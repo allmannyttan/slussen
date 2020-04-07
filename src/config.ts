@@ -11,9 +11,7 @@ export interface Config {
 const config = configPackage({
   file: `${__dirname}/../config.json`,
   defaults: {
-    foo: {
-      bar: 'baz',
-    },
+    port: 4000,
   },
 })
 

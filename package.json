@@ -1,0 +1,27 @@
+{
+  "name": "api",
+  "version": "0.0.1",
+  "description": "Integration med fastAPI.",
+  "main": "./src/index.js",
+  "scripts": {
+    "test": "node_modules/.bin/is-ci 'test:ci' 'test:watch'",
+    "test:ci": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint ./src/**/*.js",
+    "start": "node index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/motorbranschen/v2.git"
+  },
+  "author": "Anders, Martin",
+  "dependencies": {
+    "@iteam/config": "12.1.0",
+    "body-parser": "1.19.0",
+    "cors": "2.8.5",
+    "express": "4.17.1"
+  },
+  "devDependencies": {},
+  "keywords": []
+}
