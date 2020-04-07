@@ -1,11 +1,8 @@
 import configPackage from '@iteam/config'
 
-interface Foo {
-  bar: 'baz'
-}
 
 export interface Config {
-  foo: Foo
+  port: number
 }
 
 const config = configPackage({
@@ -15,6 +12,7 @@ const config = configPackage({
   },
 })
 
+export const port: Config['port'] = config.get('port')
 export default {
-  foo: config.get('foo'),
+  port: config.get('port'),
 } as Config
