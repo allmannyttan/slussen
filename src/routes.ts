@@ -1,5 +1,5 @@
-import express = require('express')
+import { Application } from 'express'
 
-module.exports = (app: express.Application) => {
+export default (app: Application) => {
   app.get('/', (_req, res) => res.send('fastAPI'))
 }

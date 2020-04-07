@@ -1,7 +1,8 @@
 import { port } from './config'
-import bodyParser = require('body-parser')
-import express = require('express')
-import cors = require('cors')
+import routes from './routes'
+import bodyParser from 'body-parser'
+import express from 'express'
+import cors from 'cors'
 
 const app: express.Application = express()
 app.set('etag', 'strong')
@@ -13,8 +14,7 @@ app.use(
   })
 )
 
-
-require('./routes')(app)
+routes(app)
 
 app.listen(port, () => {
   console.log(`
