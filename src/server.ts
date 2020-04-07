@@ -1,5 +1,6 @@
 import { port } from './config'
 import routes from './routes'
+import tenantRoutes from './services/tenantservice/routes'
 import bodyParser from 'body-parser'
 import express from 'express'
 import cors from 'cors'
@@ -14,6 +15,7 @@ app.use(
   })
 )
 
+tenantRoutes(app)
 routes(app)
 
 app.listen(port, () => {
