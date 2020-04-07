@@ -1,5 +1,22 @@
 # Svensk allmännytta
 
 
-Kod i detta rep använder Version 1 av fastAPI, utan tillgäggspaket.
-Dokumentation av fastAPI finns här http://www.fastapi.se/apidocprop/v1/ 
+Code in this repo uses Version 1 of fastAPI, without "tillgäggspaket".
+Documentation of fastAPI is available here http://www.fastapi.se/apidocprop/v1/ 
+
+
+## Starting
+
+```
+$ nvm use
+$ npm i
+$ npm start
+```
+
+## Developing
+```
+$ nvm use
+$ npm i
+$ npm run dev
+```
+
