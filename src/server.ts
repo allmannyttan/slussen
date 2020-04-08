@@ -1,11 +1,10 @@
 import { port } from './config'
-import routes from './routes'
-import tenantRoutes from './services/tenantservice/routes'
+import routes, { tenantRoutes } from './routes'
 import bodyParser from 'body-parser'
 import express from 'express'
 import cors from 'cors'
 
-const app: express.Application = express()
+const app = express()
 app.set('etag', 'strong')
 app.use(cors())
 app.use(bodyParser.json())
