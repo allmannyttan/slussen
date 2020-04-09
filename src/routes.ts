@@ -4,7 +4,7 @@ import { routes as tenantRoutes } from './services/tenantservice'
 
 export { tenantRoutes }
 
-import { client } from './services/fastapiservice'
+import { client } from './adapters/fastapiadapter'
 
 export default (app: Application) => {
   app.get('/', (_req, res) => res.send('fastAPI'))
