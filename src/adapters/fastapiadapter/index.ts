@@ -2,16 +2,14 @@ import xml2js from 'xml2js'
 import axios from 'axios'
 import { fastAPI } from '../../config'
 
-const BASE_URL = 'http://www.fastapi.se/backendprop/v1/api/'
-
 const headers = {
   'Access-Token': fastAPI.accessToken,
-  'Accept': '*/*',
+  Accept: '*/*',
 }
 
 export const xmlClient = axios.create({
   headers,
-  baseURL: BASE_URL,
+  baseURL: fastAPI.baseUrl,
   responseType: 'text',
 })
 
@@ -30,9 +28,10 @@ export const client = {
           console.error(err)
           throw err
         })
-      } catch (error) {
-        console.error(error)
-      }
+    } catch (error) {
+      console.error(error)
+    }
+    console.log(fastAPI)
   },
 
   /*

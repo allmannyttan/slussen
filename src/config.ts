@@ -3,7 +3,7 @@ import configPackage from '@iteam/config'
 export interface Config {
   port: number
   fastAPI: {
-    baseURL: string
+    baseUrl: string
     accessToken: string
   }
 }
