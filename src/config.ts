@@ -1,8 +1,11 @@
 import configPackage from '@iteam/config'
 
-
 export interface Config {
   port: number
+  fastAPI: {
+    baseUrl: string
+    accessToken: string
+  }
 }
 
 const config = configPackage({
@@ -13,6 +16,9 @@ const config = configPackage({
 })
 
 export const port: Config['port'] = config.get('port')
+export const fastAPI: Config['fastAPI'] = config.get('fastAPI')
+
 export default {
   port: config.get('port'),
+  fastAPI: config.get('fastAPI'),
 } as Config
