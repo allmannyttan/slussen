@@ -9,6 +9,6 @@ import { client } from './services/fastapiservice'
 export default (app: Application) => {
   app.get('/', (_req, res) => res.send('fastAPI'))
   app.get('/fast', async (_req, res) => {
-    res.json(await client.get('/api/fi2partner'))
+    res.json(await client.get('fi2partner'))
   })
 }

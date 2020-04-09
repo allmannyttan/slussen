@@ -1,34 +1,38 @@
 import xml2js from 'xml2js'
-import got from 'got'
+import axios from 'axios'
 import { fastAPI } from '../../config'
 
-const BASE_URL = 'http://www.fastapi.se/apidocprop/v1/APIHandler.axd?url='
+const BASE_URL = 'http://www.fastapi.se/backendprop/v1/api/'
 
 const headers = {
-  'Content-Type': 'text/xml',
-  Accept: 'text/xml',
   'Access-Token': fastAPI.accessToken,
+  'Accept': '*/*',
 }
 
-export const xmlClient = got.extend({
+export const xmlClient = axios.create({
   headers,
-  prefixUrl: BASE_URL,
+  baseURL: BASE_URL,
+  responseType: 'text',
 })
 
 export const client = {
   get: async <T = any>(url: string, options: Partial<any> = {}) => {
-    const { body }: { body: T } = await xmlClient.get(url, options)
+    try {
+      const { data }: { data: T } = await xmlClient.get(url, options)
 
-    return xml2js
-      .parseStringPromise(body)
-      .then(function (result) {
-        return result
-      })
-      .catch(function (err) {
-        // Failed
-        console.error(err)
-        throw err
-      })
+      return xml2js
+        .parseStringPromise(data)
+        .then(function (result) {
+          return result
+        })
+        .catch(function (err) {
+          // Failed
+          console.error(err)
+          throw err
+        })
+      } catch (error) {
+        console.error(error)
+      }
   },
 
   /*

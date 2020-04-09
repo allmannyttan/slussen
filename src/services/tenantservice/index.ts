@@ -1,3 +1,5 @@
-import routes from './routes'
+import { Application } from 'express'
 
-export { routes }
+export const routes = (app: Application) => {
+  app.get('/tenant', (_req, res) => res.send('fastAPI tenants'))
+}
