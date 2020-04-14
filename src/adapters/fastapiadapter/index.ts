@@ -31,7 +31,6 @@ export const client = {
     } catch (error) {
       console.error(error)
     }
-    console.log(fastAPI)
   },
 
   /*
