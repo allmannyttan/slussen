@@ -21,11 +21,6 @@ const getSocialSecurityNumber = (ids: any) => {
 const getPart = (parts: any, partName: string) => {
     const partNode = parts.filter((part: any) => { return part.fi2value_code[0] ===  partName})
 
-<<<<<<< HEAD
-=======
-    //console.log(parts)
-
->>>>>>> 2e615c80fb2a8a968e85e6308205888484bae317
     if (partNode && partNode.length > 0) {
         return partNode[0].fi2value_value[0]
     } else {
