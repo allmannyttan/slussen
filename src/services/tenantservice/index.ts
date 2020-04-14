@@ -1,5 +1,7 @@
 import { Application } from 'express'
-import { client } from '../../adapters/fastapiadapter'
+import { client } from '../../adapters/fastapiadapter'
+//import helper from '../../helpers/fastAPIXmlListHelper'
+
 
 const getTenants = async () => {
     const result = await client.get('fi2partner')
@@ -19,7 +21,7 @@ const getSocialSecurityNumber = (ids: any) => {
 const getPart = (parts: any, partName: string) => {
     const partNode = parts.filter((part: any) => { return part.fi2value_code[0] ===  partName})
 
-    console.log(parts)
+    //console.log(parts)
 
     if (partNode && partNode.length > 0) {
         return partNode[0].fi2value_value[0]
@@ -38,6 +40,7 @@ const transformTenant = (tenantRaw: any) => {
         createDate: getPart(tenantRaw.fi2part_value, 'CreatedDate'),
         name: tenantRaw.fi2part_name ? tenantRaw.fi2part_name[0]._ : null,
         fullName: tenantRaw.fi2part_fullname[0],
+        //class: helper.getNameFromClasslist(tenantRaw.fi2part_class)
     }
 }
 
