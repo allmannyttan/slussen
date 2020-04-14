@@ -1,6 +1,6 @@
 import { Application } from 'express'
 import { client } from '../../adapters/fastapiadapter'
-//import helper from '../../helpers/fastAPIXmlListHelper'
+import helper from '../../helpers/fastAPIXmlListHelper'
 
 
 const getTenants = async () => {
@@ -77,7 +77,9 @@ const getEmailAddresses = (emailAddresses: any) => {
     }).filter((email:any) => email !== null) : null
 }
 
-const transformTenant = (tenantRaw: any) => {
+
+const transformTenant = async (tenantRaw: any) => {
+    const className = await helper.getNameFromClasslist(tenantRaw.fi2part_class[0])
     return {
         id: tenantRaw.$.id,
         socialSecurityNumber: getSocialSecurityNumber(tenantRaw.fi2part_ids[0]),
@@ -111,14 +113,14 @@ const transformTenant = (tenantRaw: any) => {
                 phoneNumbers: getPhoneNumbers(contact.fi2cont_tel),
                 emailAddresses: getEmailAddresses(contact.fi2cont_email)
             }
-        }) : null
-        //class: helper.getNameFromClasslist(tenantRaw.fi2part_class)
+        }) : null,
+        className 
     }
 }
 
-const transformTenants = (tenantsRaw: any) => {
+const transformTenants = async (tenantsRaw: any) => {
     if (tenantsRaw.fi2simplemessage && tenantsRaw.fi2simplemessage.fi2partner) {
-        return tenantsRaw.fi2simplemessage.fi2partner.map(transformTenant)
+        return Promise.all(tenantsRaw.fi2simplemessage.fi2partner.map(transformTenant))
     } else {
         return {}
     }
