@@ -1,4 +1,4 @@
-import  fi2PartnerFixture  from '../__fixtures__/fi2partner.fixture'
+import  { fi2PartnerJson }  from '../__fixtures__/fastAPIAdapterResult.fixture'
 import { client } from '../../../adapters/fastapiadapter'
 import service from '../index'
 //import helper from '@app/helpers/fastAPIXmlListHelper'
@@ -10,7 +10,7 @@ jest.mock('../../../adapters/fastapiadapter')
 describe('#tenantservice', () => {
 
   beforeEach(() => {
-    console.log = jest.fn()
+    //console.log = jest.fn()
     console.error = jest.fn()
   
     jest.resetAllMocks()
@@ -18,8 +18,7 @@ describe('#tenantservice', () => {
 
   describe('#getTenants', () => {
     test('uses fast api adapter to get tenants', async () => {
-      console.log(fi2PartnerFixture)
-      ;(client.get as jest.Mock).mockResolvedValueOnce(fi2PartnerFixture)
+      ;(client.get as jest.Mock).mockResolvedValueOnce(fi2PartnerJson)
       
       await service.getTenants()
 

@@ -1,5 +1,5 @@
-export default {
-    fi2PartnerFixture: `
+export const 
+    fi2PartnerFixture = `
 <?xml version="1.0"?>
 <!--Created using Fi2Express v. 1.31.47 © Bim Alliance 2015 (Licensed to SABO)-->
 <fi2simplemessage
@@ -205,4 +205,3 @@ export default {
         </fi2part_contact>
     </fi2partner>
 </fi2simplemessage>`
-}
