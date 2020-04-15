@@ -11,6 +11,11 @@ export interface Fi2ClassNode {
   fi2class_scheme: Fi2SchemeNode[]
 }
 
+export interface Fi2ValueNode {
+  fi2value_code: string[]
+  fi2value_scheme: Fi2SchemeNode[]
+}
+
 export interface Namespace {
   'xmlns:xsi': string
   'xsi:noNamespaceSchemaLocation': string

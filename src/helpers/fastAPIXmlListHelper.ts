@@ -1,18 +1,13 @@
-import { Fi2ClassNode, Fi2ClassListXml } from './types'
+import { paths } from '@app/config'
+import { Fi2ClassNode, Fi2ClassListXml, Fi2ValueNode } from './types'
 import fs from 'fs'
 import xml2js from 'xml2js'
 
-export const getNameFromClasslist = async (
-  node: Fi2ClassNode
+const getNameFromlist = async (
+  code: string,
+  listFile: string
 ): Promise<string> => {
-  if (!node.fi2class_code) return '' //Silently return empty string or throw error?
-
-  const code = node.fi2class_code[0]
-
-  const xml = fs.readFileSync(
-    `src/fastAPIXml/classlists/${node.fi2class_scheme[0].fi2scheme_id}.xml`,
-    { encoding: 'utf8' }
-  )
+  const xml = fs.readFileSync(listFile, { encoding: 'utf8' })
 
   if (!code || !xml) return ''
 
@@ -33,6 +28,33 @@ export const getNameFromClasslist = async (
   return ''
 }
 
+export const getNameFromClasslist = async (
+  node: Fi2ClassNode
+): Promise<string> => {
+  if (!node.fi2class_code) return '' //Silently return empty string or throw error?
+
+  const code = node.fi2class_code[0]
+
+  return getNameFromlist(
+    code,
+    `${paths.classlists}${node.fi2class_scheme[0].fi2scheme_id}.xml`
+  )
+}
+
+export const getNameFromValuelist = async (
+  node: Fi2ValueNode
+): Promise<string> => {
+  if (!node.fi2value_code) return '' //Silently return empty string or throw error?
+
+  const code = node.fi2value_code[0]
+
+  return getNameFromlist(
+    code,
+    `${paths.valuelists}${node.fi2value_scheme[0].fi2scheme_id}.xml`
+  )
+}
+
 export default {
   getNameFromClasslist,
+  getNameFromValuelist,
 }

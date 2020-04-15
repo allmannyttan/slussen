@@ -1,6 +1,6 @@
 import xml2js from 'xml2js'
 import axios from 'axios'
-import { fastAPI } from '../../config'
+import { fastAPI } from '@app/config'
 
 const headers = {
   'Access-Token': fastAPI.accessToken,
@@ -40,5 +40,5 @@ export const client = {
 }
 
 export default {
-  client  
+  client,
 }
