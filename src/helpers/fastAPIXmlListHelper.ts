@@ -1,15 +1,6 @@
 
-interface Fi2SchemeNode {
-  fi2scheme_id: string[],
-  fi2scheme_name: string[],
-  fi2scheme_url: string[],
-}
 
-interface Fi2ClassNode {
-  fi2class_code: string[],
-  fi2class_scheme: Fi2SchemeNode[],
-}
-
+import { Fi2ClassNode }  from '@app/types'
 import fs from 'fs'
 import xml2js from 'xml2js'
  

@@ -1,5 +1,5 @@
 import  { fi2PartnerFixture }  from '../__fixtures__/fi2partner.fixture'
-import axios, { AxiosResponse, AxiosAdapter, AxiosInstance } from 'axios'
+import axios from 'axios'
 import { client } from '../index'
 
 jest.mock('axios', () => ({
