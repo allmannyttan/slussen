@@ -31,7 +31,7 @@ export const getNameFromClasslist = async (node: Fi2ClassNode) => {
 
   if(json.document.validationlist) {
     const item = json.document.validationlist[0]["list-item"].find(element => element['item-value'][0] === code)
-    return item['item-description'][0]  //Namn ska slås upp
+    return item['item-description'][0]
   }
   
   return ''
