@@ -1,6 +1,6 @@
 import { Application } from 'express'
-import { client } from '../../adapters/fastapiadapter'
-import helper from '../../helpers/fastAPIXmlListHelper'
+import { client } from '@app/adapters/fastapiadapter'
+import helper from '@app/helpers/fastAPIXmlListHelper'
 
 
 const getTenants = async () => {
@@ -128,4 +128,8 @@ const transformTenants = async (tenantsRaw: any) => {
 
 export const routes = (app: Application) => {
   app.get('/tenant', async (_req, res) => res.json(await getTenants()))
+}
+
+export default {
+    getTenants
 }
