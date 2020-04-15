@@ -127,7 +127,7 @@ const transformTenants = async (tenantsRaw: any) => {
 }
 
 export const routes = (app: Application) => {
-  app.get('/tenant', async (_req, res) => res.json(await getTenants()))
+  app.get('/tenants', async (_req, res) => res.json(await getTenants()))
 }
 
 export default {
