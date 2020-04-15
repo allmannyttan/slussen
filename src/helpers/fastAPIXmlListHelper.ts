@@ -2,7 +2,9 @@ import { Fi2ClassNode, Fi2ClassListXml } from './types'
 import fs from 'fs'
 import xml2js from 'xml2js'
 
-export const getNameFromClasslist = async (node: Fi2ClassNode) => {
+export const getNameFromClasslist = async (
+  node: Fi2ClassNode
+): Promise<string> => {
   if (!node.fi2class_code) return '' //Silently return empty string or throw error?
 
   const code = node.fi2class_code[0]
