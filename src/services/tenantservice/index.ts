@@ -1,6 +1,7 @@
 import { Application } from 'express'
 import { client } from '@app/adapters/fastapiadapter'
 import helper from '@app/helpers/fastAPIXmlListHelper'
+import { PhoneNumber, EmailAddress, Address, Tenant, Contact } from './types'
 
 
 const getTenants = async () => {
@@ -8,13 +9,13 @@ const getTenants = async () => {
     return transformTenants(result)
 }
 
-const getSocialSecurityNumber = (ids: any) => {
+const getSocialSecurityNumber = (ids: any) : string | void => {
     const ssnNode = ids.fi2_id.filter((id: any) => { return id.$.usage === 'Ssn' })
 
     if (ssnNode && ssnNode.length > 0) {
         return ssnNode[0]._
     } else {
-        return null
+        return undefined
     }
 }
 
@@ -34,53 +35,54 @@ const getAddressLine = (addressLines: any, usage: string) => {
     return line ? line._ : null
 }
 
-const addressTypes: {[index: string]:string} = {
+const addressTypes: {[index: string]: string} = {
     '03': 'Home Address',
     '05': 'Postal Address'
 }
 
-const getAddressType = (address: any) : string | null => {
+const getAddressType = (address: any) : string | void => {
     const typeCode : string = address.fi2addr_class[0].fi2class_code ? address.fi2addr_class[0].fi2class_code[0] : null
 
     if (typeCode) {
         return addressTypes[typeCode]
     } else {
-        return null
+        return undefined
     }
 }
 
-const getPhoneNumbers = (phoneNumbers: any) => {
-    return phoneNumbers ? phoneNumbers.map((phoneNumber: any) => {
-        let number: {[index: string]:string} = {}
+const getPhoneNumbers = (phoneNumbers: any) : [PhoneNumber] | void => {
+    if (!phoneNumbers) {
+        return undefined
+    }
 
-        number[phoneNumber.$.usage] = phoneNumber._
-
-        if (phoneNumber._) {
-            return number
-        } else {
-            return null
+    const transformedPhoneNumbers: [PhoneNumber] = phoneNumbers.map((phoneNumber: any) : PhoneNumber => {
+        return {
+            type: phoneNumber.$.usage,
+            number: phoneNumber._,
         }
-    }).filter((number:any) => number !== null) : null
+    }).filter((phoneNumber: PhoneNumber) => phoneNumber.number !== null)
+
+    return transformedPhoneNumbers
 }
 
-const getEmailAddresses = (emailAddresses: any) => {
-    return emailAddresses ? emailAddresses.map((emailAddress: any) => {
-        let email: {[index: string]:any} = {}
+const getEmailAddresses = (emailAddresses: any) : [EmailAddress] | void => {
+    if (!emailAddresses) {
+        return undefined
+    }
 
-        email[emailAddress.$.usage] = emailAddress._
-
-        if (emailAddress._) {
-            return email
-        } else {
-            return null
+    const transformedEmailAddresses: [EmailAddress] = emailAddresses.map((emailAddress: any) : EmailAddress => {
+        return {
+            type: emailAddress.$.usage,
+            address: emailAddress._,
         }
-    }).filter((email:any) => email !== null) : null
+    }).filter((email: EmailAddress) => email.address !== null)
+
+    return transformedEmailAddresses
 }
 
-
-const transformTenant = async (tenantRaw: any) => {
+const transformTenant = async (tenantRaw: any) : Promise<Tenant> => {
     const className = await helper.getNameFromClasslist(tenantRaw.fi2part_class[0])
-    return {
+    const tenant: Tenant = {
         id: tenantRaw.$.id,
         socialSecurityNumber: getSocialSecurityNumber(tenantRaw.fi2part_ids[0]),
         changedBy: getPart(tenantRaw.fi2part_value, 'ChangedBy'),
@@ -91,21 +93,23 @@ const transformTenant = async (tenantRaw: any) => {
         fullName: tenantRaw.fi2part_fullname[0],
         phoneNumbers: getPhoneNumbers(tenantRaw.fi2part_tel),
         emailAddresses: getEmailAddresses(tenantRaw.fi2part_email),
-        addresses: tenantRaw.fi2part_address ? tenantRaw.fi2part_address.map((address: any) => {
-            return {
-                guid: address.$ ? address.$.guid : null,
+        addresses: tenantRaw.fi2part_address ? tenantRaw.fi2part_address.map((address: any) : Address => {
+            const transformedAddress : Address = {
+                guid: address.$ ? address.$.guid : undefined,
                 type: getAddressType(address),
                 street: getAddressLine(address.fi2addr_addrline, 'Street'),
                 box: getAddressLine(address.fi2addr_addrline, 'Box'),
                 co: getAddressLine(address.fi2addr_addrline, 'Co'),
                 attention: getAddressLine(address.fi2addr_addrline, 'Att'),
-                zipCode: address.fi2addr_zipcode ? address.fi2addr_zipcode[0] : null,
-                city: address.fi2addr_city ? address.fi2addr_city[0] : null,
-                country: address.fi2addr_country ? address.fi2addr_country[0] : null
+                zipCode: address.fi2addr_zipcode ? address.fi2addr_zipcode[0] : undefined,
+                city: address.fi2addr_city ? address.fi2addr_city[0] : undefined,
+                country: address.fi2addr_country ? address.fi2addr_country[0] : undefined
             }
-        }) : null,
-        contacts: tenantRaw.fi2part_contact ? tenantRaw.fi2part_contact.map((contact: any) => {
-            return {
+
+            return transformedAddress
+        }) : undefined,
+        contacts: tenantRaw.fi2part_contact ? tenantRaw.fi2part_contact.map((contact: any) : Contact => {
+            const transformedContact : Contact = {
                 type: contact.fi2contact_class[0].fi2class_code[0],
                 firstName: contact.fi2cont_fname[0],
                 lastName: contact.fi2cont_lname[0],
@@ -113,9 +117,13 @@ const transformTenant = async (tenantRaw: any) => {
                 phoneNumbers: getPhoneNumbers(contact.fi2cont_tel),
                 emailAddresses: getEmailAddresses(contact.fi2cont_email)
             }
-        }) : null,
+
+            return transformedContact
+        }) : undefined,
         className 
     }
+
+    return tenant
 }
 
 const transformTenants = async (tenantsRaw: any) => {
