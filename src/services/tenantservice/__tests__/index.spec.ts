@@ -60,10 +60,12 @@ describe('#tenantservice', () => {
               Object {
                 "emailAddresses": Array [
                   Object {
-                    "Private": "Anna.Ibrahimovic@Hemma.se",
+                    "address": "Anna.Ibrahimovic@Hemma.se",
+                    "type": "Private",
                   },
                   Object {
-                    "Work": "Anna.Ibrahimovic@jobbet.se",
+                    "address": "Anna.Ibrahimovic@jobbet.se",
+                    "type": "Work",
                   },
                 ],
                 "firstName": "Anna",
@@ -71,19 +73,24 @@ describe('#tenantservice', () => {
                 "lastName": "Ibrahimovic",
                 "phoneNumbers": Array [
                   Object {
-                    "Home": "9566-463288",
+                    "number": "9566-463288",
+                    "type": "Home",
                   },
                   Object {
-                    "Work": "5938-191763",
+                    "number": "5938-191763",
+                    "type": "Work",
                   },
                   Object {
-                    "MobilePrivate": "070-9167130",
+                    "number": "070-9167130",
+                    "type": "MobilePrivate",
                   },
                   Object {
-                    "MobileWork": "12345",
+                    "number": "12345",
+                    "type": "MobileWork",
                   },
                   Object {
-                    "Fax": "12345",
+                    "number": "12345",
+                    "type": "Fax",
                   },
                 ],
                 "type": "Primary",
@@ -93,10 +100,12 @@ describe('#tenantservice', () => {
             "createdBy": "Script",
             "emailAddresses": Array [
               Object {
-                "Private": "12345@12345.com",
+                "address": "12345@12345.com",
+                "type": "Private",
               },
               Object {
-                "Work": "12345@12345.com",
+                "address": "12345@12345.com",
+                "type": "Work",
               },
             ],
             "fullName": "Anna Jansson",
@@ -104,19 +113,24 @@ describe('#tenantservice', () => {
             "name": "Anna",
             "phoneNumbers": Array [
               Object {
-                "Home": "12345-123456",
+                "number": "12345-123456",
+                "type": "Home",
               },
               Object {
-                "Work": "12345-123456",
+                "number": "12345-123456",
+                "type": "Work",
               },
               Object {
-                "MobilePrivate": "12345-123456",
+                "number": "12345-123456",
+                "type": "MobilePrivate",
               },
               Object {
-                "MobileWork": "12345-123456",
+                "number": "12345-123456",
+                "type": "MobileWork",
               },
               Object {
-                "Fax": "12345-123456",
+                "number": "12345-123456",
+                "type": "Fax",
               },
             ],
             "socialSecurityNumber": "811010-1010",
