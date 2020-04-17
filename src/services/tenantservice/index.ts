@@ -103,8 +103,6 @@ const getEmailAddresses = (emailAddresses: Fi2ValueUsage[]): EmailAddress[] | vo
 }
 
 const transformTenant = async (tenantRaw: Fi2Partner): Promise<Tenant> => {
-  //console.log(JSON.stringify(tenantRaw, null, 2))
-
   const className = await helper.getNameFromClasslist(tenantRaw.fi2part_class[0])
   const tenant: Tenant = {
     id: tenantRaw.$.id,
