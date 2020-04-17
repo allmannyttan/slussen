@@ -8,7 +8,7 @@ import {
   Fi2Address,
   Fi2Ids,
   Fi2Partner,
-  Fi2PartnerContact,
+  Fi2Contact,
   Fi2Value,
   Fi2ValueUsage,
   PhoneNumber,
@@ -148,7 +148,7 @@ const transformTenant = async (tenantRaw: Fi2Partner): Promise<Tenant> => {
       : undefined,
     contacts: tenantRaw.fi2part_contact
       ? tenantRaw.fi2part_contact.map(
-          (contact: Fi2PartnerContact): Contact => {
+          (contact: Fi2Contact): Contact => {
             const transformedContact: Contact = {
               type: contact.fi2contact_class[0].fi2class_code[0],
               firstName: contact.fi2cont_fname[0],

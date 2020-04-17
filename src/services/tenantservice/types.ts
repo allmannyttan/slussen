@@ -104,7 +104,7 @@ export interface Fi2AddrDescr {
   }
 }
 
-export interface Fi2PartnerContact {
+export interface Fi2Contact {
   $: {
     guid: string
   }
@@ -132,5 +132,5 @@ export interface Fi2Partner {
   fi2part_email: Fi2ValueUsage[]
   fi2part_web: string[]
   fi2part_address: Fi2Address[]
-  fi2part_contact: Fi2PartnerContact[]
+  fi2part_contact: Fi2Contact[]
 }
