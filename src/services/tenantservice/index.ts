@@ -17,28 +17,16 @@ import {
   Fi2PartnerResponse,
 } from './types'
 
-const getSocialSecurityNumber = (ids: Fi2Ids): string | void => {
-  const ssnNode = ids.fi2_id.filter((id: Fi2ValueUsage) => {
-    return id.$.usage === 'Ssn'
-  })
+const getSocialSecurityNumber = (ids: Fi2Ids): string => {
+  const ssnNode = ids.fi2_id.filter((id: Fi2ValueUsage) => id.$.usage === 'Ssn')
 
-  if (ssnNode && ssnNode.length > 0) {
-    return ssnNode[0]._
-  } else {
-    return undefined
-  }
+  return ssnNode.length > 0 ? ssnNode[0]._ : ''
 }
 
-const getPart = (parts: Fi2Value[], partName: string) => {
-  const partNode = parts.filter((part: Fi2Value) => {
-    return part.fi2value_code[0] === partName
-  })
+const getPart = (parts: Fi2Value[], partName: string): string => {
+  const partNode = parts.filter((part: Fi2Value) => part.fi2value_code[0] === partName)
 
-  if (partNode && partNode.length > 0) {
-    return partNode[0].fi2value_value[0]
-  } else {
-    return null
-  }
+  return partNode.length > 0 ? partNode[0].fi2value_value[0] : ''
 }
 
 const getAddressLine = (addressLines: Fi2ValueUsage[], usage: string) => {
@@ -60,13 +48,13 @@ const getAddressType = (address: Fi2Address): string => {
   if (typeCode) {
     return addressTypes[typeCode]
   } else {
-    return 'Saknas'
+    return ''
   }
 }
 
-const getPhoneNumbers = (phoneNumbers: Fi2ValueUsage[]): PhoneNumber[] | void => {
+const getPhoneNumbers = (phoneNumbers: Fi2ValueUsage[]): PhoneNumber[] => {
   if (!phoneNumbers) {
-    return undefined
+    return []
   }
 
   const transformedPhoneNumbers: PhoneNumber[] = phoneNumbers
@@ -83,9 +71,9 @@ const getPhoneNumbers = (phoneNumbers: Fi2ValueUsage[]): PhoneNumber[] | void =>
   return transformedPhoneNumbers
 }
 
-const getEmailAddresses = (emailAddresses: Fi2ValueUsage[]): EmailAddress[] | void => {
+const getEmailAddresses = (emailAddresses: Fi2ValueUsage[]): EmailAddress[] => {
   if (!emailAddresses) {
-    return undefined
+    return []
   }
 
   const transformedEmailAddresses: EmailAddress[] = emailAddresses
@@ -164,7 +152,7 @@ const transformTenants = async (tenantsRaw: Fi2PartnersResponse): Promise<Tenant
   }
 }
 
-const getTenants = async () => {
+const getTenants = async (): Promise<Tenant[]> => {
   const result = await client.get("fi2partner?filter=fi2part_class.fi2class_code:'16'")
   return transformTenants(result)
 }
