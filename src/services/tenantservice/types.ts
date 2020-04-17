@@ -121,6 +121,7 @@ export interface Fi2Contact {
 export interface Fi2Partner {
   $: {
     id: string
+    xmlns?: string
   }
   fi2part_ids: Fi2Ids[]
   fi2part_class: Fi2Class[]
@@ -133,4 +134,14 @@ export interface Fi2Partner {
   fi2part_web: string[]
   fi2part_address: Fi2Address[]
   fi2part_contact: Fi2Contact[]
+}
+
+export interface Fi2PartnersResponse {
+  fi2simplemessage: {
+    fi2partner: Fi2Partner[]
+  }
+}
+
+export interface Fi2PartnerResponse {
+  fi2partner: Fi2Partner
 }
