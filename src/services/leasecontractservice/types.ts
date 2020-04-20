@@ -9,6 +9,7 @@ export interface Contract {
   createdBy: string
   createDate: string
   date: string
+  description: string
   endingDate: string
   initialDate: string
   noticedBy: string
@@ -55,7 +56,7 @@ export interface Fi2Class {
 }
 
 export interface Fi2LeaseContractDescription {
-  _: string
+  _?: string
   $: {
     lang: string
     usage: string
@@ -113,7 +114,7 @@ export interface Fi2LeaseContract {
   fi2lease_termreason: Fi2Class[]
   fi2lease_noticestatus: Fi2Class[]
   fi2lease_value: Fi2Value[]
-  fi2lease_descr: Fi2LeaseContractDescription
+  fi2lease_descr: Fi2LeaseContractDescription[]
   fi2lease_actor: Fi2LeaseActor[]
   fi2lease_initialdate: string[]
   fi2lease_endingdate: string[]

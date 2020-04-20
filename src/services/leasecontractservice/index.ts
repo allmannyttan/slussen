@@ -86,7 +86,11 @@ const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
     signDate: getFirstDate(fi2.fi2lease_signdate),
     terminatedDate: getFirstDate(fi2.fi2lease_terminateddate),
 
-    noticeTime: fi2.fi2lease_noticetime[0],
+    description:
+      fi2.fi2lease_descr && fi2.fi2lease_descr[0] && fi2.fi2lease_descr[0]._
+        ? fi2.fi2lease_descr[0]._
+        : '',
+    noticeTime: fi2.fi2lease_noticetime ? fi2.fi2lease_noticetime[0] : 0,
 
     changedBy: getPart(fi2.fi2lease_value, 'ChangedBy'),
     changeDate: getPart(fi2.fi2lease_value, 'ChangedDate'),
@@ -128,4 +132,9 @@ export const routes = (app: Application) => {
   app.get('/leasecontracts/:id', async (_req: Request, res: Response) =>
     res.json(await getLeaseContract(_req.params.id))
   )
+}
+
+export default {
+  getLeaseContract,
+  getLeaseContracts,
 }
