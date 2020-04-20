@@ -12,7 +12,8 @@ export const findCodeInListItems = (code: string, listItems: ListItem[]): ListIt
       item = element
       break
     } else if (Array.isArray(element['list-item'])) {
-      item = findCodeInListItems(code, element['list-item'])
+      item = element['list-item'].find((e) => e['item-value'][0] === code)
+      if (item) break
     }
   }
 

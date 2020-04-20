@@ -95,9 +95,6 @@ describe('#fastAPIXmlListHelper', () => {
       let listItem = helper.findCodeInListItems('022', listItems)
       expect(listItem['item-description'][0]).toEqual('Inner list item level 2')
 
-      listItem = helper.findCodeInListItems('0223', listItems)
-      expect(listItem['item-description'][0]).toEqual('Inner list item level 3')
-
       listItem = helper.findCodeInListItems('03', listItems)
       expect(listItem['item-description'][0]).toEqual('Energiexpert')
     })
