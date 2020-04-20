@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type='text/xsl' href='Fi2list_transform.xslt'?>
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="http://www.fi2.se/schemas/1.22/fi2validationlist_002.xsd">
+  <metadata>
+    <identity>VB001_003_001</identity>
+    <description>Tillåtna värden på ett utrymmessystem</description>
+    <version>001</version>
+    <date>2015-06-23</date>
+    <author>
+      <name>Fredrik Gren</name>
+      <company>Informationsbyggarna AB</company>
+    </author>
+  </metadata>
+  <fi2referencelist />
+  <validationlist>
+    <list-value>VB001_003_001</list-value>
+    <list-description>Värdelista fi2spatisystem</list-description>
+    <list-item>
+      <item-value>Floor</item-value>
+      <item-description>Våningsnummer</item-description>
+      <item-datatype>xs:integer</item-datatype>
+      <item-definition>Våningsnummer</item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Rooms</item-value>
+      <item-description>Antal rum</item-description>
+      <item-datatype>xs:integer</item-datatype>
+      <item-definition>Antal rum</item-definition>
+      <item-referencelist />
+    </list-item>
+  </validationlist>
+</document>
