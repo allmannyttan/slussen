@@ -1,0 +1,78 @@
+import { Application, Request, Response } from 'express'
+import { client } from '@app/adapters/fastapiadapter'
+import helper from '@app/helpers/fastAPIXmlListHelper'
+
+import {
+  Contract,
+  Fi2Ids,
+  Fi2LeaseContract,
+  Fi2LeaseContractResponse,
+  Fi2LeaseContractsResponse,
+  Fi2Value,
+  Fi2ValueUsage,
+} from './types'
+
+const getFirstDate = (dates: string[]): string => (dates && dates.length > 0 ? dates[0] : '')
+
+const getPart = (parts: Fi2Value[], partName: string): string => {
+  const partNode = parts.filter((part: Fi2Value) => part.fi2value_code[0] === partName)
+
+  return partNode.length > 0 ? partNode[0].fi2value_value[0] : ''
+}
+
+const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
+  const className = await helper.getNameFromClasslist(fi2.fi2lease_class[0])
+
+  const contract: Contract = {
+    id: fi2.$.id,
+    className,
+
+    currentEndDate: getFirstDate(fi2.fi2lease_currenddate),
+    date: getFirstDate(fi2.fi2lease_date),
+    endingDate: getFirstDate(fi2.fi2lease_endingdate),
+    initialDate: getFirstDate(fi2.fi2lease_initialdate),
+    noticeDate: getFirstDate(fi2.fi2lease_noticedate),
+    renewalDate: getFirstDate(fi2.fi2lease_renewaldate),
+    signDate: getFirstDate(fi2.fi2lease_signdate),
+    terminatedDate: getFirstDate(fi2.fi2lease_terminateddate),
+
+    noticeTime: fi2.fi2lease_noticetime[0],
+
+    changedBy: getPart(fi2.fi2lease_value, 'ChangedBy'),
+    changeDate: getPart(fi2.fi2lease_value, 'ChangedDate'),
+    createdBy: getPart(fi2.fi2lease_value, 'CreatedBy'),
+    createDate: getPart(fi2.fi2lease_value, 'CreatedDate'),
+    noticedBy: getPart(fi2.fi2lease_value, 'NoticedBy'),
+  }
+
+  return contract
+}
+
+const transformContracts = async (fi2Contracts: Fi2LeaseContractsResponse): Promise<Contract[]> => {
+  if (fi2Contracts.fi2simplemessage && fi2Contracts.fi2simplemessage.fi2leasecontract) {
+    return Promise.all(fi2Contracts.fi2simplemessage.fi2leasecontract.map(transformContract))
+  } else {
+    return []
+  }
+}
+
+const getLeaseContracts = async (): Promise<Contract[]> => {
+  const contracts: Fi2LeaseContractsResponse = await client.get(`fi2leasecontract/`)
+  const result = await transformContracts(contracts)
+  return result
+}
+
+const getLeaseContract = async (id: string): Promise<Contract> => {
+  const fi2Contract: Fi2LeaseContractResponse = await client.get(`fi2leasecontract/${id}`)
+  const result = await transformContract(fi2Contract.fi2leasecontract)
+  return result
+}
+
+export const routes = (app: Application) => {
+  app.get('/leasecontracts', async (_req: Request, res: Response) =>
+    res.json(await getLeaseContracts())
+  )
+  app.get('/leasecontracts/:id', async (_req: Request, res: Response) =>
+    res.json(await getLeaseContract(_req.params.id))
+  )
+}
