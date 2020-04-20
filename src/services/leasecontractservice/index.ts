@@ -5,11 +5,13 @@ import helper from '@app/helpers/fastAPIXmlListHelper'
 import {
   Contract,
   ContractPartner,
+  ContractDocument,
   Fi2LeaseContract,
   Fi2LeaseContractResponse,
   Fi2LeaseContractsResponse,
   Fi2Value,
   Fi2LeaseActor,
+  Fi2Document,
 } from './types'
 
 const getFirstDate = (dates: string[]): string => (dates && dates.length > 0 ? dates[0] : '')
@@ -33,6 +35,16 @@ const getPartners = async (partners: Fi2LeaseActor[]): Promise<ContractPartner[]
   return contractPartners
 }
 
+const getDocuments = (documents: Fi2Document[]): ContractDocument[] => {
+  return documents.map((doc: Fi2Document) => {
+    return {
+      id: doc.fi2document_ids[0].fi2_id[0]._,
+      description: doc.fi2document_descr[0],
+      link: doc.fi2document_link[0],
+    }
+  })
+}
+
 const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
   const className = await helper.getNameFromClasslist(fi2.fi2lease_class[0])
   let terminationReason = ''
@@ -44,6 +56,7 @@ const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
     noticeStatus = await helper.getNameFromClasslist(fi2.fi2lease_noticestatus[0])
 
   const partners: ContractPartner[] = await getPartners(fi2.fi2lease_actor)
+  const documents: ContractDocument[] = await getDocuments(fi2.fi2lease_documents)
 
   const contract: Contract = {
     id: fi2.$.id,
@@ -70,6 +83,7 @@ const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
     noticedBy: getPart(fi2.fi2lease_value, 'NoticedBy'),
 
     partners,
+    documents,
   }
 
   return contract
