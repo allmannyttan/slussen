@@ -20,12 +20,19 @@ export interface Contract {
   terminatedDate: string
   terminationReason: string
   partners: ContractPartner[]
+  documents: ContractDocument[]
 }
 
 export interface ContractPartner {
   id: string
   className: string
   roleName: string
+}
+
+export interface ContractDocument {
+  id: string
+  description: string
+  link: string
 }
 
 /********** Fi2XML types **********/
@@ -88,6 +95,14 @@ export interface Fi2LeaseParentObject {
   }[]
 }
 
+// NOTE: Detta har ej kunnat testas i Sandbox.
+export interface Fi2Document {
+  fi2document_ids: Fi2Ids[]
+  fi2document_descr: string
+  fi2document_link: string
+  fi2class_code: Fi2Class
+}
+
 export interface Fi2LeaseContract {
   $: {
     id: string
@@ -110,6 +125,7 @@ export interface Fi2LeaseContract {
   fi2lease_noticedate: string[]
   fi2lease_noticetime: number[]
   fi2lease_parentobject: Fi2LeaseParentObject[]
+  fi2lease_documents: Fi2Document[]
 }
 
 export interface Fi2LeaseContractsResponse {

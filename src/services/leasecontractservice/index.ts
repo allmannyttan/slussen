@@ -23,6 +23,10 @@ const getPart = (parts: Fi2Value[], partName: string): string => {
 }
 
 const getPartners = async (partners: Fi2LeaseActor[]): Promise<ContractPartner[]> => {
+  if (!partners) {
+    return []
+  }
+
   const contractPartners: Promise<ContractPartner[]> = Promise.all(
     partners.map(async (partner) => {
       return {
@@ -35,14 +39,22 @@ const getPartners = async (partners: Fi2LeaseActor[]): Promise<ContractPartner[]
   return contractPartners
 }
 
-const getDocuments = (documents: Fi2Document[]): ContractDocument[] => {
-  return documents.map((doc: Fi2Document) => {
-    return {
-      id: doc.fi2document_ids[0].fi2_id[0]._,
-      description: doc.fi2document_descr[0],
-      link: doc.fi2document_link[0],
-    }
-  })
+const getDocuments = async (documents: Fi2Document[]): Promise<ContractDocument[]> => {
+  if (!documents) {
+    return []
+  }
+
+  return Promise.all(
+    documents.map(async (doc: Fi2Document) => {
+      const className = await helper.getNameFromClasslist(doc.fi2class_code[0])
+      return {
+        id: doc.fi2document_ids[0].fi2_id[0]._,
+        description: doc.fi2document_descr[0],
+        link: doc.fi2document_link[0],
+        className,
+      }
+    })
+  )
 }
 
 const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
