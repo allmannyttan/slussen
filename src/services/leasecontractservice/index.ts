@@ -22,10 +22,19 @@ const getPart = (parts: Fi2Value[], partName: string): string => {
 
 const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
   const className = await helper.getNameFromClasslist(fi2.fi2lease_class[0])
+  let terminationReason = ''
+  if (fi2.fi2lease_termreason)
+    terminationReason = await helper.getNameFromClasslist(fi2.fi2lease_termreason[0])
+
+  let noticeStatus = ''
+  if (fi2.fi2lease_noticestatus)
+    noticeStatus = await helper.getNameFromClasslist(fi2.fi2lease_noticestatus[0])
 
   const contract: Contract = {
     id: fi2.$.id,
     className,
+    noticeStatus,
+    terminationReason,
 
     currentEndDate: getFirstDate(fi2.fi2lease_currenddate),
     date: getFirstDate(fi2.fi2lease_date),

@@ -10,11 +10,13 @@ export interface Contract {
   endingDate: string
   initialDate: string
   noticedBy: string
+  noticeStatus: string
   noticeDate: string
   noticeTime: number
   renewalDate: string
   signDate: string
   terminatedDate: string
+  terminationReason: string
 }
 
 /********** Fi2XML types **********/
@@ -84,6 +86,8 @@ export interface Fi2LeaseContract {
   }
   fi2lease_ids: Fi2Ids[]
   fi2lease_class: Fi2Class[]
+  fi2lease_termreason: Fi2Class[]
+  fi2lease_noticestatus: Fi2Class[]
   fi2lease_value: Fi2Value[]
   fi2lease_descr: Fi2LeaseContractDescription
   fi2lease_actor: Fi2LeaseActor[]
