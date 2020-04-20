@@ -1,5 +1,7 @@
 export interface Contract {
   id: string
+  guid?: string
+
   currentEndDate: string
   changedBy: string
   changeDate: string
@@ -17,6 +19,13 @@ export interface Contract {
   signDate: string
   terminatedDate: string
   terminationReason: string
+  partners: ContractPartner[]
+}
+
+export interface ContractPartner {
+  id: string
+  className: string
+  roleName: string
 }
 
 /********** Fi2XML types **********/

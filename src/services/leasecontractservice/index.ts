@@ -4,12 +4,12 @@ import helper from '@app/helpers/fastAPIXmlListHelper'
 
 import {
   Contract,
-  Fi2Ids,
+  ContractPartner,
   Fi2LeaseContract,
   Fi2LeaseContractResponse,
   Fi2LeaseContractsResponse,
   Fi2Value,
-  Fi2ValueUsage,
+  Fi2LeaseActor,
 } from './types'
 
 const getFirstDate = (dates: string[]): string => (dates && dates.length > 0 ? dates[0] : '')
@@ -18,6 +18,19 @@ const getPart = (parts: Fi2Value[], partName: string): string => {
   const partNode = parts.filter((part: Fi2Value) => part.fi2value_code[0] === partName)
 
   return partNode.length > 0 ? partNode[0].fi2value_value[0] : ''
+}
+
+const getPartners = async (partners: Fi2LeaseActor[]): Promise<ContractPartner[]> => {
+  const contractPartners: Promise<ContractPartner[]> = Promise.all(
+    partners.map(async (partner) => {
+      return {
+        id: partner.fi2actor_partner[0].$.id,
+        className: await helper.getNameFromClasslist(partner.fi2actor_partner[0].fi2part_class[0]),
+        roleName: await helper.getNameFromClasslist(partner.fi2actor_role[0]),
+      }
+    })
+  )
+  return contractPartners
 }
 
 const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
@@ -30,8 +43,11 @@ const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
   if (fi2.fi2lease_noticestatus)
     noticeStatus = await helper.getNameFromClasslist(fi2.fi2lease_noticestatus[0])
 
+  const partners: ContractPartner[] = await getPartners(fi2.fi2lease_actor)
+
   const contract: Contract = {
     id: fi2.$.id,
+    guid: fi2.$.guid,
     className,
     noticeStatus,
     terminationReason,
@@ -52,6 +68,8 @@ const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
     createdBy: getPart(fi2.fi2lease_value, 'CreatedBy'),
     createDate: getPart(fi2.fi2lease_value, 'CreatedDate'),
     noticedBy: getPart(fi2.fi2lease_value, 'NoticedBy'),
+
+    partners,
   }
 
   return contract
