@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type='text/xsl' href='Fi2list_transform.xslt'?>
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="http://www.fi2.se/schemas/1.22/fi2validationlist_002.xsd">
+  <metadata>
+    <identity>CB001_002_001</identity>
+    <description>Uppsägningsorsak</description>
+    <version>001</version>
+    <date>2015-07-01</date>
+    <author>
+      <name>Fredrik Gren</name>
+      <company>Informationsbyggarna AB</company>
+    </author>
+  </metadata>
+  <fi2referencelist />
+  <validationlist>
+    <list-value>CB001_002_001</list-value>
+    <list-description>Uppsägningsorsak</list-description>
+    <list-item>
+      <item-value>Move</item-value>
+      <item-description>Flytt</item-description>
+      <item-definition>Flytta</item-definition>
+      <item-referencelist />
+    </list-item>
+  </validationlist>
+</document>

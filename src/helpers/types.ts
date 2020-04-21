@@ -34,18 +34,11 @@ export interface Metadata {
   author: Author[]
   reference: string[]
 }
-
-export interface ListItem2 {
-  'item-value': string[]
-  'item-description': string[]
-  'item-definition': string[]
-}
-
 export interface ListItem {
   'item-value': string[]
   'item-description': string[]
   'item-definition': string[]
-  'list-item': ListItem2[]
+  'list-item'?: ListItem[]
 }
 
 export interface Validationlist {

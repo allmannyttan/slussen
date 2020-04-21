@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type='text/xsl' href='Fi2list_transform.xslt'?>
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="http://www.fi2.se/schemas/1.22/fi2validationlist_002.xsd">
+  <metadata>
+    <identity>CB001_001_001</identity>
+    <description>Uppsägningsstatus</description>
+    <version>001</version>
+    <date>2015-06-22</date>
+    <author>
+      <name>Fredrik Gren</name>
+      <company>Informationsbyggarna AB</company>
+    </author>
+  </metadata>
+  <fi2referencelist />
+  <validationlist>
+    <list-value>CB001_001_001</list-value>
+    <list-description>Uppsägningsstatus</list-description>
+    <list-item>
+      <item-value>Preliminary</item-value>
+      <item-description>Preliminärt</item-description>
+      <item-definition />
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Definitely</item-value>
+      <item-description>Definitivt</item-description>
+      <item-definition />
+      <item-referencelist />
+    </list-item>
+  </validationlist>
+</document>

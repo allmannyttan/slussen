@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type='text/xsl' href='Fi2list_transform.xslt'?>
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="http://www.fi2.se/schemas/1.22/fi2validationlist_002.xsd">
+  <metadata>
+    <identity>CA000_025_001</identity>
+    <description>DOCUMENT_SECURITY_CLASS</description>
+    <version>001</version>
+    <date>2014-01-07</date>
+    <author>
+      <name>Fredrik Gren</name>
+      <company>Informationsbyggarna AB</company>
+    </author>
+  </metadata>
+  <fi2referencelist />
+  <validationlist>
+    <list-value>CA000_025_001</list-value>
+    <list-description>Säkerhetsklassning av dokument</list-description>
+    <list-item>
+      <item-value>Internal</item-value>
+      <item-description>Internt</item-description>
+      <item-definition>Internt dokument</item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Public</item-value>
+      <item-description>Publikt</item-description>
+      <item-definition>Publikt dokument</item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>External</item-value>
+      <item-description>Externt</item-description>
+      <item-definition>Externt dokument</item-definition>
+      <item-referencelist />
+    </list-item>
+  </validationlist>
+</document>
