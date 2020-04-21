@@ -1,4 +1,4 @@
-import xml2js from 'xml2js'
+import xml2json from 'xml2json'
 import axios from 'axios'
 import { fastAPI } from '@app/config'
 
@@ -16,16 +16,14 @@ export const client = {
     })
     try {
       const { data }: { data: T } = await xmlClient.get(url, options)
-      return xml2js
-        .parseStringPromise(data)
-        .then(function (result) {
-          return result
+      const result = JSON.parse(
+        xml2json.toJson(data, {
+          arrayNotation: ['fi2lease_actor', 'fi2lease_documents', 'fi2lease_value'],
         })
-        .catch(function (err) {
-          // Failed
-          console.error(err)
-          throw err
-        })
+      )
+      console.log(JSON.stringify(result, null, 2))
+
+      return result
     } catch (error) {
       console.error(error)
     }
