@@ -12,6 +12,8 @@ import {
   Fi2Value,
   Fi2LeaseActor,
   Fi2Document,
+  Fi2LeaseParentObject,
+  ContractRentalObject,
 } from './types'
 
 const getFirstDate = (dates: string[]): string => (dates && dates.length > 0 ? dates[0] : '')
@@ -57,6 +59,21 @@ const getDocuments = async (documents: Fi2Document[]): Promise<ContractDocument[
   )
 }
 
+const getContractDocuments = (parentObjects: Fi2LeaseParentObject[]): ContractRentalObject[] => {
+  if (!parentObjects) {
+    return []
+  }
+
+  return parentObjects.map(
+    (po: Fi2LeaseParentObject): ContractRentalObject => {
+      return {
+        id: po.fi2parent_ids[0].fi2_id[0],
+        type: po.$.fi2item,
+      }
+    }
+  )
+}
+
 const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
   const className = await helper.getNameFromClasslist(fi2.fi2lease_class[0])
   let terminationReason = ''
@@ -69,7 +86,9 @@ const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
 
   const partners: ContractPartner[] = await getPartners(fi2.fi2lease_actor)
   const documents: ContractDocument[] = await getDocuments(fi2.fi2lease_documents)
+  const rentalObjects: ContractRentalObject[] = getContractDocuments(fi2.fi2lease_parentobject)
 
+  //TODO: Add parent object
   const contract: Contract = {
     id: fi2.$.id,
     guid: fi2.$.guid,
@@ -100,6 +119,7 @@ const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
 
     partners,
     documents,
+    rentalObjects,
   }
 
   return contract

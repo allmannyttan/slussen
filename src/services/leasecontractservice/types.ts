@@ -22,6 +22,7 @@ export interface Contract {
   terminationReason: string
   partners: ContractPartner[]
   documents: ContractDocument[]
+  rentalObjects: ContractRentalObject[]
 }
 
 export interface ContractPartner {
@@ -34,6 +35,11 @@ export interface ContractDocument {
   id: string
   description: string
   link: string
+}
+
+export interface ContractRentalObject {
+  type: string
+  id: string
 }
 
 /********** Fi2XML types **********/

@@ -68,6 +68,12 @@ describe('#leasecontractservice', () => {
               },
             ],
             "renewalDate": "2020-05-01",
+            "rentalObjects": Array [
+              Object {
+                "id": "OBJ-16010204",
+                "type": "fi2spatisystem",
+              },
+            ],
             "signDate": "2001-12-19",
             "terminatedDate": "",
             "terminationReason": "",
@@ -113,6 +119,12 @@ describe('#leasecontractservice', () => {
               },
             ],
             "renewalDate": "2020-05-01",
+            "rentalObjects": Array [
+              Object {
+                "id": "OBJ-0130202",
+                "type": "fi2spatisystem",
+              },
+            ],
             "signDate": "1996-01-22",
             "terminatedDate": "",
             "terminationReason": "",
@@ -158,6 +170,12 @@ describe('#leasecontractservice', () => {
               },
             ],
             "renewalDate": "2020-05-01",
+            "rentalObjects": Array [
+              Object {
+                "id": "OBJ-06020103",
+                "type": "fi2spatisystem",
+              },
+            ],
             "signDate": "1996-04-27",
             "terminatedDate": "",
             "terminationReason": "",
@@ -219,6 +237,12 @@ describe('#leasecontractservice', () => {
             },
           ],
           "renewalDate": "2020-05-01",
+          "rentalObjects": Array [
+            Object {
+              "id": "OBJ-16010204",
+              "type": "fi2spatisystem",
+            },
+          ],
           "signDate": "2001-12-19",
           "terminatedDate": "",
           "terminationReason": "",
