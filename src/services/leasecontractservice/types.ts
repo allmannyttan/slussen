@@ -102,12 +102,16 @@ export interface Fi2LeaseParentObject {
   }[]
 }
 
+export interface Fi2DocumentIds {
+  fi2_id: string[]
+}
+
 // NOTE: Detta har ej kunnat testas i Sandbox.
 export interface Fi2Document {
-  fi2document_ids: Fi2Ids[]
-  fi2document_descr: string
+  fi2document_ids: Fi2DocumentIds[]
+  fi2document_descr: { _: string }[]
   fi2document_link: string
-  fi2class_code: Fi2Class[]
+  fi2document_class: Fi2Class[]
 }
 
 export interface Fi2LeaseContract {

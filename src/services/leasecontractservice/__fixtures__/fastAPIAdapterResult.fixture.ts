@@ -1112,3 +1112,236 @@ export const fi2LeaseContractJson = {
     ],
   },
 }
+
+export const fi2LeaseContractWithDocumentJson = {
+  fi2leasecontract: {
+    $: {
+      id: '12345',
+      guid: 'F858990C-DBFD-4355-A5BD-EEA7DB95B704',
+      xmlns: 'http://www.fi2.se/schemas/1.31',
+    },
+    fi2lease_ids: [
+      {
+        fi2_id: [
+          {
+            _: '12345',
+            $: {
+              usage: 'ContractNo',
+            },
+          },
+        ],
+      },
+    ],
+    fi2lease_class: [
+      {
+        fi2class_code: ['1'],
+        fi2class_scheme: [
+          {
+            fi2scheme_id: ['CA000_009_002'],
+            fi2scheme_name: ['FI2klassificering av kontraktstyper'],
+            fi2scheme_url: ['http://www.fi2.se/classlist/CA000_009_002.xml'],
+          },
+        ],
+      },
+    ],
+    fi2lease_value: [
+      {
+        fi2value_code: ['ChangedBy'],
+        fi2value_scheme: [
+          {
+            fi2scheme_id: ['VB001_005_001'],
+            fi2scheme_name: ['Tillåtna värden för alla typer av fi2objekt'],
+            fi2scheme_url: ['http://www.fi2.se/valuelist/VB001_005_001.xml'],
+          },
+        ],
+        fi2value_value: ['Script'],
+      },
+      {
+        fi2value_code: ['ChangedDate'],
+        fi2value_scheme: [
+          {
+            fi2scheme_id: ['VB001_005_001'],
+            fi2scheme_name: ['Tillåtna värden för alla typer av fi2objekt'],
+            fi2scheme_url: ['http://www.fi2.se/valuelist/VB001_005_001.xml'],
+          },
+        ],
+        fi2value_value: ['2015-11-18T09:25:46'],
+      },
+      {
+        fi2value_code: ['CreatedBy'],
+        fi2value_scheme: [
+          {
+            fi2scheme_id: ['VB001_005_001'],
+            fi2scheme_name: ['Tillåtna värden för alla typer av fi2objekt'],
+            fi2scheme_url: ['http://www.fi2.se/valuelist/VB001_005_001.xml'],
+          },
+        ],
+        fi2value_value: ['Script'],
+      },
+      {
+        fi2value_code: ['CreatedDate'],
+        fi2value_scheme: [
+          {
+            fi2scheme_id: ['VB001_005_001'],
+            fi2scheme_name: ['Tillåtna värden för alla typer av fi2objekt'],
+            fi2scheme_url: ['http://www.fi2.se/valuelist/VB001_005_001.xml'],
+          },
+        ],
+        fi2value_value: ['2015-11-18T09:25:46'],
+      },
+      {
+        fi2value_code: ['ETag'],
+        fi2value_scheme: [
+          {
+            fi2scheme_id: ['VB001_005_001'],
+            fi2scheme_name: ['Tillåtna värden för alla typer av fi2objekt'],
+            fi2scheme_url: ['http://www.fi2.se/valuelist/VB001_005_001.xml'],
+          },
+        ],
+        fi2value_value: ['2015-11-18T09:25:46.910'],
+      },
+      {
+        fi2value_code: ['NoticedBy'],
+        fi2value_scheme: [
+          {
+            fi2scheme_id: ['VB001_001_001'],
+            fi2scheme_name: ['Tillåtna värden på ett hyreskontrakt'],
+            fi2scheme_url: ['http://www.fi2.se/valuelist/VB001_001_001.xml'],
+          },
+        ],
+        fi2value_value: ['HG'],
+      },
+    ],
+    fi2lease_documents: [
+      {
+        fi2document_class: [
+          {
+            fi2class_code: ['Internal'],
+            fi2class_scheme: [
+              {
+                fi2scheme_id: ['CA000_025_001'],
+                fi2scheme_name: ['Klassificering Document'],
+                fi2scheme_url: ['http://www.fi2.se/classlist/CA000_025_001.xml'],
+              },
+            ],
+          },
+        ],
+        fi2document_ids: [
+          {
+            fi2_id: ['23'],
+          },
+        ],
+        fi2document_descr: [
+          {
+            _: 'Exempeldokument',
+            $: {
+              lang: 'sv',
+            },
+          },
+        ],
+        fi2document_link: ['http://www.fastapi.se/apidocprop/v1/Documents/example.txt'],
+      },
+    ],
+    fi2lease_descr: [
+      {
+        _: 'Kontraktsbeskrivning',
+        $: {
+          lang: 'sv',
+          usage: 'Default',
+        },
+      },
+    ],
+    fi2lease_actor: [
+      {
+        fi2actor_partner: [
+          {
+            $: {
+              id: '12345',
+            },
+            fi2part_ids: [
+              {
+                fi2_id: [
+                  {
+                    _: '1',
+                    $: {
+                      usage: 'Sortorder',
+                    },
+                  },
+                ],
+              },
+            ],
+            fi2part_class: [
+              {
+                fi2class_code: ['16'],
+                fi2class_scheme: [
+                  {
+                    fi2scheme_id: ['CA000_005_003'],
+                    fi2scheme_name: ['Klassificering FI2Partner'],
+                    fi2scheme_url: ['http://www.fi2.se/classlist/CA000_005_003.xml'],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+        fi2actor_role: [
+          {
+            fi2class_code: ['16'],
+            fi2class_scheme: [
+              {
+                fi2scheme_id: ['CA000_005_003'],
+                fi2scheme_name: ['Klassificering FI2Partner'],
+                fi2scheme_url: ['http://www.fi2.se/classlist/CA000_005_003.xml'],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+    fi2lease_initialdate: ['2010-11-18T09:25:46'],
+    fi2lease_endingdate: ['2020-11-18'],
+    fi2lease_currenddate: ['2020-11-18'],
+    fi2lease_noticedate: ['2018-11-18'],
+    fi2lease_terminateddate: ['2020-11-18'],
+    fi2lease_renewaldate: ['2020-08-18'],
+    fi2lease_date: ['2009-11-18'],
+    fi2lease_signdate: ['2009-11-18'],
+    fi2lease_noticestatus: [
+      {
+        fi2class_code: ['Definitely'],
+        fi2class_scheme: [
+          {
+            fi2scheme_id: ['CB001_001_001'],
+            fi2scheme_name: ['Uppsägningsstatus'],
+            fi2scheme_url: ['http://www.fi2.se/classlist/CB001_001_001.xml'],
+          },
+        ],
+      },
+    ],
+    fi2lease_termreason: [
+      {
+        fi2class_code: ['Move'],
+        fi2class_scheme: [
+          {
+            fi2scheme_id: ['CB001_002_001'],
+            fi2scheme_name: ['Klassificering av uppsägningorsak'],
+            fi2scheme_url: ['http://www.fi2.se/classlist/CB001_002_001.xml'],
+          },
+        ],
+      },
+    ],
+    fi2lease_noticetime: ['3'],
+    fi2lease_parentobject: [
+      {
+        $: {
+          fi2item: 'fi2spatisystem',
+        },
+        fi2parent_ids: [
+          {
+            fi2_id: ['12345'],
+          },
+        ],
+      },
+    ],
+  },
+}
