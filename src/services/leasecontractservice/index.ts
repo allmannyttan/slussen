@@ -48,10 +48,10 @@ const getDocuments = async (documents: Fi2Document[]): Promise<ContractDocument[
 
   return Promise.all(
     documents.map(async (doc: Fi2Document) => {
-      const className = await helper.getNameFromClasslist(doc.fi2class_code[0])
+      const className = await helper.getNameFromClasslist(doc.fi2document_class[0])
       return {
-        id: doc.fi2document_ids[0].fi2_id[0]._,
-        description: doc.fi2document_descr[0],
+        id: doc.fi2document_ids[0].fi2_id[0],
+        description: doc.fi2document_descr[0]._,
         link: doc.fi2document_link[0],
         className,
       }
@@ -59,7 +59,7 @@ const getDocuments = async (documents: Fi2Document[]): Promise<ContractDocument[
   )
 }
 
-const getContractDocuments = (parentObjects: Fi2LeaseParentObject[]): ContractRentalObject[] => {
+const getContractRentals = (parentObjects: Fi2LeaseParentObject[]): ContractRentalObject[] => {
   if (!parentObjects) {
     return []
   }
@@ -86,7 +86,7 @@ const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
 
   const partners: ContractPartner[] = await getPartners(fi2.fi2lease_actor)
   const documents: ContractDocument[] = await getDocuments(fi2.fi2lease_documents)
-  const rentalObjects: ContractRentalObject[] = getContractDocuments(fi2.fi2lease_parentobject)
+  const rentalObjects: ContractRentalObject[] = getContractRentals(fi2.fi2lease_parentobject)
 
   //TODO: Add parent object
   const contract: Contract = {
@@ -141,6 +141,8 @@ const getLeaseContracts = async (): Promise<Contract[]> => {
 
 const getLeaseContract = async (id: string): Promise<Contract> => {
   const fi2Contract: Fi2LeaseContractResponse = await client.get(`fi2leasecontract/${id}`)
+  //console.log(JSON.stringify(fi2Contract, null, 2))
+
   const result = await transformContract(fi2Contract.fi2leasecontract)
   return result
 }

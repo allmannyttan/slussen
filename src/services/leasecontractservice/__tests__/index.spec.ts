@@ -1,6 +1,7 @@
 import {
   fi2LeaseContractsJson,
   fi2LeaseContractJson,
+  fi2LeaseContractWithDocumentJson,
 } from '../__fixtures__/fastAPIAdapterResult.fixture'
 import { client } from '@app/adapters/fastapiadapter'
 import service from '../index'
@@ -246,6 +247,23 @@ describe('#leasecontractservice', () => {
           "signDate": "2001-12-19",
           "terminatedDate": "",
           "terminationReason": "",
+        }
+      `)
+    })
+
+    test('handles documents correctly', async () => {
+      ;(client.get as jest.Mock).mockResolvedValueOnce(fi2LeaseContractWithDocumentJson)
+
+      const result = await service.getLeaseContract('123')
+
+      expect(result.documents).not.toBeNull()
+      expect(result.documents.length).toEqual(1)
+      expect(result.documents[0]).toMatchInlineSnapshot(`
+        Object {
+          "className": "Internt",
+          "description": "Exempeldokument",
+          "id": "23",
+          "link": "http://www.fastapi.se/apidocprop/v1/Documents/example.txt",
         }
       `)
     })
