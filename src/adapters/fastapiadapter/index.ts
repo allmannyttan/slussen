@@ -18,7 +18,15 @@ export const client = {
       const { data }: { data: T } = await xmlClient.get(url, options)
       const result = JSON.parse(
         xml2json.toJson(data, {
-          arrayNotation: ['fi2lease_actor', 'fi2lease_documents', 'fi2lease_value'],
+          arrayNotation: [
+            'fi2lease_actor',
+            'fi2lease_documents',
+            'fi2lease_value',
+            'fi2addr_addrline',
+            'fi2addr_tel',
+            'fi2part_tel',
+            'fi2part_email',
+          ],
         })
       )
       console.log(JSON.stringify(result, null, 2))
