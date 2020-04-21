@@ -14,9 +14,11 @@ import {
   Fi2Document,
   Fi2LeaseParentObject,
   ContractRentalObject,
+  RentalType,
 } from './types'
 
-const getFirstDate = (dates: string[]): string => (dates && dates.length > 0 ? dates[0] : '')
+const getFirstString = (strings: string[]): string =>
+  strings && strings.length > 0 ? strings[0] : ''
 
 const getPart = (parts: Fi2Value[], partName: string): string => {
   const partNode = parts.filter((part: Fi2Value) => part.fi2value_code[0] === partName)
@@ -52,7 +54,7 @@ const getDocuments = async (documents: Fi2Document[]): Promise<ContractDocument[
       return {
         id: doc.fi2document_ids[0].fi2_id[0],
         description: doc.fi2document_descr[0]._,
-        link: doc.fi2document_link[0],
+        link: getFirstString(doc.fi2document_link),
         className,
       }
     })
@@ -68,7 +70,7 @@ const getContractRentals = (parentObjects: Fi2LeaseParentObject[]): ContractRent
     (po: Fi2LeaseParentObject): ContractRentalObject => {
       return {
         id: po.fi2parent_ids[0].fi2_id[0],
-        type: po.$.fi2item,
+        type: po.$.fi2item === 'fi2spatisystem' ? RentalType.Rental : RentalType.Unknown,
       }
     }
   )
@@ -88,7 +90,6 @@ const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
   const documents: ContractDocument[] = await getDocuments(fi2.fi2lease_documents)
   const rentalObjects: ContractRentalObject[] = getContractRentals(fi2.fi2lease_parentobject)
 
-  //TODO: Add parent object
   const contract: Contract = {
     id: fi2.$.id,
     guid: fi2.$.guid,
@@ -96,14 +97,14 @@ const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
     noticeStatus,
     terminationReason,
 
-    currentEndDate: getFirstDate(fi2.fi2lease_currenddate),
-    date: getFirstDate(fi2.fi2lease_date),
-    endingDate: getFirstDate(fi2.fi2lease_endingdate),
-    initialDate: getFirstDate(fi2.fi2lease_initialdate),
-    noticeDate: getFirstDate(fi2.fi2lease_noticedate),
-    renewalDate: getFirstDate(fi2.fi2lease_renewaldate),
-    signDate: getFirstDate(fi2.fi2lease_signdate),
-    terminatedDate: getFirstDate(fi2.fi2lease_terminateddate),
+    currentEndDate: getFirstString(fi2.fi2lease_currenddate),
+    date: getFirstString(fi2.fi2lease_date),
+    endingDate: getFirstString(fi2.fi2lease_endingdate),
+    initialDate: getFirstString(fi2.fi2lease_initialdate),
+    noticeDate: getFirstString(fi2.fi2lease_noticedate),
+    renewalDate: getFirstString(fi2.fi2lease_renewaldate),
+    signDate: getFirstString(fi2.fi2lease_signdate),
+    terminatedDate: getFirstString(fi2.fi2lease_terminateddate),
 
     description:
       fi2.fi2lease_descr && fi2.fi2lease_descr[0] && fi2.fi2lease_descr[0]._

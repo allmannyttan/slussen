@@ -38,8 +38,13 @@ export interface ContractDocument {
 }
 
 export interface ContractRentalObject {
-  type: string
+  type: RentalType
   id: string
+}
+
+export enum RentalType {
+  Rental = 'Rental',
+  Unknown = 'Unknown',
 }
 
 /********** Fi2XML types **********/

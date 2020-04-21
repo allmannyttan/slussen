@@ -72,7 +72,7 @@ describe('#leasecontractservice', () => {
             "rentalObjects": Array [
               Object {
                 "id": "OBJ-16010204",
-                "type": "fi2spatisystem",
+                "type": "Rental",
               },
             ],
             "signDate": "2001-12-19",
@@ -123,7 +123,7 @@ describe('#leasecontractservice', () => {
             "rentalObjects": Array [
               Object {
                 "id": "OBJ-0130202",
-                "type": "fi2spatisystem",
+                "type": "Rental",
               },
             ],
             "signDate": "1996-01-22",
@@ -174,7 +174,7 @@ describe('#leasecontractservice', () => {
             "rentalObjects": Array [
               Object {
                 "id": "OBJ-06020103",
-                "type": "fi2spatisystem",
+                "type": "Rental",
               },
             ],
             "signDate": "1996-04-27",
@@ -241,7 +241,7 @@ describe('#leasecontractservice', () => {
           "rentalObjects": Array [
             Object {
               "id": "OBJ-16010204",
-              "type": "fi2spatisystem",
+              "type": "Rental",
             },
           ],
           "signDate": "2001-12-19",
