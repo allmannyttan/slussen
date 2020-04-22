@@ -15,7 +15,7 @@ export const client = {
       responseType: 'text',
     })
     try {
-      const { data }: { data: T } = await xmlClient.get(url, options)
+      const { data } = await xmlClient.get(url, options)
       const result = JSON.parse(
         xml2json.toJson(data, {
           arrayNotation: [
