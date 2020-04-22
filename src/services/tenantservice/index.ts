@@ -90,8 +90,8 @@ const getEmailAddresses = (emailAddresses: Fi2ValueUsage[]): EmailAddress[] => {
   return transformedEmailAddresses
 }
 
-const transformTenant = async (tenantRaw: Fi2Partner): Promise<Tenant> => {
-  const className = await helper.getNameFromClasslist(tenantRaw.fi2part_class)
+const transformTenant = (tenantRaw: Fi2Partner): Tenant => {
+  const className = helper.getNameFromClasslist(tenantRaw.fi2part_class)
   const tenant: Tenant = {
     id: tenantRaw.id,
     socialSecurityNumber: getSocialSecurityNumber(tenantRaw.fi2part_ids),
@@ -138,9 +138,9 @@ const transformTenant = async (tenantRaw: Fi2Partner): Promise<Tenant> => {
   return tenant
 }
 
-const transformTenants = async (tenantsRaw: Fi2PartnersResponse): Promise<Tenant[]> => {
+const transformTenants = (tenantsRaw: Fi2PartnersResponse): Tenant[] => {
   if (tenantsRaw.fi2simplemessage && tenantsRaw.fi2simplemessage.fi2partner) {
-    return Promise.all(tenantsRaw.fi2simplemessage.fi2partner.map(transformTenant))
+    return tenantsRaw.fi2simplemessage.fi2partner.map(transformTenant)
   } else {
     return []
   }
@@ -153,7 +153,7 @@ const getTenants = async (): Promise<Tenant[]> => {
 
 const getTenant = async (id: string): Promise<Tenant> => {
   const tenant: Fi2PartnerResponse = await client.get(`fi2partner/${id}`)
-  const result = await transformTenant(tenant.fi2partner)
+  const result = transformTenant(tenant.fi2partner)
   return result
 }
 

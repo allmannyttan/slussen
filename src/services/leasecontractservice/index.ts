@@ -23,39 +23,36 @@ const getPart = (parts: Fi2Value[], partName: string): string => {
   return partNode.length > 0 ? partNode[0].fi2value_value : ''
 }
 
-const getPartners = async (partners: Fi2LeaseActor[]): Promise<ContractPartner[]> => {
+const getPartners = (partners: Fi2LeaseActor[]): ContractPartner[] => {
   if (!partners) {
     return []
   }
 
-  const contractPartners: Promise<ContractPartner[]> = Promise.all(
-    partners.map(async (partner: Fi2LeaseActor) => {
-      return {
-        id: partner.fi2actor_partner.id,
-        className: await helper.getNameFromClasslist(partner.fi2actor_partner.fi2part_class),
-        roleName: await helper.getNameFromClasslist(partner.fi2actor_role),
-      }
-    })
-  )
+  const contractPartners: ContractPartner[] = partners.map((partner: Fi2LeaseActor) => {
+    return {
+      id: partner.fi2actor_partner.id,
+      className: helper.getNameFromClasslist(partner.fi2actor_partner.fi2part_class),
+      roleName: helper.getNameFromClasslist(partner.fi2actor_role),
+    }
+  })
+
   return contractPartners
 }
 
-const getDocuments = async (documents: Fi2Document[]): Promise<ContractDocument[]> => {
+const getDocuments = (documents: Fi2Document[]): ContractDocument[] => {
   if (!documents) {
     return []
   }
 
-  return Promise.all(
-    documents.map(async (doc: Fi2Document) => {
-      const className = await helper.getNameFromClasslist(doc.fi2document_class)
-      return {
-        id: doc.fi2document_ids.fi2_id,
-        description: doc.fi2document_descr.$t,
-        link: doc.fi2document_link,
-        className,
-      }
-    })
-  )
+  return documents.map((doc: Fi2Document) => {
+    const className = helper.getNameFromClasslist(doc.fi2document_class)
+    return {
+      id: doc.fi2document_ids.fi2_id,
+      description: doc.fi2document_descr.$t,
+      link: doc.fi2document_link,
+      className,
+    }
+  })
 }
 
 const getContractRentals = (parentObject: Fi2LeaseParentObject): ContractRentalObject => {
@@ -65,18 +62,18 @@ const getContractRentals = (parentObject: Fi2LeaseParentObject): ContractRentalO
   }
 }
 
-const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
-  const className = await helper.getNameFromClasslist(fi2.fi2lease_class)
+const transformContract = (fi2: Fi2LeaseContract): Contract => {
+  const className = helper.getNameFromClasslist(fi2.fi2lease_class)
   let terminationReason = ''
   if (fi2.fi2lease_termreason)
-    terminationReason = await helper.getNameFromClasslist(fi2.fi2lease_termreason)
+    terminationReason = helper.getNameFromClasslist(fi2.fi2lease_termreason)
 
   let noticeStatus = ''
   if (fi2.fi2lease_noticestatus)
-    noticeStatus = await helper.getNameFromClasslist(fi2.fi2lease_noticestatus)
+    noticeStatus = helper.getNameFromClasslist(fi2.fi2lease_noticestatus)
 
-  const partners: ContractPartner[] = await getPartners(fi2.fi2lease_actor)
-  const documents: ContractDocument[] = await getDocuments(fi2.fi2lease_documents)
+  const partners: ContractPartner[] = getPartners(fi2.fi2lease_actor)
+  const documents: ContractDocument[] = getDocuments(fi2.fi2lease_documents)
   const rentalObject: ContractRentalObject = getContractRentals(fi2.fi2lease_parentobject)
 
   const contract: Contract = {
@@ -115,9 +112,9 @@ const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
   return contract
 }
 
-const transformContracts = async (fi2Contracts: Fi2LeaseContractsResponse): Promise<Contract[]> => {
+const transformContracts = (fi2Contracts: Fi2LeaseContractsResponse): Contract[] => {
   if (fi2Contracts.fi2simplemessage && fi2Contracts.fi2simplemessage.fi2leasecontract) {
-    return Promise.all(fi2Contracts.fi2simplemessage.fi2leasecontract.map(transformContract))
+    return fi2Contracts.fi2simplemessage.fi2leasecontract.map(transformContract)
   } else {
     return []
   }
@@ -125,14 +122,14 @@ const transformContracts = async (fi2Contracts: Fi2LeaseContractsResponse): Prom
 
 const getLeaseContracts = async (): Promise<Contract[]> => {
   const contracts: Fi2LeaseContractsResponse = await client.get(`fi2leasecontract/`)
-  const result = await transformContracts(contracts)
+  const result = transformContracts(contracts)
   return result
 }
 
 const getLeaseContract = async (id: string): Promise<Contract> => {
   const fi2Contract: Fi2LeaseContractResponse = await client.get(`fi2leasecontract/${id}`)
 
-  const result = await transformContract(fi2Contract.fi2leasecontract)
+  const result = transformContract(fi2Contract.fi2leasecontract)
   return result
 }
 

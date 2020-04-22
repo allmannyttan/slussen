@@ -1,4 +1,4 @@
-import { Fi2Address } from "../tenantservice/types";
+import { Fi2Address, Address } from "../tenantservice/types";
 
 export interface Rental {
   type: string
@@ -13,7 +13,7 @@ export interface Rental {
   name: string
   fullName: string
   description: string
-
+  addresses: Address[]
 }
 
 export interface Document {

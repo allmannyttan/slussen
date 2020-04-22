@@ -6,6 +6,7 @@ import {
     Rental,
     Document,
     Area,
+    Address,
     Fi2SpatiSystem,
     Fi2Document,
     Fi2Area,
@@ -60,6 +61,7 @@ const transformRental = (fi2: Fi2SpatiSystem): Rental => {
 
   const documents: Document[] = getDocuments(fi2.fi2spsys_documents)
   const areas: Area[] = getAreas(fi2.fi2spsys_area)
+  const addresses: Address[] = getAddresses(fi2.fi2spsys_addresses)
 
   const rental: Rental = {
     type: className,
@@ -73,7 +75,8 @@ const transformRental = (fi2: Fi2SpatiSystem): Rental => {
     areas,
     name: fi2.fi2spsys_name.$t,
     fullName: fi2.fi2spsys_fullname,
-    description: fi2.fi2spsys_descr.$t
+    description: fi2.fi2spsys_descr.$t,
+    addresses
   }
 
   return rental
