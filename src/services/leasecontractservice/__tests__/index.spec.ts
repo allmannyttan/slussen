@@ -69,12 +69,10 @@ describe('#leasecontractservice', () => {
               },
             ],
             "renewalDate": "2020-05-01",
-            "rentalObjects": Array [
-              Object {
-                "id": "OBJ-16010204",
-                "type": "fi2spatisystem",
-              },
-            ],
+            "rentalObject": Object {
+              "id": "OBJ-16010204",
+              "type": "Rental",
+            },
             "signDate": "2001-12-19",
             "terminatedDate": "",
             "terminationReason": "",
@@ -120,12 +118,10 @@ describe('#leasecontractservice', () => {
               },
             ],
             "renewalDate": "2020-05-01",
-            "rentalObjects": Array [
-              Object {
-                "id": "OBJ-0130202",
-                "type": "fi2spatisystem",
-              },
-            ],
+            "rentalObject": Object {
+              "id": "OBJ-0130202",
+              "type": "Rental",
+            },
             "signDate": "1996-01-22",
             "terminatedDate": "",
             "terminationReason": "",
@@ -171,12 +167,10 @@ describe('#leasecontractservice', () => {
               },
             ],
             "renewalDate": "2020-05-01",
-            "rentalObjects": Array [
-              Object {
-                "id": "OBJ-06020103",
-                "type": "fi2spatisystem",
-              },
-            ],
+            "rentalObject": Object {
+              "id": "OBJ-06020103",
+              "type": "Rental",
+            },
             "signDate": "1996-04-27",
             "terminatedDate": "",
             "terminationReason": "",
@@ -203,49 +197,44 @@ describe('#leasecontractservice', () => {
 
       expect(result).toMatchInlineSnapshot(`
         Object {
-          "changeDate": "2014-03-12T11:54:18",
-          "changedBy": "",
-          "className": "Bostadsavtal",
-          "createDate": "2015-04-23T09:13:17",
-          "createdBy": "",
-          "currentEndDate": "2020-08-01",
-          "date": "2001-12-18",
-          "description": "Tillsvidareavtal för en bostad",
-          "documents": Array [],
-          "endingDate": "",
-          "guid": "94F6BA02-EE7E-4076-B5B4-5C3062ED304B",
-          "id": "1",
-          "initialDate": "2002-02-01T00:00:00",
-          "noticeDate": "",
-          "noticeStatus": "",
+          "changeDate": "2015-11-18T09:25:46",
+          "changedBy": "Script",
+          "className": "Hyresavtal",
+          "createDate": "2015-11-18T09:25:46",
+          "createdBy": "Script",
+          "currentEndDate": "2020-11-18",
+          "date": "2009-11-18",
+          "description": "Kontraktsbeskrivning",
+          "documents": Array [
+            Object {
+              "className": "Internt",
+              "description": "Exempeldokument",
+              "id": "23",
+              "link": "http://www.fastapi.se/apidocprop/v1/Documents/example.txt",
+            },
+          ],
+          "endingDate": "2020-11-18",
+          "guid": "F858990C-DBFD-4355-A5BD-EEA7DB95B704",
+          "id": "12345",
+          "initialDate": "2010-11-18T09:25:46",
+          "noticeDate": "2018-11-18",
+          "noticeStatus": "Definitivt",
           "noticeTime": "3",
-          "noticedBy": "",
+          "noticedBy": "HG",
           "partners": Array [
             Object {
               "className": "Hyresgäst",
-              "id": "PARTN-147",
-              "roleName": "Hyresgäst",
-            },
-            Object {
-              "className": "Hyresgäst",
-              "id": "PARTN-162",
-              "roleName": "Hyresgäst",
-            },
-            Object {
-              "className": "Hyresgäst",
-              "id": "PARTN-273",
+              "id": "12345",
               "roleName": "Hyresgäst",
             },
           ],
-          "renewalDate": "2020-05-01",
-          "rentalObjects": Array [
-            Object {
-              "id": "OBJ-16010204",
-              "type": "fi2spatisystem",
-            },
-          ],
-          "signDate": "2001-12-19",
-          "terminatedDate": "",
+          "renewalDate": "2020-08-18",
+          "rentalObject": Object {
+            "id": "12345",
+            "type": "Rental",
+          },
+          "signDate": "2009-11-18",
+          "terminatedDate": "2020-11-18",
           "terminationReason": "",
         }
       `)

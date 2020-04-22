@@ -14,14 +14,13 @@ import {
   Fi2Document,
   Fi2LeaseParentObject,
   ContractRentalObject,
+  RentalType,
 } from './types'
 
-const getFirstDate = (dates: string[]): string => (dates && dates.length > 0 ? dates[0] : '')
-
 const getPart = (parts: Fi2Value[], partName: string): string => {
-  const partNode = parts.filter((part: Fi2Value) => part.fi2value_code[0] === partName)
+  const partNode = parts.filter((part: Fi2Value) => part.fi2value_code === partName)
 
-  return partNode.length > 0 ? partNode[0].fi2value_value[0] : ''
+  return partNode.length > 0 ? partNode[0].fi2value_value : ''
 }
 
 const getPartners = async (partners: Fi2LeaseActor[]): Promise<ContractPartner[]> => {
@@ -30,11 +29,11 @@ const getPartners = async (partners: Fi2LeaseActor[]): Promise<ContractPartner[]
   }
 
   const contractPartners: Promise<ContractPartner[]> = Promise.all(
-    partners.map(async (partner) => {
+    partners.map(async (partner: Fi2LeaseActor) => {
       return {
-        id: partner.fi2actor_partner[0].$.id,
-        className: await helper.getNameFromClasslist(partner.fi2actor_partner[0].fi2part_class[0]),
-        roleName: await helper.getNameFromClasslist(partner.fi2actor_role[0]),
+        id: partner.fi2actor_partner.id,
+        className: await helper.getNameFromClasslist(partner.fi2actor_partner.fi2part_class),
+        roleName: await helper.getNameFromClasslist(partner.fi2actor_role),
       }
     })
   )
@@ -48,68 +47,59 @@ const getDocuments = async (documents: Fi2Document[]): Promise<ContractDocument[
 
   return Promise.all(
     documents.map(async (doc: Fi2Document) => {
-      const className = await helper.getNameFromClasslist(doc.fi2document_class[0])
+      const className = await helper.getNameFromClasslist(doc.fi2document_class)
       return {
-        id: doc.fi2document_ids[0].fi2_id[0],
-        description: doc.fi2document_descr[0]._,
-        link: doc.fi2document_link[0],
+        id: doc.fi2document_ids.fi2_id,
+        description: doc.fi2document_descr.$t,
+        link: doc.fi2document_link,
         className,
       }
     })
   )
 }
 
-const getContractRentals = (parentObjects: Fi2LeaseParentObject[]): ContractRentalObject[] => {
-  if (!parentObjects) {
-    return []
+const getContractRentals = (parentObject: Fi2LeaseParentObject): ContractRentalObject => {
+  return {
+    id: parentObject.fi2parent_ids.fi2_id,
+    type: parentObject.fi2item === 'fi2spatisystem' ? RentalType.Rental : RentalType.Unknown,
   }
-
-  return parentObjects.map(
-    (po: Fi2LeaseParentObject): ContractRentalObject => {
-      return {
-        id: po.fi2parent_ids[0].fi2_id[0],
-        type: po.$.fi2item,
-      }
-    }
-  )
 }
 
 const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
-  const className = await helper.getNameFromClasslist(fi2.fi2lease_class[0])
+  const className = await helper.getNameFromClasslist(fi2.fi2lease_class)
   let terminationReason = ''
   if (fi2.fi2lease_termreason)
-    terminationReason = await helper.getNameFromClasslist(fi2.fi2lease_termreason[0])
+    terminationReason = await helper.getNameFromClasslist(fi2.fi2lease_termreason)
 
   let noticeStatus = ''
   if (fi2.fi2lease_noticestatus)
-    noticeStatus = await helper.getNameFromClasslist(fi2.fi2lease_noticestatus[0])
+    noticeStatus = await helper.getNameFromClasslist(fi2.fi2lease_noticestatus)
 
   const partners: ContractPartner[] = await getPartners(fi2.fi2lease_actor)
   const documents: ContractDocument[] = await getDocuments(fi2.fi2lease_documents)
-  const rentalObjects: ContractRentalObject[] = getContractRentals(fi2.fi2lease_parentobject)
+  const rentalObject: ContractRentalObject = getContractRentals(fi2.fi2lease_parentobject)
 
-  //TODO: Add parent object
   const contract: Contract = {
-    id: fi2.$.id,
-    guid: fi2.$.guid,
+    id: fi2.id,
+    guid: fi2.guid,
     className,
     noticeStatus,
     terminationReason,
 
-    currentEndDate: getFirstDate(fi2.fi2lease_currenddate),
-    date: getFirstDate(fi2.fi2lease_date),
-    endingDate: getFirstDate(fi2.fi2lease_endingdate),
-    initialDate: getFirstDate(fi2.fi2lease_initialdate),
-    noticeDate: getFirstDate(fi2.fi2lease_noticedate),
-    renewalDate: getFirstDate(fi2.fi2lease_renewaldate),
-    signDate: getFirstDate(fi2.fi2lease_signdate),
-    terminatedDate: getFirstDate(fi2.fi2lease_terminateddate),
+    currentEndDate: fi2.fi2lease_currenddate || '',
+    date: fi2.fi2lease_date || '',
+    endingDate: fi2.fi2lease_endingdate || '',
+    initialDate: fi2.fi2lease_initialdate || '',
+    noticeDate: fi2.fi2lease_noticedate || '',
+    renewalDate: fi2.fi2lease_renewaldate || '',
+    signDate: fi2.fi2lease_signdate || '',
+    terminatedDate: fi2.fi2lease_terminateddate || '',
 
     description:
-      fi2.fi2lease_descr && fi2.fi2lease_descr[0] && fi2.fi2lease_descr[0]._
-        ? fi2.fi2lease_descr[0]._
+      fi2.fi2lease_descr && fi2.fi2lease_descr && fi2.fi2lease_descr.$t
+        ? fi2.fi2lease_descr.$t
         : '',
-    noticeTime: fi2.fi2lease_noticetime ? fi2.fi2lease_noticetime[0] : 0,
+    noticeTime: fi2.fi2lease_noticetime ? fi2.fi2lease_noticetime : 0,
 
     changedBy: getPart(fi2.fi2lease_value, 'ChangedBy'),
     changeDate: getPart(fi2.fi2lease_value, 'ChangedDate'),
@@ -119,7 +109,7 @@ const transformContract = async (fi2: Fi2LeaseContract): Promise<Contract> => {
 
     partners,
     documents,
-    rentalObjects,
+    rentalObject,
   }
 
   return contract

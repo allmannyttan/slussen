@@ -18,21 +18,21 @@ import {
 } from './types'
 
 const getSocialSecurityNumber = (ids: Fi2Ids): string => {
-  const ssnNode = ids.fi2_id.filter((id: Fi2ValueUsage) => id.$.usage === 'Ssn')
+  const ssnNode = ids.fi2_id.filter((id: Fi2ValueUsage) => id.usage === 'Ssn')
 
-  return ssnNode.length > 0 ? ssnNode[0]._ : ''
+  return ssnNode.length > 0 ? ssnNode[0].$t : ''
 }
 
 const getPart = (parts: Fi2Value[], partName: string): string => {
-  const partNode = parts.filter((part: Fi2Value) => part.fi2value_code[0] === partName)
+  const partNode = parts.filter((part: Fi2Value) => part.fi2value_code === partName)
 
-  return partNode.length > 0 ? partNode[0].fi2value_value[0] : ''
+  return partNode.length > 0 ? partNode[0].fi2value_value : ''
 }
 
 const getAddressLine = (addressLines: Fi2ValueUsage[], usage: string) => {
-  const line = addressLines.find((line: Fi2ValueUsage) => line.$.usage === usage)
+  const line = addressLines.find((line: Fi2ValueUsage) => line.usage === usage)
 
-  return line ? line._ : ''
+  return line ? line.$t : ''
 }
 
 const addressTypes: { [index: string]: string } = {
@@ -41,8 +41,8 @@ const addressTypes: { [index: string]: string } = {
 }
 
 const getAddressType = (address: Fi2Address): string => {
-  const typeCode: string | null = address.fi2addr_class[0].fi2class_code
-    ? address.fi2addr_class[0].fi2class_code[0]
+  const typeCode: string | null = address.fi2addr_class.fi2class_code
+    ? address.fi2addr_class.fi2class_code
     : null
 
   if (typeCode) {
@@ -61,8 +61,8 @@ const getPhoneNumbers = (phoneNumbers: Fi2ValueUsage[]): PhoneNumber[] => {
     .map(
       (phoneNumber: Fi2ValueUsage): PhoneNumber => {
         return {
-          type: phoneNumber.$.usage,
-          number: phoneNumber._,
+          type: phoneNumber.usage,
+          number: phoneNumber.$t,
         }
       }
     )
@@ -80,8 +80,8 @@ const getEmailAddresses = (emailAddresses: Fi2ValueUsage[]): EmailAddress[] => {
     .map(
       (emailAddress: Fi2ValueUsage): EmailAddress => {
         return {
-          type: emailAddress.$.usage,
-          address: emailAddress._,
+          type: emailAddress.usage,
+          address: emailAddress.$t,
         }
       }
     )
@@ -91,52 +91,46 @@ const getEmailAddresses = (emailAddresses: Fi2ValueUsage[]): EmailAddress[] => {
 }
 
 const transformTenant = async (tenantRaw: Fi2Partner): Promise<Tenant> => {
-  const className = await helper.getNameFromClasslist(tenantRaw.fi2part_class[0])
+  const className = await helper.getNameFromClasslist(tenantRaw.fi2part_class)
   const tenant: Tenant = {
-    id: tenantRaw.$.id,
-    socialSecurityNumber: getSocialSecurityNumber(tenantRaw.fi2part_ids[0]),
+    id: tenantRaw.id,
+    socialSecurityNumber: getSocialSecurityNumber(tenantRaw.fi2part_ids),
     changedBy: getPart(tenantRaw.fi2part_value, 'ChangedBy'),
     changeDate: getPart(tenantRaw.fi2part_value, 'ChangedDate'),
     createdBy: getPart(tenantRaw.fi2part_value, 'CreatedBy'),
     createDate: getPart(tenantRaw.fi2part_value, 'CreatedDate'),
-    name: tenantRaw.fi2part_name ? tenantRaw.fi2part_name[0]._ : '',
-    fullName: tenantRaw.fi2part_fullname[0],
+    name: tenantRaw.fi2part_name ? tenantRaw.fi2part_name.$t : '',
+    fullName: tenantRaw.fi2part_fullname,
     phoneNumbers: getPhoneNumbers(tenantRaw.fi2part_tel),
     emailAddresses: getEmailAddresses(tenantRaw.fi2part_email),
     addresses: tenantRaw.fi2part_address
       ? tenantRaw.fi2part_address.map(
           (address: Fi2Address): Address => {
             const transformedAddress: Address = {
-              guid: address.$ ? address.$.guid : undefined,
+              guid: address.guid ? address.guid : undefined,
               type: getAddressType(address),
               street: getAddressLine(address.fi2addr_addrline, 'Street'),
               box: getAddressLine(address.fi2addr_addrline, 'Box'),
               co: getAddressLine(address.fi2addr_addrline, 'Co'),
               attention: getAddressLine(address.fi2addr_addrline, 'Att'),
-              zipCode: address.fi2addr_zipcode ? address.fi2addr_zipcode[0] : undefined,
-              city: address.fi2addr_city ? address.fi2addr_city[0] : undefined,
-              country: address.fi2addr_country ? address.fi2addr_country[0] : undefined,
+              zipCode: address.fi2addr_zipcode ? address.fi2addr_zipcode : undefined,
+              city: address.fi2addr_city ? address.fi2addr_city : undefined,
+              country: address.fi2addr_country ? address.fi2addr_country : undefined,
             }
 
             return transformedAddress
           }
         )
       : undefined,
-    contacts: tenantRaw.fi2part_contact
-      ? tenantRaw.fi2part_contact.map(
-          (contact: Fi2Contact): Contact => {
-            const transformedContact: Contact = {
-              type: contact.fi2contact_class[0].fi2class_code[0],
-              firstName: contact.fi2cont_fname[0],
-              lastName: contact.fi2cont_lname[0],
-              fullName: contact.fi2cont_fullname[0],
-              phoneNumbers: getPhoneNumbers(contact.fi2cont_tel),
-              emailAddresses: getEmailAddresses(contact.fi2cont_email),
-            }
-
-            return transformedContact
-          }
-        )
+    contact: tenantRaw.fi2part_contact
+      ? {
+          type: tenantRaw.fi2part_contact.fi2contact_class.fi2class_code,
+          firstName: tenantRaw.fi2part_contact.fi2cont_fname,
+          lastName: tenantRaw.fi2part_contact.fi2cont_lname,
+          fullName: tenantRaw.fi2part_contact.fi2cont_fullname,
+          phoneNumbers: getPhoneNumbers(tenantRaw.fi2part_contact.fi2cont_tel),
+          emailAddresses: getEmailAddresses(tenantRaw.fi2part_contact.fi2cont_email),
+        }
       : undefined,
     className,
   }
