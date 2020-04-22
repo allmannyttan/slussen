@@ -131,7 +131,6 @@ const getLeaseContracts = async (): Promise<Contract[]> => {
 
 const getLeaseContract = async (id: string): Promise<Contract> => {
   const fi2Contract: Fi2LeaseContractResponse = await client.get(`fi2leasecontract/${id}`)
-  //console.log(JSON.stringify(fi2Contract, null, 2))
 
   const result = await transformContract(fi2Contract.fi2leasecontract)
   return result

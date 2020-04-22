@@ -26,6 +26,11 @@ export const client = {
             'fi2addr_tel',
             'fi2part_tel',
             'fi2part_email',
+            'fi2part_address',
+            'fi2part_value',
+            'fi2_id',
+            'fi2cont_tel',
+            'fi2cont_email',
           ],
         })
       )
