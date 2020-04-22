@@ -7,7 +7,7 @@ interface HealthResponse {
 
 const checkHealth = async (): Promise<HealthResponse> => {
   const tenants = await tenantService.getTenants()
-  const fastAPIAccess = !!tenants
+  const fastAPIAccess = Array.isArray(tenants) && tenants.length > 0
 
   return {
     fastAPIAccess,
