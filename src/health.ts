@@ -6,10 +6,11 @@ interface HealthResponse {
 }
 
 const checkHealth = async (): Promise<HealthResponse> => {
-  const fastAPIAccess = await tenantService.getTenants()
-  console.log(fastAPIAccess)
+  const tenants = await tenantService.getTenants()
+  const fastAPIAccess = !!tenants
+
   return {
-    fastAPIAccess: true,
+    fastAPIAccess,
   }
 }
 
