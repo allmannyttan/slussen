@@ -2,7 +2,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ '**' ]
+    branches: [ master ]
   pull_request:
     branches: [ '**' ]
 
@@ -23,6 +23,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
-    - run: npm test:ci
+    - run: npm run test:ci
       env:
         CI: true
