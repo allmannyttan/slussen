@@ -57,46 +57,44 @@ describe('#tenantservice', () => {
             "changeDate": "2015-11-18T09:21:06",
             "changedBy": "Script",
             "className": "Hyresgäst",
-            "contacts": Array [
-              Object {
-                "emailAddresses": Array [
-                  Object {
-                    "address": "Anna.Ibrahimovic@Hemma.se",
-                    "type": "Private",
-                  },
-                  Object {
-                    "address": "Anna.Ibrahimovic@jobbet.se",
-                    "type": "Work",
-                  },
-                ],
-                "firstName": "Anna",
-                "fullName": "Anna Ibrahimovic",
-                "lastName": "Ibrahimovic",
-                "phoneNumbers": Array [
-                  Object {
-                    "number": "9566-463288",
-                    "type": "Home",
-                  },
-                  Object {
-                    "number": "5938-191763",
-                    "type": "Work",
-                  },
-                  Object {
-                    "number": "070-9167130",
-                    "type": "MobilePrivate",
-                  },
-                  Object {
-                    "number": "12345",
-                    "type": "MobileWork",
-                  },
-                  Object {
-                    "number": "12345",
-                    "type": "Fax",
-                  },
-                ],
-                "type": "Primary",
-              },
-            ],
+            "contact": Object {
+              "emailAddresses": Array [
+                Object {
+                  "address": "Anna.Ibrahimovic@Hemma.se",
+                  "type": "Private",
+                },
+                Object {
+                  "address": "Anna.Ibrahimovic@jobbet.se",
+                  "type": "Work",
+                },
+              ],
+              "firstName": "Anna",
+              "fullName": "Anna Ibrahimovic",
+              "lastName": "Ibrahimovic",
+              "phoneNumbers": Array [
+                Object {
+                  "number": "9566-463288",
+                  "type": "Home",
+                },
+                Object {
+                  "number": "5938-191763",
+                  "type": "Work",
+                },
+                Object {
+                  "number": "070-9167130",
+                  "type": "MobilePrivate",
+                },
+                Object {
+                  "number": "12345",
+                  "type": "MobileWork",
+                },
+                Object {
+                  "number": "12345",
+                  "type": "Fax",
+                },
+              ],
+              "type": "Primary",
+            },
             "createDate": "2015-11-18T09:21:06",
             "createdBy": "Script",
             "emailAddresses": Array [
@@ -185,46 +183,44 @@ describe('#tenantservice', () => {
           "changeDate": "2015-11-18T09:21:06",
           "changedBy": "Script",
           "className": "Hyresgäst",
-          "contacts": Array [
-            Object {
-              "emailAddresses": Array [
-                Object {
-                  "address": "Anna.Ibrahimovic@Hemma.se",
-                  "type": "Private",
-                },
-                Object {
-                  "address": "Anna.Ibrahimovic@jobbet.se",
-                  "type": "Work",
-                },
-              ],
-              "firstName": "Anna",
-              "fullName": "Anna Ibrahimovic",
-              "lastName": "Ibrahimovic",
-              "phoneNumbers": Array [
-                Object {
-                  "number": "9566-463288",
-                  "type": "Home",
-                },
-                Object {
-                  "number": "5938-191763",
-                  "type": "Work",
-                },
-                Object {
-                  "number": "070-9167130",
-                  "type": "MobilePrivate",
-                },
-                Object {
-                  "number": "12345",
-                  "type": "MobileWork",
-                },
-                Object {
-                  "number": "12345",
-                  "type": "Fax",
-                },
-              ],
-              "type": "Primary",
-            },
-          ],
+          "contact": Object {
+            "emailAddresses": Array [
+              Object {
+                "address": "Anna.Ibrahimovic@Hemma.se",
+                "type": "Private",
+              },
+              Object {
+                "address": "Anna.Ibrahimovic@jobbet.se",
+                "type": "Work",
+              },
+            ],
+            "firstName": "Anna",
+            "fullName": "Anna Ibrahimovic",
+            "lastName": "Ibrahimovic",
+            "phoneNumbers": Array [
+              Object {
+                "number": "9566-463288",
+                "type": "Home",
+              },
+              Object {
+                "number": "5938-191763",
+                "type": "Work",
+              },
+              Object {
+                "number": "070-9167130",
+                "type": "MobilePrivate",
+              },
+              Object {
+                "number": "12345",
+                "type": "MobileWork",
+              },
+              Object {
+                "number": "12345",
+                "type": "Fax",
+              },
+            ],
+            "type": "Primary",
+          },
           "createDate": "2015-11-18T09:21:06",
           "createdBy": "Script",
           "emailAddresses": Array [
