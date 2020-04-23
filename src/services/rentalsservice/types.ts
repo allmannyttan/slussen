@@ -1,4 +1,4 @@
-import { Fi2Address, Address } from "../tenantservice/types";
+import { Fi2Address, Address } from '@app/commonTypes/types';
 
 export interface Rental {
   type: string
@@ -117,5 +117,5 @@ export interface Fi2SpatiSystemsResponse {
 }
   
 export interface Fi2SpatiSystemResponse {
-  fi2rental: Fi2SpatiSystem
+  fi2spatisystem: Fi2SpatiSystem
 }

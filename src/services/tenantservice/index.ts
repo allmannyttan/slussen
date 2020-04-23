@@ -1,17 +1,17 @@
 import { Application, Request, Response } from 'express'
 import { client } from '@app/adapters/fastapiadapter'
 import helper from '@app/helpers/fastAPIXmlListHelper'
+import { convertAddress } from '@app/helpers/converters'
+import { Address, Fi2Address, Fi2Value, Fi2ValueUsage } from '@app/commonTypes/types'
+
+
 import {
-  Address,
   Contact,
   EmailAddress,
-  Fi2Address,
   Fi2Contact,
   Fi2Ids,
   Fi2Partner,
   Fi2PartnersResponse,
-  Fi2Value,
-  Fi2ValueUsage,
   PhoneNumber,
   Tenant,
   Fi2PartnerResponse,
@@ -27,29 +27,6 @@ const getPart = (parts: Fi2Value[], partName: string): string => {
   const partNode = parts.filter((part: Fi2Value) => part.fi2value_code === partName)
 
   return partNode.length > 0 ? partNode[0].fi2value_value : ''
-}
-
-const getAddressLine = (addressLines: Fi2ValueUsage[], usage: string) => {
-  const line = addressLines.find((line: Fi2ValueUsage) => line.usage === usage)
-
-  return line ? line.$t : ''
-}
-
-const addressTypes: { [index: string]: string } = {
-  '03': 'Home Address',
-  '05': 'Postal Address',
-}
-
-const getAddressType = (address: Fi2Address): string => {
-  const typeCode: string | null = address.fi2addr_class.fi2class_code
-    ? address.fi2addr_class.fi2class_code
-    : null
-
-  if (typeCode) {
-    return addressTypes[typeCode]
-  } else {
-    return ''
-  }
 }
 
 const getPhoneNumbers = (phoneNumbers: Fi2ValueUsage[]): PhoneNumber[] => {
@@ -104,24 +81,7 @@ const transformTenant = (tenantRaw: Fi2Partner): Tenant => {
     phoneNumbers: getPhoneNumbers(tenantRaw.fi2part_tel),
     emailAddresses: getEmailAddresses(tenantRaw.fi2part_email),
     addresses: tenantRaw.fi2part_address
-      ? tenantRaw.fi2part_address.map(
-          (address: Fi2Address): Address => {
-            const transformedAddress: Address = {
-              guid: address.guid ? address.guid : undefined,
-              type: getAddressType(address),
-              street: getAddressLine(address.fi2addr_addrline, 'Street'),
-              box: getAddressLine(address.fi2addr_addrline, 'Box'),
-              co: getAddressLine(address.fi2addr_addrline, 'Co'),
-              attention: getAddressLine(address.fi2addr_addrline, 'Att'),
-              zipCode: address.fi2addr_zipcode ? address.fi2addr_zipcode : undefined,
-              city: address.fi2addr_city ? address.fi2addr_city : undefined,
-              country: address.fi2addr_country ? address.fi2addr_country : undefined,
-            }
-
-            return transformedAddress
-          }
-        )
-      : undefined,
+      ? tenantRaw.fi2part_address.map(convertAddress) : undefined,
     contact: tenantRaw.fi2part_contact
       ? {
           type: tenantRaw.fi2part_contact.fi2contact_class.fi2class_code,
@@ -159,9 +119,9 @@ const getTenant = async (id: string): Promise<Tenant> => {
 
 export const routes = (app: Application) => {
   app.get('/tenants', async (_req: Request, res: Response) => res.json(await getTenants())),
-    app.get('/tenants/:id', async (_req: Request, res: Response) =>
-      res.json(await getTenant(_req.params.id))
-    )
+  app.get('/tenants/:id', async (_req: Request, res: Response) =>
+    res.json(await getTenant(_req.params.id))
+  )
 }
 
 export default {

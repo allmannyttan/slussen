@@ -31,6 +31,7 @@ export const client = {
             'fi2_id',
             'fi2cont_tel',
             'fi2cont_email',
+            'fi2spsys_address'
           ],
         })
       )

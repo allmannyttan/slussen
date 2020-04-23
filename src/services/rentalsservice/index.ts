@@ -1,6 +1,7 @@
 import { Application, Request, Response } from 'express'
 import { client } from '@app/adapters/fastapiadapter'
 import helper, { getNameFromClasslist } from '@app/helpers/fastAPIXmlListHelper'
+import { convertAddress } from '@app/helpers/converters'
 
 import {
     Rental,
@@ -12,8 +13,10 @@ import {
     Fi2Area,
     Fi2Value,
     Fi2SpatiSystemResponse,
-    Fi2SpatiSystemsResponse
+    Fi2SpatiSystemsResponse,
 } from './types'
+import { Fi2SpatiSystem } from './types'
+import { Fi2SpatiSystemResponse } from './types'
 
 const getPart = (parts: Fi2Value[], partName: string): string => {
   const partNode = parts.filter((part: Fi2Value) => part.fi2value_code === partName)
@@ -61,7 +64,7 @@ const transformRental = (fi2: Fi2SpatiSystem): Rental => {
 
   const documents: Document[] = getDocuments(fi2.fi2spsys_documents)
   const areas: Area[] = getAreas(fi2.fi2spsys_area)
-  const addresses: Address[] = getAddresses(fi2.fi2spsys_addresses)
+  const addresses: Address[] = fi2.fi2spsys_address ? fi2.fi2spsys_address.map(convertAddress) : []
 
   const rental: Rental = {
     type: className,
@@ -93,6 +96,13 @@ const transformRentals = (fiSpatiSystems: Fi2SpatiSystemsResponse): Rental[] => 
 const getRentals = async (): Promise<Rental[]> => {
   const fi2SpatiSystems: Fi2SpatiSystemsResponse = await client.get(`fi2spatisystem/`)
   const result = transformRentals(fi2SpatiSystems)
+
+  return result
+}
+
+const getRental = async (id: string): Promise<Rental> => {
+  const rental: Fi2SpatiSystemResponse = await client.get(`fi2spatisystem/${id}`)
+  const result = transformRental(rental.fi2spatisystem)
 
   return result
 }
