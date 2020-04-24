@@ -1,19 +1,20 @@
 import xml2json from 'xml2json'
 import axios from 'axios'
-import { fastAPI } from '@app/config'
-
-const headers = {
-  'Access-Token': fastAPI.accessToken,
-  Accept: '*/*',
-}
+import config from '@app/config'
 
 export const client = {
   get: async <T = any>(url: string, options: Partial<any> = {}) => {
+    const headers = {
+      'Access-Token': config.fastAPI.accessToken,
+      Accept: '*/*',
+    }
+
     const xmlClient = axios.create({
       headers,
-      baseURL: fastAPI.baseUrl,
+      baseURL: config.fastAPI.baseUrl,
       responseType: 'text',
     })
+
     try {
       const { data }: { data: T } = await xmlClient.get(url, options)
       const result = JSON.parse(

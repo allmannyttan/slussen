@@ -20,10 +20,6 @@ const config = configPackage({
       classlists: `${__dirname}/fastAPIXml/classlists/`,
       valuelists: `${__dirname}/fastAPIXml/valuelists/`,
     },
-    fastAPI: {
-      baseUrl: '',
-      accessToken: '',
-    },
   },
 })
 
