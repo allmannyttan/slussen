@@ -1,6 +1,6 @@
 import { Application, Request, Response } from 'express'
 import { client } from '@app/adapters/fastapiadapter'
-import helper, { getNameFromClasslist } from '@app/helpers/fastAPIXmlListHelper'
+import helper from '@app/helpers/fastAPIXmlListHelper'
 import { convertAddress } from '@app/helpers/converters'
 
 import {
@@ -15,8 +15,6 @@ import {
     Fi2SpatiSystemResponse,
     Fi2SpatiSystemsResponse,
 } from './types'
-import { Fi2SpatiSystem } from './types'
-import { Fi2SpatiSystemResponse } from './types'
 
 const getPart = (parts: Fi2Value[], partName: string): string => {
   const partNode = parts.filter((part: Fi2Value) => part.fi2value_code === partName)
