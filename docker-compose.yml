@@ -4,7 +4,9 @@ services:
   postgres:
     image: postgres:12.2-alpine
     environment:
-      POSTGRES_DB: 
+      TZ: Europe/Stockholm
+      POSTGRES_DB: api-db
+      POSTGRES_PASSWORD: postgrespassword
     volumes:
       - db-data:/var/lib/postgresql/data
     ports:
