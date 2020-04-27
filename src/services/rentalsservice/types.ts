@@ -78,3 +78,5 @@ export interface Fi2SpatiSystemsResponse {
 export interface Fi2SpatiSystemResponse {
   fi2spatisystem: Fi2SpatiSystem
 }
+
+export { Fi2Value, Address, Fi2Document }

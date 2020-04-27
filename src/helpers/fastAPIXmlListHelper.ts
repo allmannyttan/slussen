@@ -1,5 +1,5 @@
 import { paths } from '@app/config'
-import { Fi2ClassNode, Fi2ClassListXml, Fi2ValueNode, ListItem } from './types'
+import { Fi2ClassNode, Fi2ClassListXml, Fi2ValueNode, ListItem, Validationlist } from './types'
 import fs from 'fs'
 import xml2json from 'xml2json'
 

@@ -2,7 +2,7 @@ import { Application, Request, Response } from 'express'
 import { client } from '@app/adapters/fastapiadapter'
 import helper from '@app/helpers/fastAPIXmlListHelper'
 import { convertAddress } from '@app/helpers/converters'
-import { Address, Fi2Address, Fi2Value, Fi2ValueUsage } from '@app/commonTypes/types'
+import { Fi2Value, Fi2ValueUsage } from '@app/commonTypes/types'
 
 
 import {
@@ -67,6 +67,21 @@ const getEmailAddresses = (emailAddresses: Fi2ValueUsage[]): EmailAddress[] => {
   return transformedEmailAddresses
 }
 
+const transformContact = (fi2Contact : Fi2Contact) : Contact | undefined => {
+  if (fi2Contact) {
+    return {
+      type: fi2Contact.fi2contact_class.fi2class_code,
+      firstName: fi2Contact.fi2cont_fname,
+      lastName: fi2Contact.fi2cont_lname,
+      fullName: fi2Contact.fi2cont_fullname,
+      phoneNumbers: getPhoneNumbers(fi2Contact.fi2cont_tel),
+      emailAddresses: getEmailAddresses(fi2Contact.fi2cont_email),
+    }
+  } else {
+    return undefined
+  }
+}
+
 const transformTenant = (tenantRaw: Fi2Partner): Tenant => {
   const className = helper.getNameFromClasslist(tenantRaw.fi2part_class)
   const tenant: Tenant = {
@@ -82,16 +97,7 @@ const transformTenant = (tenantRaw: Fi2Partner): Tenant => {
     emailAddresses: getEmailAddresses(tenantRaw.fi2part_email),
     addresses: tenantRaw.fi2part_address
       ? tenantRaw.fi2part_address.map(convertAddress) : undefined,
-    contact: tenantRaw.fi2part_contact
-      ? {
-          type: tenantRaw.fi2part_contact.fi2contact_class.fi2class_code,
-          firstName: tenantRaw.fi2part_contact.fi2cont_fname,
-          lastName: tenantRaw.fi2part_contact.fi2cont_lname,
-          fullName: tenantRaw.fi2part_contact.fi2cont_fullname,
-          phoneNumbers: getPhoneNumbers(tenantRaw.fi2part_contact.fi2cont_tel),
-          emailAddresses: getEmailAddresses(tenantRaw.fi2part_contact.fi2cont_email),
-        }
-      : undefined,
+    contact: transformContact(tenantRaw.fi2part_contact),
     className,
   }
 

@@ -99,3 +99,5 @@ export interface Fi2LeaseContractsResponse {
 export interface Fi2LeaseContractResponse {
   fi2leasecontract: Fi2LeaseContract
 }
+
+export { Fi2Value, Fi2Document, Fi2ParentObject }

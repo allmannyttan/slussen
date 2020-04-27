@@ -12,7 +12,7 @@ import {
   Fi2Value,
   Fi2LeaseActor,
   Fi2Document,
-  Fi2LeaseParentObject,
+  Fi2ParentObject,
   ContractRentalObject,
   RentalType,
 } from './types'
@@ -55,7 +55,7 @@ const getDocuments = (documents: Fi2Document[]): ContractDocument[] => {
   })
 }
 
-const getContractRentals = (parentObject: Fi2LeaseParentObject): ContractRentalObject => {
+const getContractRentals = (parentObject: Fi2ParentObject): ContractRentalObject => {
   return {
     id: parentObject.fi2parent_ids.fi2_id,
     type: parentObject.fi2item === 'fi2spatisystem' ? RentalType.Rental : RentalType.Unknown,

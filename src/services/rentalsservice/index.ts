@@ -113,3 +113,8 @@ export const routes = (app: Application) => {
     res.json(await getRental(_req.params.id))
   )
 }
+
+export default {
+  getRental,
+  getRentals,
+}

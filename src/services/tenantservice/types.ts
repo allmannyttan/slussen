@@ -83,3 +83,5 @@ export interface Fi2PartnersResponse {
 export interface Fi2PartnerResponse {
   fi2partner: Fi2Partner
 }
+
+export { Fi2Address, Address, Fi2ValueUsage }
