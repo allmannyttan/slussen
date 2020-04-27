@@ -32,7 +32,7 @@ const config = configPackage({
       host: 'localhost',
       port: 5432,
       user: 'postgres',
-      password: 'example',
+      password: 'postgrespassword',
       database: 'api-db',
     },
   },

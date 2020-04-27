@@ -1,5 +1,5 @@
 import { Client, QueryArrayResult } from 'pg'
-import { postgres: config } from '@app/config'
+import { postgres as config } from '@app/config'
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(() => resolve(), ms))
 
@@ -16,7 +16,7 @@ async function connect(attemptNo = 0): Promise<Client> {
   } catch (err) {
     console.warn(err)
 
-    if (attemptNo >= 10) {
+    if (attemptNo >= 3) {
       throw err
     }
 
@@ -26,12 +26,15 @@ async function connect(attemptNo = 0): Promise<Client> {
   }
 }
 
-async function client(): Promise<Client> {
+export const client = async (): Promise<Client> => {
   const client: Client = await connect()
   return client
 }
 
-async function query(sql: string | TemplateString, params = []): Promise<QueryArrayResult<any[]>> {
+export const query = async (
+  sql: string | TemplateString,
+  params = []
+): Promise<QueryArrayResult<any[]>> => {
   // when using `sql-template-strings`
   if (typeof sql !== 'string') {
     params = sql.values
@@ -47,5 +50,3 @@ async function query(sql: string | TemplateString, params = []): Promise<QueryAr
     await conn.end()
   }
 }
-
-module.exports = { client, query }
