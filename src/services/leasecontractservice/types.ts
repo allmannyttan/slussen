@@ -1,3 +1,5 @@
+import { Fi2Value, Fi2Class, Fi2ParentObject, Fi2Document, Fi2Ids } from '@app/commonTypes/types';
+
 export interface Contract {
   id: string
   guid?: string
@@ -48,37 +50,10 @@ export enum RentalType {
 }
 
 /********** Fi2XML types **********/
-
-export interface Fi2Scheme {
-  fi2scheme_id: string
-  fi2scheme_name: string
-  fi2scheme_url: string
-}
-
-export interface Fi2Value {
-  fi2value_code: string
-  fi2value_scheme: Fi2Scheme
-  fi2value_value: string
-}
-
-export interface Fi2Class {
-  fi2class_code: string
-  fi2class_scheme: Fi2Scheme
-}
-
 export interface Fi2LeaseContractDescription {
   $t: string
   lang: string
   usage?: string
-}
-
-export interface Fi2ValueUsage {
-  $t: string
-  usage: string
-}
-
-export interface Fi2Ids {
-  fi2_id: Fi2ValueUsage
 }
 
 export interface Fi2PartnerReference {
@@ -90,25 +65,6 @@ export interface Fi2PartnerReference {
 export interface Fi2LeaseActor {
   fi2actor_partner: Fi2PartnerReference
   fi2actor_role: Fi2Class
-}
-
-export interface Fi2LeaseParentObject {
-  fi2item: string
-  fi2parent_ids: {
-    fi2_id: string
-  }
-}
-
-export interface Fi2DocumentIds {
-  fi2_id: string
-}
-
-// NOTE: Detta har ej kunnat testas i Sandbox.
-export interface Fi2Document {
-  fi2document_ids: Fi2DocumentIds
-  fi2document_descr: { $t: string }
-  fi2document_link: string
-  fi2document_class: Fi2Class
 }
 
 export interface Fi2LeaseContract {
@@ -130,7 +86,7 @@ export interface Fi2LeaseContract {
   fi2lease_terminateddate: string
   fi2lease_noticedate: string
   fi2lease_noticetime: number
-  fi2lease_parentobject: Fi2LeaseParentObject
+  fi2lease_parentobject: Fi2ParentObject
   fi2lease_documents: Fi2Document[]
 }
 

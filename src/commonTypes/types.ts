@@ -1,13 +1,13 @@
 export interface Address {
-  guid: string | void
-  type: string | void
+  guid?: string
+  type?: string
   street: string
   box: string
   co: string
   attention: string
-  zipCode: string | undefined
-  city: string | undefined
-  country: string | undefined
+  zipCode?: string
+  city?: string
+  country?: string
 }
 
 export interface Fi2Address {
@@ -47,4 +47,27 @@ export interface Fi2ValueUsage {
 export interface Fi2AddrDescr {
   $t: string
   lang: string
+}
+
+export interface Fi2ParentObject {
+  fi2item: string
+  fi2parent_ids: {
+    fi2_id: string
+  }
+}
+
+export interface Fi2DocumentIds {
+  fi2_id: string
+}
+
+// NOTE: Detta har ej kunnat testas i Sandbox.
+export interface Fi2Document {
+  fi2document_ids: Fi2DocumentIds
+  fi2document_descr: { $t: string }
+  fi2document_link: string
+  fi2document_class: Fi2Class
+}
+
+export interface Fi2Ids {
+  fi2_id: Fi2ValueUsage
 }

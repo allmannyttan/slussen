@@ -1,4 +1,4 @@
-import { Fi2Address, Address } from '@app/commonTypes/types';
+import { Fi2Address, Address, Fi2Value, Fi2Class, Fi2ParentObject, Fi2Document, Fi2Ids } from '@app/commonTypes/types';
 
 export interface Rental {
   type: string
@@ -34,43 +34,9 @@ export interface Area {
 }
 
 // ---
-
-export interface Fi2Scheme {
-  fi2scheme_id: string
-  fi2scheme_name: string
-  fi2scheme_url: string
-}
-
-export interface Fi2Value {
-  fi2value_code: string
-  fi2value_scheme: Fi2Scheme
-  fi2value_value: string
-}
-
-export interface Fi2Class {
-  fi2class_code: string
-  fi2class_scheme: Fi2Scheme
-}
-
 export interface Fi2ValueUsage {
   $t: string
   usage: string
-}
-  
-export interface Fi2Ids {
-  fi2_id: Fi2ValueUsage
-}
-
-export interface Fi2DocumentIds {
-  fi2_id: string
-}
-
-// NOTE: Detta har ej kunnat testas i Sandbox.
-export interface Fi2Document {
-  fi2document_ids: Fi2DocumentIds
-  fi2document_descr: { $t: string }
-  fi2document_link: string
-  fi2document_class: Fi2Class
 }
 
 export interface Fi2AreaStatus {
@@ -86,13 +52,6 @@ export interface Fi2Area {
   fi2area_measuredtype: string
   fi2area_derivedfrom: string
   fi2area_perimeter: { $t: string, unit: string }
-}
-
-export interface Fi2ParentObject {
-  fi2item: string
-  fi2parent_ids: {
-    fi2_id: string
-  }
 }
 
 export interface Fi2SpatiSystem {
