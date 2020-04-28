@@ -5,8 +5,10 @@ import {
 } from '../__fixtures__/fastAPIAdapterResult.fixture'
 import { client } from '@app/adapters/fastapiadapter'
 import service from '../index'
+import config from '../../../config'
 
 jest.mock('@app/adapters/fastapiadapter')
+jest.mock('../../../config')
 
 describe('#leasecontractservice', () => {
   beforeEach(() => {
@@ -14,6 +16,11 @@ describe('#leasecontractservice', () => {
     console.error = jest.fn()
 
     jest.resetAllMocks()
+
+    config.fastAPI = {
+      baseUrl: 'test',
+      accessToken: 'test',
+    }
   })
 
   describe('#getLeaseContracts', () => {
