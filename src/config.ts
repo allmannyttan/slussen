@@ -4,7 +4,8 @@ export interface Config {
   port: number
   fastAPI: {
     baseUrl: string
-    accessToken: string
+    user: string
+    password: string
   }
   paths: {
     classlists: string
