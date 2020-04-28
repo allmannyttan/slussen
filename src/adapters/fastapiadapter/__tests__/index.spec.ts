@@ -2,11 +2,13 @@ import { client } from '../index'
 import { fi2PartnerFixture } from '../__fixtures__/fi2partner.fixture'
 import axios from 'axios'
 import xml2json from 'xml2json'
+import config from '../../../config'
 
 jest.mock('axios', () => ({
   create: jest.fn(),
 }))
 jest.mock('xml2json')
+jest.mock('../../../config')
 
 describe('#fastapiadapter', () => {
   let xmlClientMock
@@ -22,6 +24,11 @@ describe('#fastapiadapter', () => {
     ;(axios.create as jest.Mock).mockReturnValue(xmlClientMock)
 
     xml2json.toJson = jest.fn().mockReturnValue(jsonResult)
+
+    config.fastAPI = {
+      baseUrl: 'test',
+      accessToken: 'test',
+    }
   })
 
   describe('#get', () => {
