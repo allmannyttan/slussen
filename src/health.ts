@@ -2,6 +2,7 @@ import { Application, Request, Response } from 'express'
 import { performance } from 'perf_hooks'
 import tenantService from '@app/services/tenantservice'
 import { query } from '@app/adapters/postgres'
+import { getNewAccessToken } from '@app/adapters/fastapiadapter/tokenHelper'
 
 interface SystemHealthInfo {
   name: string
@@ -17,10 +18,10 @@ interface HealthResponse {
 const checkFastAPIAccess = async (): Promise<SystemHealthInfo> => {
   try {
     const start = performance.now()
-    const tenants = await tenantService.getTenants()
+    const token = await getNewAccessToken()
     const end = performance.now()
 
-    const access = Array.isArray(tenants) && tenants.length > 0
+    const access = !!token
     const responseTime = end - start
 
     return {
