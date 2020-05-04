@@ -2,11 +2,7 @@ import xml2json from 'xml2json'
 import axios from 'axios'
 import { fastAPI } from '@app/config'
 import { tokenRefresher } from './tokenHelper'
-
-interface FastAPIRequest {
-  url: string
-  token?: string
-}
+import { FastAPIRequest } from './types'
 
 const innerGet = async <T = any>(request: FastAPIRequest) => {
   const headers = {
