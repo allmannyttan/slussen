@@ -13,15 +13,13 @@ const innerGet = async <T = any>(request: FastAPIRequest) => {
     'Access-Token': request.token || '',
     Accept: '*/*',
   }
-  console.log(request)
-  console.log('calling fastAPI with headers:', headers)
   const xmlClient = axios.create({
     headers,
     baseURL: fastAPI.baseUrl,
     responseType: 'text',
   })
 
-  const { data }: { data: T } = await xmlClient.get(request.url)
+  const { data } = await xmlClient.get(request.url)
   const result = JSON.parse(
     xml2json.toJson(data, {
       arrayNotation: [

@@ -51,7 +51,7 @@ export interface Validationlist {
 export interface Document {
   $: Namespace
   metadata: Metadata[]
-  validationlist: Validationlist[]
+  validationlist: Validationlist
 }
 
 export interface Fi2ClassListXml {
