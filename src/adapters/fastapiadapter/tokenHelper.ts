@@ -37,7 +37,6 @@ export const tokenRefresher = <T extends (arg: FastAPIRequest) => any>(
 ): ((funcArg: FastAPIRequest) => Promise<ReturnType<T>>) => {
   return async (arg: FastAPIRequest): Promise<ReturnType<T>> => {
     try {
-      console.log('args: ', arg)
       const token = await getAccessTokenFromDb()
 
       if (token === null) {
