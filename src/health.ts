@@ -41,12 +41,10 @@ const checkFastAPIAccess = async (): Promise<SystemHealthInfo> => {
 const checkDbAccess = async (): Promise<SystemHealthInfo> => {
   try {
     const start = performance.now()
-    const {
-      rows: [row],
-    } = await query('SELECT NOW();')
+    const [now] = await query<Date>('SELECT NOW();')
     const end = performance.now()
 
-    const access = row && row.now instanceof Date
+    const access = now && now instanceof Date
     const responseTime = end - start
 
     return {
