@@ -124,13 +124,13 @@ const transformContracts = async (fi2Contracts: Fi2LeaseContractsResponse): Prom
 }
 
 const getLeaseContracts = async (): Promise<Contract[]> => {
-  const contracts: Fi2LeaseContractsResponse = await client.get(`fi2leasecontract/`)
+  const contracts: Fi2LeaseContractsResponse = await client.get({ url: `fi2leasecontract/` })
   const result = await transformContracts(contracts)
   return result
 }
 
 const getLeaseContract = async (id: string): Promise<Contract> => {
-  const fi2Contract: Fi2LeaseContractResponse = await client.get(`fi2leasecontract/${id}`)
+  const fi2Contract: Fi2LeaseContractResponse = await client.get({ url: `fi2leasecontract/${id}` })
 
   const result = await transformContract(fi2Contract.fi2leasecontract)
   return result

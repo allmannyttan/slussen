@@ -147,12 +147,12 @@ const transformTenants = async (tenantsRaw: Fi2PartnersResponse): Promise<Tenant
 }
 
 const getTenants = async (): Promise<Tenant[]> => {
-  const result = await client.get("fi2partner?filter=fi2part_class.fi2class_code:'16'")
+  const result = await client.get({ url: "fi2partner?filter=fi2part_class.fi2class_code:'16'" })
   return transformTenants(result)
 }
 
 const getTenant = async (id: string): Promise<Tenant> => {
-  const tenant: Fi2PartnerResponse = await client.get(`fi2partner/${id}`)
+  const tenant: Fi2PartnerResponse = await client.get({ url: `fi2partner/${id}` })
   const result = await transformTenant(tenant.fi2partner)
   return result
 }

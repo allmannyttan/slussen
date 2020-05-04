@@ -1,4 +1,5 @@
-import { Client, QueryArrayResult } from 'pg'
+import { Client } from 'pg'
+
 import { postgres as config } from '@app/config'
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(() => resolve(), ms))
@@ -31,10 +32,7 @@ export const client = async (): Promise<Client> => {
   return client
 }
 
-export const query = async (
-  sql: string | TemplateString,
-  params = []
-): Promise<QueryArrayResult<any[]>> => {
+export const query = async <T>(sql: string | TemplateString, params = []): Promise<T[]> => {
   // when using `sql-template-strings`
   if (typeof sql !== 'string') {
     params = sql.values
@@ -44,8 +42,8 @@ export const query = async (
   const conn = await connect()
 
   try {
-    const result = await conn.query(sql, params)
-    return result
+    const result = await conn.query<T>(sql, params)
+    return result.rows
   } finally {
     await conn.end()
   }

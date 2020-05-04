@@ -5,9 +5,9 @@ exports.up = (pgm) => {
 
   pgm.sql(`
     CREATE TABLE fastapi_tokens (
+      id SERIAL PRIMARY KEY,
       token_value VARCHAR(100),
-      created TIMESTAMPTZ,
-      is_valid BOOLEAN
+      created TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `)
 }
