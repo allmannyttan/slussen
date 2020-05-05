@@ -158,10 +158,44 @@ const getTenant = async (id: string): Promise<Tenant> => {
 }
 
 export const routes = (app: Application) => {
+  /**
+   * @swagger
+   * /tenants:
+   *  get:
+   *    summary: Gets all tenants
+   *    description: Retrieves all tenants in the system
+   *    responses:
+   *      '200':
+   *        description: 'List of tenants'
+   *        schema:
+   *            type: array
+   *            items:
+   *              $ref: '#/definitions/Tenant'
+   */
   app.get('/tenants', async (_req: Request, res: Response) => res.json(await getTenants())),
-    app.get('/tenants/:id', async (_req: Request, res: Response) =>
-      res.json(await getTenant(_req.params.id))
-    )
+   /**
+   * @swagger
+   * /tenants/{id}:
+   *  get:
+   *    summary: Gets a tenant by id
+   *    description: Retrieves a tenant by its id
+   *    parameters:
+   *      - in: path
+   *        name: id
+   *        type: integer
+   *        required: true
+   *        description: tenant id
+   *    responses:
+   *      '200':
+   *        description: 'Returns the tenant with the specified id'
+   *        schema:
+   *          $ref: '#/definitions/Tenant'
+   *      '404':
+   *        description: 'No tenant with the specified id exists'
+   */
+  app.get('/tenants/:id', async (_req: Request, res: Response) =>
+    res.json(await getTenant(_req.params.id))
+  )
 }
 
 export default {

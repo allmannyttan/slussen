@@ -9,15 +9,15 @@ export interface EmailAddress {
 }
 
 export interface Address {
-  guid: string | void
-  type: string | void
+  guid?: string
+  type?: string
   street: string
   box: string
   co: string
   attention: string
-  zipCode: string | undefined
-  city: string | undefined
-  country: string | undefined
+  zipCode?: string
+  city?: string
+  country?: string
 }
 
 export interface Contact {
@@ -25,23 +25,23 @@ export interface Contact {
   firstName: string
   lastName: string
   fullName: string
-  phoneNumbers: PhoneNumber[] | void
-  emailAddresses: EmailAddress[] | void
+  phoneNumbers?: PhoneNumber[]
+  emailAddresses?: EmailAddress[]
 }
 
 export interface Tenant {
   id: string
-  socialSecurityNumber: string | void
-  changedBy: string | null
-  changeDate: string | null
-  createdBy: string | null
-  createDate: string | null
+  socialSecurityNumber?: string
+  changedBy?: string
+  changeDate?: string
+  createdBy?: string
+  createDate?: string
   name: string
   fullName: string
-  phoneNumbers: PhoneNumber[] | void
-  emailAddresses: EmailAddress[] | void
-  addresses: Address[] | void
-  contact: Contact | void
+  phoneNumbers?: PhoneNumber[]
+  emailAddresses?: EmailAddress[]
+  addresses?: Address[]
+  contact?: Contact
   className: string
 }
 

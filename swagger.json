@@ -1,0 +1,395 @@
+{
+  "info": {
+    "title": "FastAPIAPI",
+    "version": "0.1.0",
+    "description": "Modern front till fastAPI"
+  },
+  "basePath": "/",
+  "swagger": "2.0",
+  "paths": {
+    "/tenants": {
+      "get": {
+        "summary": "Gets all tenants",
+        "description": "Retrieves all tenants in the system",
+        "responses": {
+          "200": {
+            "description": "List of tenants",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Tenant"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tenants/{id}": {
+      "get": {
+        "summary": "Gets a tenant by id",
+        "description": "Retrieves a tenant by its id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "integer",
+            "required": true,
+            "description": "tenant id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the tenant with the specified id",
+            "schema": {
+              "$ref": "#/definitions/Tenant"
+            }
+          },
+          "404": {
+            "description": "No tenant with the specified id exists"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Tenant": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "socialSecurityNumber": {
+          "type": "string"
+        },
+        "changedBy": {
+          "type": "string"
+        },
+        "changeDate": {
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createDate": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "phoneNumbers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PhoneNumber"
+          }
+        },
+        "emailAddresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EmailAddress"
+          }
+        },
+        "addresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Address"
+          }
+        },
+        "contact": {
+          "$ref": "#/definitions/Contact"
+        },
+        "className": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "fullName",
+        "className"
+      ],
+      "additionalProperties": false
+    },
+    "Address": {
+      "type": "object",
+      "properties": {
+        "guid": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "street": {
+          "type": "string"
+        },
+        "box": {
+          "type": "string"
+        },
+        "co": {
+          "type": "string"
+        },
+        "attention": {
+          "type": "string"
+        },
+        "zipCode": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "street",
+        "box",
+        "co",
+        "attention"
+      ],
+      "additionalProperties": false
+    },
+    "PhoneNumber": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "number": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "number"
+      ],
+      "additionalProperties": false
+    },
+    "EmailAddress": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "address"
+      ],
+      "additionalProperties": false
+    },
+    "Contact": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "phoneNumbers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PhoneNumber"
+          }
+        },
+        "emailAddresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EmailAddress"
+          }
+        }
+      },
+      "required": [
+        "type",
+        "firstName",
+        "lastName",
+        "fullName"
+      ],
+      "additionalProperties": false
+    },
+    "Contract": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "guid": {
+          "type": "string"
+        },
+        "currentEndDate": {
+          "type": "string"
+        },
+        "changedBy": {
+          "type": "string"
+        },
+        "changeDate": {
+          "type": "string"
+        },
+        "className": {
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createDate": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "endingDate": {
+          "type": "string"
+        },
+        "initialDate": {
+          "type": "string"
+        },
+        "noticedBy": {
+          "type": "string"
+        },
+        "noticeStatus": {
+          "type": "string"
+        },
+        "noticeDate": {
+          "type": "string"
+        },
+        "noticeTime": {
+          "type": "number"
+        },
+        "renewalDate": {
+          "type": "string"
+        },
+        "signDate": {
+          "type": "string"
+        },
+        "terminatedDate": {
+          "type": "string"
+        },
+        "terminationReason": {
+          "type": "string"
+        },
+        "partners": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ContractPartner"
+          }
+        },
+        "documents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ContractDocument"
+          }
+        },
+        "rentalObject": {
+          "$ref": "#/definitions/ContractRentalObject"
+        }
+      },
+      "required": [
+        "id",
+        "currentEndDate",
+        "changedBy",
+        "changeDate",
+        "className",
+        "createdBy",
+        "createDate",
+        "date",
+        "description",
+        "endingDate",
+        "initialDate",
+        "noticedBy",
+        "noticeStatus",
+        "noticeDate",
+        "noticeTime",
+        "renewalDate",
+        "signDate",
+        "terminatedDate",
+        "terminationReason",
+        "partners",
+        "documents",
+        "rentalObject"
+      ],
+      "additionalProperties": false
+    },
+    "ContractPartner": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "className": {
+          "type": "string"
+        },
+        "roleName": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "className",
+        "roleName"
+      ],
+      "additionalProperties": false
+    },
+    "ContractDocument": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "link": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "description",
+        "link"
+      ],
+      "additionalProperties": false
+    },
+    "ContractRentalObject": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "$ref": "#/definitions/RentalType"
+        },
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "id"
+      ],
+      "additionalProperties": false
+    },
+    "RentalType": {
+      "type": "string",
+      "enum": [
+        "Rental",
+        "Unknown"
+      ]
+    }
+  },
+  "responses": {},
+  "parameters": {},
+  "securityDefinitions": {},
+  "tags": []
+}

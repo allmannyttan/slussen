@@ -3,6 +3,8 @@ import routes, { tenantRoutes, leaseContactRoutes, healthRoutes } from './routes
 import bodyParser from 'body-parser'
 import express from 'express'
 import cors from 'cors'
+import swaggerUi from 'swagger-ui-express'
+const specs = require('../swagger.json')
 
 const app = express()
 app.set('etag', 'strong')
@@ -13,6 +15,8 @@ app.use(
     extended: true,
   })
 )
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
 
 tenantRoutes(app)
 leaseContactRoutes(app)
