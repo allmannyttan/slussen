@@ -29,7 +29,7 @@ const options = {
     basePath: '/', // Base path (optional)
   },
   // List of files to be processes. You can also set globs './routes/*.js'
-  apis: ['src/services/tenantservice/index.ts'],
+  apis: ['src/services/tenantservice/index.ts', 'src/services/leasecontractservice/index.ts'],
 };
 
 const specs = swaggerJsdoc(options);

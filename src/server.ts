@@ -4,7 +4,7 @@ import bodyParser from 'body-parser'
 import express from 'express'
 import cors from 'cors'
 import swaggerUi from 'swagger-ui-express'
-const specs = require('../swagger.json')
+import specs from '../swagger.json'
 
 const app = express()
 app.set('etag', 'strong')
@@ -16,7 +16,7 @@ app.use(
   })
 )
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs))
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }))
 
 tenantRoutes(app)
 leaseContactRoutes(app)
