@@ -142,7 +142,7 @@ export const routes = (app: Application) => {
    * /leasecontracts:
    *  get:
    *    summary: Gets all contracts for rentals
-   *    description: Retrieves all lease contracts for rentals in the system
+   *    description: Retrieves all lease contracts for rentals in the system. Currently the only way of finding a contract for a specific tenant is to retrieve all and filter on the client side. API-side filters will be added later on.
    *    responses:
    *      '200':
    *        description: 'List of contracts'
@@ -159,7 +159,7 @@ export const routes = (app: Application) => {
    * /leasecontracts/{id}:
    *  get:
    *    summary: Gets a contract by id
-   *    description: Retrieves a lease contract by its id
+   *    description: Retrieves a lease contract by its id. Currently the only way of finding a contract for a specific tenant is to retrieve all and filter on the client side. API-side filters will be added later on.
    *    parameters:
    *      - in: path
    *        name: id
