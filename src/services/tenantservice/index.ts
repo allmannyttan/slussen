@@ -163,7 +163,7 @@ export const routes = (app: Application) => {
    * /tenants:
    *  get:
    *    summary: Gets all tenants
-   *    description: Retrieves all tenants in the system
+   *    description: Retrieves all tenants in the system. There is currently no way of filtering or doing API-side searches.
    *    responses:
    *      '200':
    *        description: 'List of tenants'
