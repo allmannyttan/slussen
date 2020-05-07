@@ -5,11 +5,15 @@ Code in this repo uses Version 1 of fastAPI, without "tillgäggspaket".
 Documentation of fastAPI is available here http://www.fastapi.se/apidocprop/v1/ 
 
 
-## Starting
+## Dependencies
+A PostgreSQL database, started using `docker-compose`.
+Database migrations will set up the database on `npm start` and `npm run dev`.
 
+## Starting
 ```
 $ nvm use
 $ npm i
+$ npm docker-compose up -d
 $ npm start
 ```
 
@@ -17,8 +21,11 @@ $ npm start
 ```
 $ nvm use
 $ npm i
+$ npm docker-compose up -d
 $ npm run dev
 ```
+
+
 
 ## Sandbox example URLs
 Get all tenants (i.e. partners with class 16)
