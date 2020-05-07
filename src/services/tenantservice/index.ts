@@ -148,7 +148,7 @@ export const routes = (app: Application) => {
      *    parameters:
      *      - in: path
      *        name: id
-     *        type: integer
+     *        type: string
      *        required: true
      *        description: tenant id
      *    responses:

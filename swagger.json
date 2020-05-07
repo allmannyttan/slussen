@@ -10,7 +10,7 @@
     "/tenants": {
       "get": {
         "summary": "Gets all tenants",
-        "description": "Retrieves all tenants in the system",
+        "description": "Retrieves all tenants in the system. There is currently no way of filtering or doing API-side searches.",
         "responses": {
           "200": {
             "description": "List of tenants",
@@ -32,7 +32,7 @@
           {
             "in": "path",
             "name": "id",
-            "type": "integer",
+            "type": "string",
             "required": true,
             "description": "tenant id"
           }
@@ -89,6 +89,49 @@
           },
           "404": {
             "description": "No contract with the specified id exists"
+          }
+        }
+      }
+    },
+    "/rentals": {
+      "get": {
+        "summary": "Gets all rental units",
+        "description": "Retrieves all rental units in the system. There is currently no way of filtering or doing API-side searches.",
+        "responses": {
+          "200": {
+            "description": "List of rental units",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Rental"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rentals/{id}": {
+      "get": {
+        "summary": "Gets a rental unit by id",
+        "description": "Retrieves a rental unit by its id",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "type": "string",
+            "required": true,
+            "description": "rental id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the rental unit with the specified id",
+            "schema": {
+              "$ref": "#/definitions/Rental"
+            }
+          },
+          "404": {
+            "description": "No rental unit with the specified id exists"
           }
         }
       }
@@ -259,6 +302,134 @@
         "firstName",
         "lastName",
         "fullName"
+      ],
+      "additionalProperties": false
+    },
+    "Rental": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "guid": {
+          "type": "string"
+        },
+        "changedBy": {
+          "type": "string"
+        },
+        "changeDate": {
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "createDate": {
+          "type": "string"
+        },
+        "documents": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Document"
+          }
+        },
+        "areas": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Area"
+          }
+        },
+        "name": {
+          "type": "string"
+        },
+        "fullName": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "addresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Address"
+          }
+        }
+      },
+      "required": [
+        "type",
+        "id",
+        "changedBy",
+        "changeDate",
+        "createdBy",
+        "createDate",
+        "documents",
+        "areas",
+        "name",
+        "fullName",
+        "description",
+        "addresses"
+      ],
+      "additionalProperties": false
+    },
+    "Area": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "size": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "measuredBy": {
+          "type": "string"
+        },
+        "measuredDate": {
+          "type": "string"
+        },
+        "measuredType": {
+          "type": "string"
+        },
+        "derivedFrom": {
+          "type": "string"
+        },
+        "perimeter": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type",
+        "size",
+        "status",
+        "measuredBy",
+        "measuredDate",
+        "measuredType",
+        "derivedFrom",
+        "perimeter"
+      ],
+      "additionalProperties": false
+    },
+    "Document": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "link": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "description",
+        "link"
       ],
       "additionalProperties": false
     },
