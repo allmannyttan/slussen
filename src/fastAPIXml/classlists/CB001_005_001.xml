@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type='text/xsl' href='Fi2list_transform.xslt'?>
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="http://www.fi2.se/schemas/1.22/fi2validationlist_002.xsd">
+  <metadata>
+    <identity>CB001_005_001</identity>
+    <description>Klassifikation utrymmessystem</description>
+    <version>001</version>
+    <date>2015-10-26</date>
+    <author>
+      <name>Fredrik Gren</name>
+      <company>Informationsbyggarna AB</company>
+    </author>
+  </metadata>
+  <fi2referencelist />
+  <validationlist>
+    <list-value>CB001_005_001</list-value>
+    <list-description>Typer av utrymmessystem/lägenheter</list-description>
+    <list-item>
+      <item-value>Apartment</item-value>
+      <item-description>Lägenhet</item-description>
+      <item-definition />
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Garage</item-value>
+      <item-description>Garage</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Parking</item-value>
+      <item-description>Parkering</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Storage</item-value>
+      <item-description>Förråd</item-description>
+      <item-definition />
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Premises</item-value>
+      <item-description>Lokal</item-description>
+      <item-definition />
+      <item-referencelist />
+    </list-item>
+  </validationlist>
+</document>

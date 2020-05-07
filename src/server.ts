@@ -1,5 +1,5 @@
 import { port } from './config'
-import routes, { tenantRoutes, leaseContactRoutes, healthRoutes } from './routes'
+import routes, { tenantRoutes, leaseContactRoutes, rentalRoutes, healthRoutes } from './routes'
 import bodyParser from 'body-parser'
 import express from 'express'
 import cors from 'cors'
@@ -16,6 +16,7 @@ app.use(
 
 tenantRoutes(app)
 leaseContactRoutes(app)
+rentalRoutes(app)
 healthRoutes(app)
 routes(app)
 
