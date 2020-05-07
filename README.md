@@ -13,7 +13,7 @@ Database migrations will set up the database on `npm start` and `npm run dev`.
 ```
 $ nvm use
 $ npm i
-$ npm docker-compose up -d
+$ docker-compose up -d
 $ npm start
 ```
 
@@ -21,7 +21,7 @@ $ npm start
 ```
 $ nvm use
 $ npm i
-$ npm docker-compose up -d
+$ docker-compose up -d
 $ npm run dev
 ```
 
