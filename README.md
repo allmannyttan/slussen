@@ -20,6 +20,9 @@ $ npm i
 $ npm run dev
 ```
 
+This starts the api here http://localhost:4000
+Swagger generated docs are available on http://localhost:4000/api-docs
+
 ## Sandbox example URLs
 Get all tenants (i.e. partners with class 16)
 /api/fi2partner?filter=fi2part_class.fi2class_code:'16'
