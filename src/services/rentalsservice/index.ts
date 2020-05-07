@@ -4,16 +4,16 @@ import helper from '@app/helpers/fastAPIXmlListHelper'
 import { convertAddress } from '@app/helpers/converters'
 
 import {
-    Rental,
-    Document,
-    Area,
-    Address,
-    Fi2SpatiSystem,
-    Fi2Document,
-    Fi2Area,
-    Fi2Value,
-    Fi2SpatiSystemResponse,
-    Fi2SpatiSystemsResponse,
+  Rental,
+  Document,
+  Area,
+  Address,
+  Fi2SpatiSystem,
+  Fi2Document,
+  Fi2Area,
+  Fi2Value,
+  Fi2SpatiSystemResponse,
+  Fi2SpatiSystemsResponse,
 } from './types'
 
 const getPart = (parts: Fi2Value[], partName: string): string => {
@@ -28,17 +28,17 @@ const getAreas = (areas: Fi2Area[]): Area[] => {
   }
 
   return areas.map((area: Fi2Area) => {
-      return {
-        type: area.fi2area_code,
-        size: area.fi2area_value.$t + ' ' + area.fi2area_value.unit,
-        status: area.fi2area_status.fi2class_code,
-        measuredBy: area.fi2area_measuredby,
-        measuredDate: area.fi2area_measureddate,
-        measuredType: area.fi2area_measuredtype,
-        derivedFrom: area.fi2area_derivedfrom,
-        perimeter: area.fi2area_perimeter.$t + ' ' + area.fi2area_perimeter.unit,
-      }
-    })
+    return {
+      type: area.fi2area_code,
+      size: area.fi2area_value.$t + ' ' + area.fi2area_value.unit,
+      status: area.fi2area_status.fi2class_code,
+      measuredBy: area.fi2area_measuredby,
+      measuredDate: area.fi2area_measureddate,
+      measuredType: area.fi2area_measuredtype,
+      derivedFrom: area.fi2area_derivedfrom,
+      perimeter: area.fi2area_perimeter.$t + ' ' + area.fi2area_perimeter.unit,
+    }
+  })
 }
 
 const getDocuments = (documents: Fi2Document[]): Document[] => {
@@ -47,14 +47,14 @@ const getDocuments = (documents: Fi2Document[]): Document[] => {
   }
 
   return documents.map((doc: Fi2Document) => {
-      const className = helper.getNameFromClasslist(doc.fi2document_class)
-      return {
-        id: doc.fi2document_ids.fi2_id,
-        description: doc.fi2document_descr.$t,
-        link: doc.fi2document_link,
-        className,
-      }
-    })
+    const className = helper.getNameFromClasslist(doc.fi2document_class)
+    return {
+      id: doc.fi2document_ids.fi2_id,
+      description: doc.fi2document_descr.$t,
+      link: doc.fi2document_link,
+      className,
+    }
+  })
 }
 
 const transformRental = (fi2: Fi2SpatiSystem): Rental => {
@@ -77,7 +77,7 @@ const transformRental = (fi2: Fi2SpatiSystem): Rental => {
     name: fi2.fi2spsys_name.$t,
     fullName: fi2.fi2spsys_fullname,
     description: fi2.fi2spsys_descr.$t,
-    addresses
+    addresses,
   }
 
   return rental
@@ -106,9 +106,42 @@ const getRental = async (id: string): Promise<Rental> => {
 }
 
 export const routes = (app: Application) => {
-  app.get('/rentals', async (_req: Request, res: Response) =>
-    res.json(await getRentals())
-  )
+  /**
+   * @swagger
+   * /rentals:
+   *  get:
+   *    summary: Gets all rental units
+   *    description: Retrieves all rental units in the system. There is currently no way of filtering or doing API-side searches.
+   *    responses:
+   *      '200':
+   *        description: 'List of rental units'
+   *        schema:
+   *            type: array
+   *            items:
+   *              $ref: '#/definitions/Rental'
+   */
+  app.get('/rentals', async (_req: Request, res: Response) => res.json(await getRentals()))
+
+  /**
+   * @swagger
+   * /rentals/{id}:
+   *  get:
+   *    summary: Gets a rental unit by id
+   *    description: Retrieves a rental unit by its id
+   *    parameters:
+   *      - in: path
+   *        name: id
+   *        type: string
+   *        required: true
+   *        description: rental id
+   *    responses:
+   *      '200':
+   *        description: 'Returns the rental unit with the specified id'
+   *        schema:
+   *          $ref: '#/definitions/Rental'
+   *      '404':
+   *        description: 'No rental unit with the specified id exists'
+   */
   app.get('/rentals/:id', async (_req: Request, res: Response) =>
     res.json(await getRental(_req.params.id))
   )

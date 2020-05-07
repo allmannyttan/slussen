@@ -134,9 +134,43 @@ const getLeaseContract = async (id: string): Promise<Contract> => {
 }
 
 export const routes = (app: Application) => {
+  /**
+   * @swagger
+   * /leasecontracts:
+   *  get:
+   *    summary: Gets all contracts for rentals
+   *    description: Retrieves all lease contracts for rentals in the system. Currently the only way of finding a contract for a specific tenant is to retrieve all and filter on the client side. API-side filters will be added later on.
+   *    responses:
+   *      '200':
+   *        description: 'List of contracts'
+   *        schema:
+   *            type: array
+   *            items:
+   *              $ref: '#/definitions/Contract'
+   */
   app.get('/leasecontracts', async (_req: Request, res: Response) =>
     res.json(await getLeaseContracts())
   )
+   /**
+   * @swagger
+   * /leasecontracts/{id}:
+   *  get:
+   *    summary: Gets a contract by id
+   *    description: Retrieves a lease contract by its id. Currently the only way of finding a contract for a specific tenant is to retrieve all and filter on the client side. API-side filters will be added later on.
+   *    parameters:
+   *      - in: path
+   *        name: id
+   *        type: integer
+   *        required: true
+   *        description: contract id
+   *    responses:
+   *      '200':
+   *        description: 'Returns the lease contract with the specified id'
+   *        schema:
+   *          $ref: '#/definitions/Contract'
+   *      '404':
+   *        description: 'No contract with the specified id exists'
+   */
   app.get('/leasecontracts/:id', async (_req: Request, res: Response) =>
     res.json(await getLeaseContract(_req.params.id))
   )

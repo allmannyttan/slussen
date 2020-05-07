@@ -15,8 +15,8 @@ export interface Contact {
   firstName: string
   lastName: string
   fullName: string
-  phoneNumbers: PhoneNumber[] | void
-  emailAddresses: EmailAddress[] | void
+  phoneNumbers?: PhoneNumber[]
+  emailAddresses?: EmailAddress[]
 }
 
 export interface Tenant {

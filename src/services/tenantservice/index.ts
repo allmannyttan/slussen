@@ -4,7 +4,6 @@ import helper from '@app/helpers/fastAPIXmlListHelper'
 import { convertAddress } from '@app/helpers/converters'
 import { Fi2Value, Fi2ValueUsage } from '@app/commonTypes/types'
 
-
 import {
   Contact,
   EmailAddress,
@@ -67,7 +66,7 @@ const getEmailAddresses = (emailAddresses: Fi2ValueUsage[]): EmailAddress[] => {
   return transformedEmailAddresses
 }
 
-const transformContact = (fi2Contact : Fi2Contact) : Contact | undefined => {
+const transformContact = (fi2Contact: Fi2Contact): Contact | undefined => {
   if (fi2Contact) {
     return {
       type: fi2Contact.fi2contact_class.fi2class_code,
@@ -96,7 +95,8 @@ const transformTenant = (tenantRaw: Fi2Partner): Tenant => {
     phoneNumbers: getPhoneNumbers(tenantRaw.fi2part_tel),
     emailAddresses: getEmailAddresses(tenantRaw.fi2part_email),
     addresses: tenantRaw.fi2part_address
-      ? tenantRaw.fi2part_address.map(convertAddress) : undefined,
+      ? tenantRaw.fi2part_address.map(convertAddress)
+      : undefined,
     contact: transformContact(tenantRaw.fi2part_contact),
     className,
   }
@@ -124,10 +124,45 @@ const getTenant = async (id: string): Promise<Tenant> => {
 }
 
 export const routes = (app: Application) => {
+  /**
+   * @swagger
+   * /tenants:
+   *  get:
+   *    summary: Gets all tenants
+   *    description: Retrieves all tenants in the system. There is currently no way of filtering or doing API-side searches.
+   *    responses:
+   *      '200':
+   *        description: 'List of tenants'
+   *        schema:
+   *            type: array
+   *            items:
+   *              $ref: '#/definitions/Tenant'
+   */
   app.get('/tenants', async (_req: Request, res: Response) => res.json(await getTenants())),
-  app.get('/tenants/:id', async (_req: Request, res: Response) =>
-    res.json(await getTenant(_req.params.id))
-  )
+    /**
+     * @swagger
+     * /tenants/{id}:
+     *  get:
+     *    summary: Gets a tenant by id
+     *    description: Retrieves a tenant by its id
+     *    parameters:
+     *      - in: path
+     *        name: id
+     *        type: string
+     *        required: true
+     *        description: tenant id
+     *    responses:
+     *      '200':
+     *        description: 'Returns the tenant with the specified id'
+     *        schema:
+     *          $ref: '#/definitions/Tenant'
+     *      '404':
+     *        description: 'No tenant with the specified id exists'
+     */
+
+    app.get('/tenants/:id', async (_req: Request, res: Response) =>
+      res.json(await getTenant(_req.params.id))
+    )
 }
 
 export default {
