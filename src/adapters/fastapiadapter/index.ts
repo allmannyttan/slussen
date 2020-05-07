@@ -32,14 +32,14 @@ export const client = {
             'fi2_id',
             'fi2cont_tel',
             'fi2cont_email',
-            'fi2spsys_address'
+            'fi2spsys_address',
           ],
         })
       )
 
       return result
     } catch (error) {
-      console.error(error)
+      throw error
     }
   },
 

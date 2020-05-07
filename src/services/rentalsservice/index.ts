@@ -1,7 +1,8 @@
 import { Application, Request, Response } from 'express'
 import { client } from '@app/adapters/fastapiadapter'
-import helper from '@app/helpers/fastAPIXmlListHelper'
 import { convertAddress } from '@app/helpers/converters'
+import asyncHandler from 'express-async-handler'
+import helper from '@app/helpers/fastAPIXmlListHelper'
 
 import {
   Rental,
@@ -120,7 +121,10 @@ export const routes = (app: Application) => {
    *            items:
    *              $ref: '#/definitions/Rental'
    */
-  app.get('/rentals', async (_req: Request, res: Response) => res.json(await getRentals()))
+  app.get(
+    '/rentals',
+    asyncHandler(async (_req: Request, res: Response) => res.json(await getRentals()))
+  )
 
   /**
    * @swagger
@@ -142,8 +146,9 @@ export const routes = (app: Application) => {
    *      '404':
    *        description: 'No rental unit with the specified id exists'
    */
-  app.get('/rentals/:id', async (_req: Request, res: Response) =>
-    res.json(await getRental(_req.params.id))
+  app.get(
+    '/rentals/:id',
+    asyncHandler(async (_req: Request, res: Response) => res.json(await getRental(_req.params.id)))
   )
 }
 

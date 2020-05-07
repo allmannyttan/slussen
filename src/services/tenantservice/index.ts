@@ -1,8 +1,9 @@
 import { Application, Request, Response } from 'express'
 import { client } from '@app/adapters/fastapiadapter'
-import helper from '@app/helpers/fastAPIXmlListHelper'
 import { convertAddress } from '@app/helpers/converters'
 import { Fi2Value, Fi2ValueUsage } from '@app/commonTypes/types'
+import asyncHandler from 'express-async-handler'
+import helper from '@app/helpers/fastAPIXmlListHelper'
 
 import {
   Contact,
@@ -138,7 +139,10 @@ export const routes = (app: Application) => {
    *            items:
    *              $ref: '#/definitions/Tenant'
    */
-  app.get('/tenants', async (_req: Request, res: Response) => res.json(await getTenants())),
+  app.get(
+    '/tenants',
+    asyncHandler(async (_req: Request, res: Response) => res.json(await getTenants()))
+  ),
     /**
      * @swagger
      * /tenants/{id}:
@@ -160,8 +164,11 @@ export const routes = (app: Application) => {
      *        description: 'No tenant with the specified id exists'
      */
 
-    app.get('/tenants/:id', async (_req: Request, res: Response) =>
-      res.json(await getTenant(_req.params.id))
+    app.get(
+      '/tenants/:id',
+      asyncHandler(async (_req: Request, res: Response) =>
+        res.json(await getTenant(_req.params.id))
+      )
     )
 }
 

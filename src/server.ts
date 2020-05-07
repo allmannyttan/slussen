@@ -5,6 +5,7 @@ import express from 'express'
 import cors from 'cors'
 import swaggerUi from 'swagger-ui-express'
 import specs from '../swagger.json'
+import errorMiddleware from '@app/middleware/errorhandler'
 
 const app = express()
 app.set('etag', 'strong')
@@ -15,7 +16,9 @@ app.use(
     extended: true,
   })
 )
-
+app.get('/error', (_req, res, next) => {
+  next(new Error('test'))
+})
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }))
 
 tenantRoutes(app)
@@ -31,3 +34,4 @@ app.listen(port, () => {
     REST: http://localhost:${port}
   `)
 })
+app.use(errorMiddleware)
