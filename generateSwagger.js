@@ -12,7 +12,7 @@ const config = {
 }
 const tenantSchema = tsj.createGenerator(config).createSchema(config.type)
 
-config.path = 'src/services/rentalsservice/types.ts'
+config.path = 'src/services/rentalservice/types.ts'
 const rentalSchema = tsj.createGenerator(config).createSchema(config.type)
 
 config.path = 'src/services/leasecontractservice/types.ts'
@@ -32,7 +32,7 @@ const options = {
   apis: [
     'src/services/tenantservice/index.ts',
     'src/services/leasecontractservice/index.ts',
-    'src/services/rentalsservice/index.ts',
+    'src/services/rentalservice/index.ts',
   ],
 }
 
