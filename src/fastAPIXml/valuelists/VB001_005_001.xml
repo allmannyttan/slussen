@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type='text/xsl' href='Fi2list_transform.xslt'?>
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="http://www.fi2.se/schemas/1.22/fi2validationlist_002.xsd">
+  <metadata>
+    <identity>VB001_005_001</identity>
+    <description>Värdelista generell alla fi2objekt</description>
+    <version>001</version>
+    <date>2015-06-23</date>
+    <author>
+      <name>Fredrik Gren</name>
+      <company>Informationsbyggarna AB</company>
+    </author>
+  </metadata>
+  <fi2referencelist />
+  <validationlist>
+    <list-value>VB001_005_001</list-value>
+    <list-description>Tillåtna värden för alla typer av fi2objekt</list-description>
+    <list-item>
+      <item-value>CreatedDate</item-value>
+      <item-description>Skapad datum</item-description>
+      <item-datatype>xs:dateTime</item-datatype>
+      <item-definition>Skapad datum</item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>CreatedBy</item-value>
+      <item-description>Skapad av</item-description>
+      <item-datatype>xs:string</item-datatype>
+      <item-definition>Skapad av</item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>ChangedDate</item-value>
+      <item-description>Ändringsdatum</item-description>
+      <item-datatype>xs:dateTime</item-datatype>
+      <item-definition>Ändringsdatum</item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>ChangedBy</item-value>
+      <item-description>Ändrad av</item-description>
+      <item-datatype>xs:string</item-datatype>
+      <item-definition>Ändrad av</item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>ETag</item-value>
+      <item-description>ETag</item-description>
+      <item-datatype>xs:string</item-datatype>
+      <item-definition>ETag</item-definition>
+      <item-referencelist />
+    </list-item>
+  </validationlist>
+</document>

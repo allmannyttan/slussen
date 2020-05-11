@@ -1,5 +1,5 @@
 import { paths } from '@app/config'
-import { Fi2ClassNode, Fi2ClassListXml, Fi2ValueNode, ListItem } from './types'
+import { Fi2ClassNode, Fi2ClassListXml, Fi2ValueNode, ListItem, Validationlist } from './types'
 import fs from 'fs'
 import xml2json from 'xml2json'
 
@@ -20,7 +20,7 @@ export const findCodeInListItems = (code: string, listItems: ListItem[]): ListIt
   return item
 }
 
-const getNameFromlist = async (code: string, listFile: string): Promise<string> => {
+const getNameFromlist = (code: string, listFile: string): string => {
   if (!fs.existsSync(listFile)) {
     throw new Error(`List file missing: ${listFile}`)
   }
@@ -40,7 +40,7 @@ const getNameFromlist = async (code: string, listFile: string): Promise<string> 
   return ''
 }
 
-export const getNameFromClasslist = async (node: Fi2ClassNode): Promise<string> => {
+export const getNameFromClasslist = (node: Fi2ClassNode): string => {
   if (!node.fi2class_code) return '' //Silently return empty string or throw error?
 
   const code = node.fi2class_code
@@ -48,7 +48,7 @@ export const getNameFromClasslist = async (node: Fi2ClassNode): Promise<string> 
   return getNameFromlist(code, `${paths.classlists}${node.fi2class_scheme.fi2scheme_id}.xml`)
 }
 
-export const getNameFromValuelist = async (node: Fi2ValueNode): Promise<string> => {
+export const getNameFromValuelist = (node: Fi2ValueNode): string => {
   if (!node.fi2value_code) return '' //Silently return empty string or throw error?
 
   const code = node.fi2value_code

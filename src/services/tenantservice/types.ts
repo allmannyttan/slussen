@@ -1,3 +1,5 @@
+import { Address, Fi2Class, Fi2Address, Fi2ValueUsage, Fi2Value } from '@app/commonTypes/types'
+
 export interface PhoneNumber {
   type: string
   number: string
@@ -8,79 +10,32 @@ export interface EmailAddress {
   address: string
 }
 
-export interface Address {
-  guid: string | void
-  type: string | void
-  street: string
-  box: string
-  co: string
-  attention: string
-  zipCode: string | undefined
-  city: string | undefined
-  country: string | undefined
-}
-
 export interface Contact {
   type: string
   firstName: string
   lastName: string
   fullName: string
-  phoneNumbers: PhoneNumber[] | void
-  emailAddresses: EmailAddress[] | void
+  phoneNumbers?: PhoneNumber[]
+  emailAddresses?: EmailAddress[]
 }
 
 export interface Tenant {
   id: string
-  socialSecurityNumber: string | void
-  changedBy: string | null
-  changeDate: string | null
-  createdBy: string | null
-  createDate: string | null
+  socialSecurityNumber?: string
+  changedBy?: string
+  changeDate?: string
+  createdBy?: string
+  createDate?: string
   name: string
   fullName: string
-  phoneNumbers: PhoneNumber[] | void
-  emailAddresses: EmailAddress[] | void
-  addresses: Address[] | void
-  contact: Contact | void
+  phoneNumbers?: PhoneNumber[]
+  emailAddresses?: EmailAddress[]
+  addresses?: Address[]
+  contact?: Contact
   className: string
 }
 
 /********** Fi2XML types **********/
-
-export interface Fi2Scheme {
-  fi2scheme_id: string
-  fi2scheme_name: string
-  fi2scheme_url: string
-}
-
-export interface Fi2Value {
-  fi2value_code: string
-  fi2value_scheme: Fi2Scheme
-  fi2value_value: string
-}
-
-export interface Fi2Class {
-  fi2class_code: string
-  fi2class_scheme: Fi2Scheme
-}
-
-export interface Fi2ValueUsage {
-  $t: string
-  usage: string
-}
-
-export interface Fi2Address {
-  guid: string
-  fi2addr_class: Fi2Class
-  fi2addr_descr: Fi2AddrDescr
-  fi2addr_addrline: Fi2ValueUsage[]
-  fi2addr_zipcode: string
-  fi2addr_city: string
-  fi2addr_country: string
-  fi2addr_region: string
-  fi2addr_tel: Fi2ValueUsage[]
-}
-
 export interface Fi2Ids {
   fi2_id: Fi2ValueUsage[]
 }
@@ -89,11 +44,6 @@ export interface Fi2PartnerName {
   $t: string
   lang: string
   usage: string
-}
-
-export interface Fi2AddrDescr {
-  $t: string
-  lang: string
 }
 
 export interface Fi2Contact {
@@ -133,3 +83,5 @@ export interface Fi2PartnersResponse {
 export interface Fi2PartnerResponse {
   fi2partner: Fi2Partner
 }
+
+export { Fi2Address, Address, Fi2ValueUsage }

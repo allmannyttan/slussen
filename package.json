@@ -4,16 +4,18 @@
   "description": "Integration med fastAPI.",
   "main": "./index.js",
   "scripts": {
-    "migrate": "node-pg-migrate",
-    "migrate:up": "node-pg-migrate up",
-    "start": "node-pg-migrate up && ts-node -r tsconfig-paths/register src/server.ts",
+    "build": "tsc",
     "dev": "node-pg-migrate up && ts-node-dev --no-notify --ignore-watch node_modules -r tsconfig-paths/register src/server.ts",
+    "docs": "node generateSwagger",
     "lint": "eslint ./src/**/*.ts",
+    "migrate:up": "node-pg-migrate up",
+    "migrate": "node-pg-migrate",
     "prod": "tsc && node ./dist/lib/server.js",
-    "test": "npm run test:watch",
+    "start": "node-pg-migrate up && ts-node -r tsconfig-paths/register src/server.ts",
     "test:ci": "jest --ci",
+    "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test": "npm run test:watch"
   },
   "repository": {
     "type": "git",
@@ -30,6 +32,8 @@
     "node-pg-migrate": "4.6.2",
     "pg": "8.0.3",
     "sql-template-strings": "2.2.2",
+    "swagger-ui-express": "^4.1.4",
+    "typescript": "^3.8.3",
     "xml2js": "0.4.23",
     "xml2json": "0.12.0"
   },
@@ -40,6 +44,8 @@
     "@types/jest": "25.2.1",
     "@types/pg": "7.14.3",
     "@types/xml2json": "0.11.0",
+    "@types/swagger-jsdoc": "^3.0.2",
+    "@types/swagger-ui-express": "^4.1.2",
     "@types/xml2js": "0.4.5",
     "@typescript-eslint/eslint-plugin": "2.27.0",
     "@typescript-eslint/parser": "2.27.0",
@@ -48,11 +54,12 @@
     "jest": "25.2.7",
     "jest-watch-typeahead": "0.5.0",
     "prettier": "2.0.4",
+    "swagger-jsdoc": "^4.0.0",
     "ts-jest": "25.3.1",
     "ts-node": "8.8.2",
     "ts-node-dev": "1.0.0-pre.44",
-    "tsconfig-paths": "3.9.0",
-    "typescript": "3.8.3"
+    "ts-to-json": "^0.65.1",
+    "tsconfig-paths": "3.9.0"
   },
   "keywords": []
 }
