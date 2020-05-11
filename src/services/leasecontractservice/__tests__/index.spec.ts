@@ -30,7 +30,7 @@ describe('#leasecontractservice', () => {
       await service.getLeaseContracts()
 
       expect(client.get).toHaveBeenCalledTimes(1)
-      expect(client.get).toHaveBeenCalledWith('fi2leasecontract/')
+      expect(client.get).toHaveBeenCalledWith({ url: 'fi2leasecontract/' })
     })
 
     test('returns contracts in correct format', async () => {
@@ -194,7 +194,7 @@ describe('#leasecontractservice', () => {
       await service.getLeaseContract('123')
 
       expect(client.get).toHaveBeenCalledTimes(1)
-      expect(client.get).toHaveBeenCalledWith('fi2leasecontract/123')
+      expect(client.get).toHaveBeenCalledWith({ url: 'fi2leasecontract/123' })
     })
 
     test('returns a contract in correct format', async () => {

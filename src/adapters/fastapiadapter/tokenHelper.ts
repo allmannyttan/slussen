@@ -62,3 +62,7 @@ export const tokenRefresher = <T extends (arg: FastAPIRequest) => any>(
     }
   }
 }
+
+export default {
+  tokenRefresher,
+}

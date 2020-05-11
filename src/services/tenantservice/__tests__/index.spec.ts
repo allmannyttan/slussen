@@ -19,7 +19,9 @@ describe('#tenantservice', () => {
       await service.getTenants()
 
       expect(client.get).toHaveBeenCalledTimes(1)
-      expect(client.get).toHaveBeenCalledWith("fi2partner?filter=fi2part_class.fi2class_code:'16'")
+      expect(client.get).toHaveBeenCalledWith({
+        url: "fi2partner?filter=fi2part_class.fi2class_code:'16'",
+      })
     })
 
     test('returns tenants in correct format', async () => {
@@ -146,7 +148,7 @@ describe('#tenantservice', () => {
       await service.getTenant('123')
 
       expect(client.get).toHaveBeenCalledTimes(1)
-      expect(client.get).toHaveBeenCalledWith('fi2partner/123')
+      expect(client.get).toHaveBeenCalledWith({ url: 'fi2partner/123' })
     })
 
     test('returns a tenant in correct format', async () => {
