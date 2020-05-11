@@ -3,7 +3,6 @@ FROM node:13.2.0-alpine
 
 COPY package.json /app/
 COPY package-lock.json /app/
-COPY index.ts /app/
 COPY tsconfig.json /app/
 COPY src /app/src
 
