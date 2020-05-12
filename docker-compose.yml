@@ -1,0 +1,16 @@
+version: "3"
+services:
+  api:
+    # image: docker.pkg.github.com/allmannyttans-digitaliseringsinitiativ/api/api:push-image-on-master-build
+    build: .
+    ports:
+      - "4000:3000"
+    networks:
+      - api
+    environment:
+      - "PORT=${PORT}"
+      - "FAST_API__BASE_URL=${FASTAPIBASEURL}"
+      - "FAST_API__ACCESS_TOKEN=${FASTAPIACCESSTOKEN}"
+
+networks:
+  api:
