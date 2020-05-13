@@ -9,7 +9,8 @@
     "docs": "node generateSwagger",
     "lint": "eslint ./src/**/*.ts",
     "migrate:up": "node-pg-migrate up",
-    "migrate": "node-pg-migrate",
+    "migrate:down": "node-pg-migrate down",
+    "migrate": "node-pg-migrate -f migrate-config.json",
     "prod": "tsc && node ./dist/lib/server.js",
     "start": "node-pg-migrate up && ts-node -r tsconfig-paths/register src/server.ts",
     "test:ci": "jest --ci",
@@ -19,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com:Iteam1337/svensk-allmannytta.git"
+    "url": "git@github.com:Allmannyttans-Digitaliseringsinitiativ/api.git"
   },
   "author": "Anders, Martin",
   "license": "ISC",
