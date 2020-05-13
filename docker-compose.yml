@@ -1,8 +1,24 @@
-version: '3'
-
+version: "3"
 services:
+  api:
+    # image: docker.pkg.github.com/allmannyttans-digitaliseringsinitiativ/api/api:push-image-on-master-build
+    build: .
+    ports:
+      - 4000:4000
+    networks:
+      - api
+    environment:
+      - "PORT=${PORT}"
+      - "FAST_API__BASE_URL=${FASTAPIBASEURL}"
+      - "FAST_API__ACCESS_TOKEN=${FASTAPIACCESSTOKEN}"
+      - "FAST_API__USER=${FASTAPIUSER}"
+      - "FAST_API__PASSWORD=${FASTAPIPASSWORD}"
+      - "DATABASE_URL=${DATABASE_URL}"
+      - "POSTGRES__HOST=${POSTGRESHOST}"
   postgres:
     image: postgres:12.2-alpine
+    networks: 
+      - api
     environment:
       TZ: Europe/Stockholm
       POSTGRES_DB: api-db
@@ -11,6 +27,9 @@ services:
       - db-data:/var/lib/postgresql/data
     ports:
       - 5432:5432
+    
+networks:
+  api:
 
 volumes:
   db-data:
