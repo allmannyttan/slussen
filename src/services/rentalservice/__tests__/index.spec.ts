@@ -23,7 +23,7 @@ describe('#rentalsservice', () => {
       await service.getRentals()
 
       expect(client.get).toHaveBeenCalledTimes(1)
-      expect(client.get).toHaveBeenCalledWith('fi2spatisystem/')
+      expect(client.get).toHaveBeenCalledWith({ url: 'fi2spatisystem/' })
     })
 
     test('returns rentals in correct format', async () => {
@@ -430,7 +430,7 @@ describe('#rentalsservice', () => {
       await service.getRental('123')
 
       expect(client.get).toHaveBeenCalledTimes(1)
-      expect(client.get).toHaveBeenCalledWith('fi2spatisystem/123')
+      expect(client.get).toHaveBeenCalledWith({ url: 'fi2spatisystem/123' })
     })
 
     test('returns a contract in correct format', async () => {
