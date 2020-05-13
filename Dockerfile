@@ -14,6 +14,7 @@ COPY package-lock.json /app/
 COPY tsconfig.json /app/
 COPY swagger.json /app/
 COPY src /app/src
+COPY migrations /app/migrations
 
 WORKDIR /app
 VOLUME /app/data
