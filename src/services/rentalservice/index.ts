@@ -92,14 +92,14 @@ const transformRentals = (fiSpatiSystems: Fi2SpatiSystemsResponse): Rental[] => 
 }
 
 const getRentals = async (): Promise<Rental[]> => {
-  const fi2SpatiSystems: Fi2SpatiSystemsResponse = await client.get(`fi2spatisystem/`)
+  const fi2SpatiSystems: Fi2SpatiSystemsResponse = await client.get({ url: `fi2spatisystem/` })
   const result = transformRentals(fi2SpatiSystems)
 
   return result
 }
 
 const getRental = async (id: string): Promise<Rental> => {
-  const rental: Fi2SpatiSystemResponse = await client.get(`fi2spatisystem/${id}`)
+  const rental: Fi2SpatiSystemResponse = await client.get({ url: `fi2spatisystem/${id}` })
   const result = transformRental(rental.fi2spatisystem)
 
   return result
