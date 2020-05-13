@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:12.2-alpine
+    environment:
+      TZ: Europe/Stockholm
+      POSTGRES_DB: api-db
+      POSTGRES_PASSWORD: postgrespassword
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+volumes:
+  db-data:
+    driver: local

@@ -1,11 +1,14 @@
 import { Application, Request, Response } from 'express'
-import tenantService from '@app/services/tenantservice'
 import { performance } from 'perf_hooks'
+import tenantService from '@app/services/tenantservice'
+import { query } from '@app/adapters/postgres'
+import { getNewAccessToken } from '@app/adapters/fastapiadapter/tokenHelper'
 
 interface SystemHealthInfo {
   name: string
   access: boolean
   responseTime: number
+  errorMessage?: string
 }
 
 interface HealthResponse {
@@ -13,22 +16,55 @@ interface HealthResponse {
 }
 
 const checkFastAPIAccess = async (): Promise<SystemHealthInfo> => {
-  const start = performance.now()
-  const tenants = await tenantService.getTenants()
-  const end = performance.now()
+  try {
+    const start = performance.now()
+    const token = await getNewAccessToken()
+    const end = performance.now()
 
-  const access = Array.isArray(tenants) && tenants.length > 0
-  const responseTime = end - start
+    const access = !!token
+    const responseTime = end - start
 
-  return {
-    name: 'fastAPI',
-    access,
-    responseTime,
+    return {
+      name: 'fastAPI',
+      access,
+      responseTime,
+    }
+  } catch (error) {
+    return {
+      name: 'fastAPI',
+      access: false,
+      responseTime: 0,
+      errorMessage: error,
+    }
+  }
+}
+
+const checkDbAccess = async (): Promise<SystemHealthInfo> => {
+  try {
+    const start = performance.now()
+    const [now] = await query<Date>('SELECT NOW();')
+    const end = performance.now()
+
+    const access = now && now instanceof Date
+    const responseTime = end - start
+
+    return {
+      name: 'db',
+      access,
+      responseTime,
+    }
+  } catch (error) {
+    return {
+      name: 'db',
+      access: false,
+      responseTime: 0,
+      errorMessage: error,
+    }
   }
 }
 
 const checkHealth = async (): Promise<HealthResponse> => {
-  const health: SystemHealthInfo[] = [await checkFastAPIAccess()]
+  const health: SystemHealthInfo[] = [await checkFastAPIAccess(), await checkDbAccess()]
 
   return {
     health,
