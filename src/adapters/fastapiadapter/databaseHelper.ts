@@ -2,7 +2,7 @@ import { query } from '@app/adapters/postgres'
 import { FastAPIToken } from './types'
 
 export const getAccessTokenFromDb = async (): Promise<string | null> => {
-  const sql = `SELECT created, token_value FROM fastapi_tokens ORDER BY created DESC`
+  const sql = `SELECT created, token_value FROM fastapi_tokens ORDER BY created DESC LIMIT 1`
   const tokens: FastAPIToken[] = await query<FastAPIToken>(sql)
   return Array.isArray(tokens) && tokens.length > 0 ? tokens[0].token_value : null
 }
