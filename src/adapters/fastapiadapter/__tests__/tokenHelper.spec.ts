@@ -1,5 +1,4 @@
 import tokenHelper from '../tokenHelper'
-import config from '../../../config'
 import axios from 'axios'
 import { getAccessTokenFromDb } from '../databaseHelper'
 
@@ -7,19 +6,20 @@ jest.mock('axios', () => ({
   get: jest.fn(),
 }))
 jest.mock('../databaseHelper')
-const mockFn = jest.fn(async (args) => Promise.resolve(args))
+jest.mock('../../../config', () => {
+  return {
+    fastAPI: {
+      baseUrl: 'test',
+      user: 'user',
+      password: 'pwd',
+    },
+  }
+})
+const mockFn = jest.fn()
 
 describe('#tokenHelper', () => {
   beforeEach(() => {
     jest.resetAllMocks()
-
-    //console.log = jest.fn()
-    //console.error = jest.fn()
-    config.fastAPI = {
-      baseUrl: 'test',
-      user: 'user',
-      password: 'pwd',
-    }
     ;(getAccessTokenFromDb as jest.Mock).mockResolvedValue('a test token')
   })
 
@@ -79,8 +79,8 @@ describe('#tokenHelper', () => {
 
       expect(getAccessTokenFromDb).toHaveBeenCalledTimes(1)
       expect(axios.get).toHaveBeenCalledTimes(1)
-      expect(axios.get).toHaveBeenCalledWith('login?user=demouser&password=demopassword', {
-        baseURL: 'http://www.fastapi.se/backendprop/v1/api/',
+      expect(axios.get).toHaveBeenCalledWith('login?user=user&password=pwd', {
+        baseURL: 'test',
       })
       expect(mockFn).toHaveBeenCalledTimes(2) //to verify re-try
       expect(mockFn).toHaveBeenCalledWith({ url: 'cat', token: 'a access token from fastAPI' })

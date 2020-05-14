@@ -8,7 +8,15 @@ jest.mock('axios', () => ({
   create: jest.fn(),
 }))
 jest.mock('xml2json')
-jest.mock('../../../config')
+jest.mock('../../../config', () => {
+  return {
+    fastAPI: {
+      baseUrl: 'test',
+      user: 'user',
+      password: 'pwd',
+    },
+  }
+})
 jest.mock('../tokenHelper', () => ({
   tokenRefresher: (innerGet) => {
     return (arg) => {
@@ -74,7 +82,7 @@ describe('#fastapiadapter', () => {
     await client.get({ url: 'an url' })
 
     expect(axios.create).toHaveBeenCalledWith({
-      baseURL: 'http://www.fastapi.se/backendprop/v1/api/',
+      baseURL: 'test',
       headers: {
         Accept: '*/*',
         'Access-Token': 'a test token',
