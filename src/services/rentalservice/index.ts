@@ -32,12 +32,12 @@ const getAreas = (areas: Fi2Area[]): Area[] => {
     return {
       type: area.fi2area_code,
       size: area.fi2area_value.$t + ' ' + area.fi2area_value.unit,
-      status: area.fi2area_status.fi2class_code,
+      status: area.fi2area_status ? area.fi2area_status.fi2class_code : '',
       measuredBy: area.fi2area_measuredby,
       measuredDate: area.fi2area_measureddate,
       measuredType: area.fi2area_measuredtype,
       derivedFrom: area.fi2area_derivedfrom,
-      perimeter: area.fi2area_perimeter.$t + ' ' + area.fi2area_perimeter.unit,
+      perimeter: area.fi2area_perimeter ? area.fi2area_perimeter.$t + ' ' + area.fi2area_perimeter.unit : '',
     }
   })
 }
@@ -77,7 +77,7 @@ const transformRental = (fi2: Fi2SpatiSystem): Rental => {
     areas,
     name: fi2.fi2spsys_name.$t,
     fullName: fi2.fi2spsys_fullname,
-    description: fi2.fi2spsys_descr.$t,
+    description: fi2.fi2spsys_descr ? fi2.fi2spsys_descr.$t : '',
     addresses,
   }
 
