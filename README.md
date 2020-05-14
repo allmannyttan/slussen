@@ -1,15 +1,51 @@
 # Svensk allmännytta
 
-
 Code in this repo uses Version 1 of fastAPI, without "tillgäggspaket".
 Documentation of fastAPI is available here http://www.fastapi.se/apidocprop/v1/ 
 
+## Config
+
+### Local machine
+
+Put a file called config.json in the project directory:
+
+```
+{
+  "port": 4000, // API port
+  "postgres": {
+    "host": "localhost",
+    "port": 5432,
+    "user": "postgres",
+    "password": "password",
+    "database": "api-db"
+  },
+  "fastAPI": {
+    "baseURL": "https://...", 
+    "accessToken": "12345", // only used for sandbox
+    "user": "user", // user for fastAPI, used to obtain access token
+    "password": "password" // password for fastAPI, used to obtain access token
+  }
+} 
+```
+
+### Environment variables
+
+Translate fields in config.json by converting to uppercase and replacing . with __, and camelCase with snake_case. Examples:
+
+PORT=4000
+POSTGRES__HOST=localhost
+FAST_API__BASE_URL=https://...
+
+
+## Dependencies
+A PostgreSQL database, started using `docker-compose`.
+Database migrations will set up the database on `npm start` and `npm run dev`.
 
 ## Starting
-
 ```
 $ nvm use
 $ npm i
+$ docker-compose up -d
 $ npm start
 ```
 
@@ -17,6 +53,7 @@ $ npm start
 ```
 $ nvm use
 $ npm i
+$ docker-compose up -d
 $ npm run dev
 ```
 
