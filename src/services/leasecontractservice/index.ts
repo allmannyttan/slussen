@@ -1,5 +1,6 @@
 import { Application, Request, Response } from 'express'
 import { client } from '@app/adapters/fastapiadapter'
+import asyncHandler from 'express-async-handler'
 import helper from '@app/helpers/fastAPIXmlListHelper'
 
 import {
@@ -148,8 +149,9 @@ export const routes = (app: Application) => {
    *            items:
    *              $ref: '#/definitions/Contract'
    */
-  app.get('/leasecontracts', async (_req: Request, res: Response) =>
-    res.json(await getLeaseContracts())
+  app.get(
+    '/leasecontracts',
+    asyncHandler(async (_req: Request, res: Response) => res.json(await getLeaseContracts()))
   )
   /**
    * @swagger
@@ -171,8 +173,11 @@ export const routes = (app: Application) => {
    *      '404':
    *        description: 'No contract with the specified id exists'
    */
-  app.get('/leasecontracts/:id', async (_req: Request, res: Response) =>
-    res.json(await getLeaseContract(_req.params.id))
+  app.get(
+    '/leasecontracts/:id',
+    asyncHandler(async (_req: Request, res: Response) =>
+      res.json(await getLeaseContract(_req.params.id))
+    )
   )
 }
 

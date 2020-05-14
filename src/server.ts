@@ -3,6 +3,7 @@ import routes, { tenantRoutes, leaseContactRoutes, rentalRoutes, healthRoutes } 
 import bodyParser from 'body-parser'
 import express from 'express'
 import cors from 'cors'
+import errorMiddleware from '@app/middleware/errorhandler'
 
 const app = express()
 app.set('etag', 'strong')
@@ -27,3 +28,4 @@ app.listen(port, () => {
     REST: http://localhost:${port}
   `)
 })
+app.use(errorMiddleware)
