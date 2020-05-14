@@ -41,7 +41,7 @@ const errorMiddleware = (error: any, request: Request, response: Response, next:
   //TODO: Send error to logging service of choice.
   console.error(redact(error))
 
-  const status = error ? error.response.status : 500
+  const status = error.status || (error.response ? error.response.status : 500)
   const message = error.message || 'Something went wrong'
   response.status(status).send({
     status,
