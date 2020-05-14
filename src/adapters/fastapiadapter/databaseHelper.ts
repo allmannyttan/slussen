@@ -14,3 +14,8 @@ export const setAccessTokenInDb = async (token: string): Promise<number | null> 
   const ids = await query<number>(sql)
   return Array.isArray(ids) && ids.length > 0 ? ids[0] : null
 }
+
+export default {
+  getAccessTokenFromDb,
+  setAccessTokenInDb,
+}
