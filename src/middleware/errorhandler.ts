@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from 'express'
  * Redacts possibly sensitive information from errors before they are logged.
  * @param error
  */
-const redact = (error) => {
+const redact = (error: any) => {
   delete error.request
   delete error.config
   delete error.isAxiosError
