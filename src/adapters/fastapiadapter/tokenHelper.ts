@@ -38,8 +38,7 @@ export const tokenRefresher = <T extends (arg: FastAPIRequest) => any>(
   return async (arg: FastAPIRequest): Promise<ReturnType<T>> => {
     try {
       const token = await getAccessTokenFromDb()
-
-      if (token === null) {
+      if (token === null || !token) {
         throw new Error(NO_TOKENS_IN_DB_ERROR)
       }
 

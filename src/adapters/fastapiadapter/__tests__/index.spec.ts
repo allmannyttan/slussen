@@ -1,6 +1,5 @@
 import { client } from '../index'
 import { fi2PartnerFixture } from '../__fixtures__/fi2partner.fixture'
-// import tokenHelper from '../tokenHelper'
 import axios from 'axios'
 import xml2json from 'xml2json'
 import config from '../../../config'
@@ -9,8 +8,23 @@ jest.mock('axios', () => ({
   create: jest.fn(),
 }))
 jest.mock('xml2json')
-jest.mock('../../../config')
-// jest.mock('../tokenHelper')
+jest.mock('../../../config', () => {
+  return {
+    fastAPI: {
+      baseUrl: 'test',
+      user: 'user',
+      password: 'pwd',
+    },
+  }
+})
+jest.mock('../tokenHelper', () => ({
+  tokenRefresher: (innerGet) => {
+    return (arg) => {
+      arg.token = 'a test token'
+      return innerGet(arg)
+    }
+  },
+}))
 
 describe('#fastapiadapter', () => {
   let xmlClientMock
@@ -32,15 +46,11 @@ describe('#fastapiadapter', () => {
       user: 'user',
       password: 'pwd',
     }
-
-    //tokenHelper.tokenRefresher = jest.fn(async () => async () => Promise.resolve({}))
   })
 
-  describe.skip('#get', () => {
+  describe('#get', () => {
     test('gets xml and returns json from xml2json', async () => {
       const result = await client.get({ url: 'an url' })
-
-      expect(xmlClientMock.get).toHaveBeenCalledTimes(1)
       expect(xml2json.toJson).toHaveBeenCalledWith(fi2PartnerFixture, {
         arrayNotation: [
           'fi2lease_actor',
@@ -55,10 +65,29 @@ describe('#fastapiadapter', () => {
           'fi2_id',
           'fi2cont_tel',
           'fi2cont_email',
-          'fi2spsys_address',
         ],
       })
       expect(result).toEqual(JSON.parse(jsonResult))
+    })
+  })
+
+  test('calls the correct url', async () => {
+    await client.get({ url: 'an url' })
+
+    expect(xmlClientMock.get).toHaveBeenCalledTimes(1)
+    expect(xmlClientMock.get).toHaveBeenCalledWith('an url')
+  })
+
+  test('uses token from tokenRefresher in header', async () => {
+    await client.get({ url: 'an url' })
+
+    expect(axios.create).toHaveBeenCalledWith({
+      baseURL: 'test',
+      headers: {
+        Accept: '*/*',
+        'Access-Token': 'a test token',
+      },
+      responseType: 'text',
     })
   })
 })
