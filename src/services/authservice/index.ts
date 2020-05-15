@@ -1,7 +1,7 @@
 import { Application, Request, Response } from 'express'
 import asyncHandler from 'express-async-handler'
 import hash from '@app/helpers/hash'
-import { createToken } from '@app/helpers/jwt'
+import { createToken, refreshToken } from '@app/helpers/jwt'
 import { authMiddleware } from '@app/middleware/auth'
 
 export const routes = (app: Application) => {
@@ -67,6 +67,15 @@ export const routes = (app: Application) => {
     asyncHandler(async (req: Request, res: Response) => {
       const { username, password } = req.body
       const token = await createToken(username, password)
+      res.json(token)
+    })
+  )
+
+  app.post(
+    '/auth/refresh-token',
+    authMiddleware,
+    asyncHandler(async (req: Request, res: Response) => {
+      const token = await refreshToken(req.auth)
       res.json(token)
     })
   )

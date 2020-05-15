@@ -1,5 +1,5 @@
 import { auth } from '../config'
-import { JWT } from '../middleware/auth/types'
+import { JWT, UserTokenInfo } from './types'
 import {
   setUserFailedLoginAttempts,
   setUserLocked,
@@ -55,6 +55,45 @@ export const createToken = async (username: string, password: string): Promise<J
     )
 
     return { token }
+  } catch (error) {
+    // How do we log this?
+    console.error(error)
+    const err = createHttpError('Invalid credentials')
+    err.status = 401
+    throw err
+  }
+}
+
+export const refreshToken = async (token: UserTokenInfo): Promise<JWT> => {
+  try {
+    const { username } = token
+    const user = await getUser(username)
+
+    if (!user) {
+      throw new Error(`No such user: ${username}.`)
+    }
+
+    if (user.locked === true) {
+      throw new Error(`User locked: ${user.id}.`)
+    }
+
+    if (user.disabled === true) {
+      throw new Error(`User disabled: ${user.id}.`)
+    }
+
+    // Welcome in, here is your token
+    const freshToken = jwt.sign(
+      {
+        sub: user.id,
+        username: user.username,
+      },
+      auth.secret,
+      {
+        expiresIn: auth.expiresIn,
+      }
+    )
+
+    return { token: freshToken }
   } catch (error) {
     // How do we log this?
     console.error(error)

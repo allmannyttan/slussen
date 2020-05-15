@@ -1,4 +1,4 @@
-import { User } from './types'
+import { User } from '@app/helpers/types'
 import SQL from 'sql-template-strings'
 import { query } from '@app/adapters/postgres'
 
