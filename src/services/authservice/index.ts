@@ -1,7 +1,8 @@
 import { Application, Request, Response } from 'express'
 import asyncHandler from 'express-async-handler'
-import hash from '@app/middleware/auth/hash'
-import { createToken, authMiddleware } from '@app/middleware/auth/jwt'
+import hash from '@app/helpers/hash'
+import { createToken } from '@app/helpers/jwt'
+import { authMiddleware } from '@app/middleware/auth'
 
 export const routes = (app: Application) => {
   /**

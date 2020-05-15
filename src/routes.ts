@@ -1,6 +1,5 @@
 import swaggerUi from 'swagger-ui-express'
 import specs from '../swagger.json'
-import { authMiddleware } from '@app/middleware/auth/jwt'
 import { Application } from 'express'
 
 import { routes as authRoutes } from './services/authservice'

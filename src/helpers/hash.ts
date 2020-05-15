@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import { PasswordAndHash } from './types'
+import { PasswordAndHash } from '../middleware/auth/types'
 
 const createSalt = async (): Promise<string> => {
   const saltByteSize = 12
