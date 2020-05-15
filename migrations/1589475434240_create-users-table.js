@@ -7,9 +7,9 @@ exports.up = (pgm) => {
       username VARCHAR(100) UNIQUE,
       locked BOOLEAN NOT NULL DEFAULT false,
       disabled BOOLEAN NOT NULL DEFAULT false,
-      passwordHash varchar(200),
+      password_hash varchar(200),
       salt varchar(200),
-      failedLoginAttempts SMALLINT DEFAULT 0,
+      failed_login_attempts SMALLINT DEFAULT 0,
       created TIMESTAMPTZ NOT NULL DEFAULT NOW()
     )
   `)

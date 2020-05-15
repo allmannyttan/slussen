@@ -8,7 +8,7 @@ export interface User {
   failedLoginAttempts: number
 }
 
-export interface UserToken {
+export interface UserTokenInfo {
   sub: string
   username: string
 }
@@ -16,4 +16,8 @@ export interface UserToken {
 export interface PasswordAndHash {
   password: string
   salt: string
+}
+
+export interface JWT {
+  token: string
 }

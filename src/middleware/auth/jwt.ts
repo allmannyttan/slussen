@@ -5,13 +5,13 @@ import createHttpError from 'http-errors'
 import SQL from 'sql-template-strings'
 import { query } from '@app/adapters/postgres'
 import hash from './hash'
-import { User } from './types'
+import { User, JWT } from './types'
 
 const { secret } = auth
 
 const setUserFailedLoginAttempts = async (userId: number, attempts: number): Promise<void> => {
   const sql = SQL`
-    UPDATE "user" 
+    UPDATE "users" 
     SET failed_login_attempts = ${attempts}
     WHERE id = ${userId}
   `
@@ -20,7 +20,7 @@ const setUserFailedLoginAttempts = async (userId: number, attempts: number): Pro
 
 const setUserLocked = async (userId: number, locked: boolean): Promise<void> => {
   const sql = SQL`
-    UPDATE "user" 
+    UPDATE "users" 
     SET locked = ${locked}
     WHERE id = ${userId}
   `
@@ -32,24 +32,24 @@ const getUser = async (username: string): Promise<User> => {
       SELECT
         id,
         username,
-        password_hash as passwordHash,
+        password_hash as "passwordHash",
         salt,
         locked,
         disabled,
-        failed_login_attempts as failedLoginAttempts
+        failed_login_attempts as "failedLoginAttempts"
       FROM users
       WHERE username = ${username}
     `
 
-  const [user] = await query(sql)
+  const [user] = await query<User>(sql)
 
-  return user as User
+  return user
 }
 
-export const createToken = async (password: string, username: string) => {
+export const createToken = async (username: string, password: string): Promise<JWT> => {
   try {
     const user = await getUser(username)
-
+    console.log(user)
     if (!user) {
       throw new Error(`No such user: ${username}.`)
     }
@@ -81,7 +81,7 @@ export const createToken = async (password: string, username: string) => {
     const token = jwt.sign(
       {
         sub: user.id,
-        userName: user.username,
+        username: user.username,
       },
       auth.secret,
       {
@@ -101,15 +101,15 @@ export const createToken = async (password: string, username: string) => {
 
 const authorize = ({ authorization }: any = {}) => {
   const authHeader: string | undefined = authorization
-  console.log('authorizing')
   if (authHeader) {
     const user:
       | string
       | {
-          id?: string
+          sub?: number
+          username?: string
         } = jwt.verify(authHeader.replace('Bearer ', ''), secret)
 
-    if (user && typeof user !== 'string' && user.id) {
+    if (user && typeof user !== 'string' && user.sub) {
       return { auth: user }
     }
   }

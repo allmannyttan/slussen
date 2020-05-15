@@ -16,5 +16,4 @@ export default (app: Application) => {
     res.send(`<h1>fastAPI REST API</h1> <a href="/api-docs">Documentation available here</a>`)
   )
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }))
-  app.use('/auth-test', authMiddleware, (_req, res) => res.send('hej hej'))
 }
