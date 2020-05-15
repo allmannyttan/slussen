@@ -11,6 +11,11 @@
       "get": {
         "summary": "Gets all tenants",
         "description": "Retrieves all tenants in the system. There is currently no way of filtering or doing API-side searches.",
+        "security": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        },
         "responses": {
           "200": {
             "description": "List of tenants",
@@ -20,6 +25,9 @@
                 "$ref": "#/definitions/Tenant"
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
@@ -28,6 +36,11 @@
       "get": {
         "summary": "Gets a tenant by id",
         "description": "Retrieves a tenant by its id",
+        "security": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        },
         "parameters": [
           {
             "in": "path",
@@ -44,6 +57,9 @@
               "$ref": "#/definitions/Tenant"
             }
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "404": {
             "description": "No tenant with the specified id exists"
           }
@@ -54,6 +70,11 @@
       "get": {
         "summary": "Gets all contracts for rentals",
         "description": "Retrieves all lease contracts for rentals in the system. Currently the only way of finding a contract for a specific tenant is to retrieve all and filter on the client side. API-side filters will be added later on.",
+        "security": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        },
         "responses": {
           "200": {
             "description": "List of contracts",
@@ -63,6 +84,9 @@
                 "$ref": "#/definitions/Contract"
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
@@ -80,12 +104,20 @@
             "description": "contract id"
           }
         ],
+        "security": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        },
         "responses": {
           "200": {
             "description": "Returns the lease contract with the specified id",
             "schema": {
               "$ref": "#/definitions/Contract"
             }
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "404": {
             "description": "No contract with the specified id exists"
@@ -97,6 +129,11 @@
       "get": {
         "summary": "Gets all rental units",
         "description": "Retrieves all rental units in the system. There is currently no way of filtering or doing API-side searches.",
+        "security": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        },
         "responses": {
           "200": {
             "description": "List of rental units",
@@ -106,6 +143,9 @@
                 "$ref": "#/definitions/Rental"
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }
@@ -114,6 +154,11 @@
       "get": {
         "summary": "Gets a rental unit by id",
         "description": "Retrieves a rental unit by its id",
+        "security": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        },
         "parameters": [
           {
             "in": "path",
@@ -129,6 +174,9 @@
             "schema": {
               "$ref": "#/definitions/Rental"
             }
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "404": {
             "description": "No rental unit with the specified id exists"
@@ -217,12 +265,20 @@
             "required": true
           }
         ],
+        "security": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        },
         "responses": {
           "200": {
             "description": "Result of the validation.",
             "schema": {
               "type": "string"
             }
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         }
       }

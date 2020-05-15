@@ -82,11 +82,17 @@ export const routes = (app: Application) => {
    *        schema:
    *          type: string
    *        required: true
+   *    security:
+   *      type: http
+   *      scheme: bearer
+   *      bearerFormat: JWT
    *    responses:
    *      '200':
    *        description: 'Result of the validation.'
    *        schema:
    *          type: string
+   *      '401':
+   *        description: 'Unauthorized'
    */
   app.get('/auth/test', authMiddleware, (_req, res) => res.send('Authorization OK'))
 }
