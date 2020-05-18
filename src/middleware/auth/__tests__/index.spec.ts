@@ -14,7 +14,7 @@ describe('#authMiddleware', () => {
   test('it calls jwt.authorize and assigns the result to Request', async () => {
     ;(authorize as jest.Mock).mockReturnValueOnce({ auth: 'bar' })
     const next = jest.fn()
-    let request = {
+    const request = {
       headers: [],
     }
 
