@@ -71,12 +71,42 @@ export const routes = (app: Application) => {
     })
   )
 
-  app.post(
+  /**
+   * @swagger
+   * /auth/refresh-token:
+   *  get:
+   *    summary: Renews a jwt token
+   *    description: Validates username + password and returns a valid token to be used in authorization header.
+   *    parameters:
+   *      - in: header
+   *        name: authorization
+   *        schema:
+   *          type: string
+   *        required: true
+   *    security:
+   *      type: http
+   *      scheme: bearer
+   *      bearerFormat: JWT
+   *    responses:
+   *      '200':
+   *        description: 'A valid token'
+   *        schema:
+   *            type: object
+   *            properties:
+   *              token:
+   *                type: string
+   *      '401':
+   *        description: 'Unauthorized'
+   */
+  app.get(
     '/auth/refresh-token',
     authMiddleware,
     asyncHandler(async (req: Request, res: Response) => {
-      const token = await refreshToken(req.auth)
-      res.json(token)
+      if (!req.auth) {
+        res.status(401).send('Unauthorized, token missing')
+      } else {
+        res.json(await refreshToken(req.auth))
+      }
     })
   )
 

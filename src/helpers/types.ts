@@ -11,6 +11,8 @@ export interface User {
 export interface UserTokenInfo {
   sub: string
   username: string
+  iat?: number
+  exp?: number
 }
 
 export interface PasswordAndHash {
