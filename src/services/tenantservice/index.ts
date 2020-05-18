@@ -132,6 +132,12 @@ export const routes = (app: Application) => {
    *  get:
    *    summary: Gets all tenants
    *    description: Retrieves all tenants in the system. There is currently no way of filtering or doing API-side searches.
+   *    parameters:
+   *      - in: header
+   *        name: authorization
+   *        schema:
+   *          type: string
+   *        required: true
    *    security:
    *      type: http
    *      scheme: bearer
@@ -162,6 +168,11 @@ export const routes = (app: Application) => {
      *      scheme: bearer
      *      bearerFormat: JWT
      *    parameters:
+     *      - in: header
+     *        name: authorization
+     *        schema:
+     *          type: string
+     *        required: true
      *      - in: path
      *        name: id
      *        type: string

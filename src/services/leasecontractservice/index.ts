@@ -142,6 +142,12 @@ export const routes = (app: Application) => {
    *  get:
    *    summary: Gets all contracts for rentals
    *    description: Retrieves all lease contracts for rentals in the system. Currently the only way of finding a contract for a specific tenant is to retrieve all and filter on the client side. API-side filters will be added later on.
+   *    parameters:
+   *      - in: header
+   *        name: authorization
+   *        schema:
+   *          type: string
+   *        required: true
    *    security:
    *      type: http
    *      scheme: bearer
@@ -169,6 +175,11 @@ export const routes = (app: Application) => {
    *    summary: Gets a contract by id
    *    description: Retrieves a lease contract by its id. Currently the only way of finding a contract for a specific tenant is to retrieve all and filter on the client side. API-side filters will be added later on.
    *    parameters:
+   *      - in: header
+   *        name: authorization
+   *        schema:
+   *          type: string
+   *        required: true
    *      - in: path
    *        name: id
    *        type: integer

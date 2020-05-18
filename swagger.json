@@ -11,6 +11,16 @@
       "get": {
         "summary": "Gets all tenants",
         "description": "Retrieves all tenants in the system. There is currently no way of filtering or doing API-side searches.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
         "security": {
           "type": "http",
           "scheme": "bearer",
@@ -43,6 +53,14 @@
         },
         "parameters": [
           {
+            "in": "header",
+            "name": "authorization",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
+          {
             "in": "path",
             "name": "id",
             "type": "string",
@@ -70,6 +88,16 @@
       "get": {
         "summary": "Gets all contracts for rentals",
         "description": "Retrieves all lease contracts for rentals in the system. Currently the only way of finding a contract for a specific tenant is to retrieve all and filter on the client side. API-side filters will be added later on.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
         "security": {
           "type": "http",
           "scheme": "bearer",
@@ -96,6 +124,14 @@
         "summary": "Gets a contract by id",
         "description": "Retrieves a lease contract by its id. Currently the only way of finding a contract for a specific tenant is to retrieve all and filter on the client side. API-side filters will be added later on.",
         "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
           {
             "in": "path",
             "name": "id",
@@ -129,6 +165,16 @@
       "get": {
         "summary": "Gets all rental units",
         "description": "Retrieves all rental units in the system. There is currently no way of filtering or doing API-side searches.",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
         "security": {
           "type": "http",
           "scheme": "bearer",
@@ -160,6 +206,14 @@
           "bearerFormat": "JWT"
         },
         "parameters": [
+          {
+            "in": "header",
+            "name": "authorization",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          },
           {
             "in": "path",
             "name": "id",
