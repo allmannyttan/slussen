@@ -121,8 +121,24 @@ const transformContracts = (fi2Contracts: Fi2LeaseContractsResponse): Contract[]
   }
 }
 
-const getLeaseContracts = async (): Promise<Contract[]> => {
-  const contracts: Fi2LeaseContractsResponse = await client.get({ url: `fi2leasecontract/` })
+/**
+ * Creates a query string for fastAPI from a number of parameters.
+ */
+const createQueryString = (rentalid?: string) : string => {
+  const translations = {
+    rentalid: 'fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id'
+  }
+
+  if (!rentalid) {
+    return ''
+  }
+
+  return `?filter=${translations.rentalid}:'${rentalid}'`
+}
+
+const getLeaseContracts = async (rentalid?: string): Promise<Contract[]> => {
+  const querystring = createQueryString(rentalid)
+  const contracts: Fi2LeaseContractsResponse = await client.get({ url: `fi2leasecontract/${querystring}` })
   const result = transformContracts(contracts)
   return result
 }
@@ -141,6 +157,12 @@ export const routes = (app: Application) => {
    *  get:
    *    summary: Gets all contracts for rentals
    *    description: Retrieves all lease contracts for rentals in the system. Currently the only way of finding a contract for a specific tenant is to retrieve all and filter on the client side. API-side filters will be added later on.
+   *    parameters:
+   *      - in: query
+   *        description: "Filter for rental IDs, supports simple wildcards (example: rentalid=11*)."
+   *        name: rentalid
+   *        required: false
+   *        type: string
    *    responses:
    *      '200':
    *        description: 'List of contracts'
@@ -151,7 +173,7 @@ export const routes = (app: Application) => {
    */
   app.get(
     '/leasecontracts',
-    asyncHandler(async (_req: Request, res: Response) => res.json(await getLeaseContracts()))
+    asyncHandler(async (_req: Request, res: Response) => res.json(await getLeaseContracts(_req.query.rentalid)))
   )
   /**
    * @swagger

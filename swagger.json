@@ -54,6 +54,15 @@
       "get": {
         "summary": "Gets all contracts for rentals",
         "description": "Retrieves all lease contracts for rentals in the system. Currently the only way of finding a contract for a specific tenant is to retrieve all and filter on the client side. API-side filters will be added later on.",
+        "parameters": [
+          {
+            "in": "query",
+            "description": "Filter for rental IDs, supports simple wildcards (example: rentalid=11*).",
+            "name": "rentalid",
+            "required": false,
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of contracts",
