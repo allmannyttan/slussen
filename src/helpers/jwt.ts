@@ -4,7 +4,7 @@ import {
   setUserFailedLoginAttempts,
   setUserLocked,
   getUser,
-} from '../middleware/auth/databaseHelper'
+} from '@app/middleware/auth/databaseHelper'
 import createHttpError from 'http-errors'
 import hash from './hash'
 import jwt from 'jsonwebtoken'
