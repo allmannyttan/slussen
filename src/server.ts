@@ -11,7 +11,7 @@ import express from 'express'
 import cors from 'cors'
 import errorMiddleware from '@app/middleware/errorhandler'
 
-const app = express()
+export const app = express()
 app.set('etag', 'strong')
 app.use(cors())
 app.use(bodyParser.json())

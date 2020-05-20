@@ -5,15 +5,42 @@ import {
 } from '../__fixtures__/fastAPIAdapterResult.fixture'
 import { client } from '@app/adapters/fastapiadapter'
 import service from '../index'
+import { authMiddleware } from '@app/middleware/auth'
+import helper from '@app/helpers/fastAPIXmlListHelper'
+
+import supertest from 'supertest'
 
 jest.mock('@app/adapters/fastapiadapter')
+jest.mock('@app/helpers/fastAPIXmlListHelper')
+jest.mock('@app/middleware/auth')
+jest.mock('@app/config', () => ({
+  port: 3335,
+  fastAPI: {
+    baseUrl: 'test',
+  },
+  auth: {
+    secret: 'a secret',
+  },
+}))
+
+import { app } from '../../../server'
+
+const verifyGetRouteIsProtected = async (route: string) => {
+  try {
+    await supertest(app).get(route).expect(200)
+    expect(authMiddleware).toHaveBeenCalledTimes(1)
+  } catch (error) {
+    fail(error)
+  }
+}
 
 describe('#rentalsservice', () => {
   beforeEach(() => {
-    //console.log = jest.fn()
+    console.log = jest.fn()
     console.error = jest.fn()
 
     jest.resetAllMocks()
+    ;(helper.getNameFromClasslist as jest.Mock).mockReturnValue('mocked')
   })
 
   describe('#getRentals', () => {
@@ -116,7 +143,7 @@ describe('#rentalsservice', () => {
             "description": "Lägenhet",
             "documents": Array [
               Object {
-                "className": "Internt",
+                "className": "mocked",
                 "description": "Exempeldokument",
                 "id": Array [
                   "23",
@@ -124,7 +151,7 @@ describe('#rentalsservice', () => {
                 "link": "http://www.fastapi.se/apidocprop/v1/Documents/example.txt",
               },
               Object {
-                "className": "Internt",
+                "className": "mocked",
                 "description": "Exempeldokument",
                 "id": Array [
                   "30",
@@ -136,7 +163,7 @@ describe('#rentalsservice', () => {
             "guid": "C6395082-FBDC-4930-8219-580E082EB9B4",
             "id": "12345",
             "name": "Lägenhet",
-            "type": "Lägenhet",
+            "type": "mocked",
           },
           Object {
             "addresses": Array [],
@@ -209,7 +236,7 @@ describe('#rentalsservice', () => {
             "description": "Lägenhet",
             "documents": Array [
               Object {
-                "className": "Internt",
+                "className": "mocked",
                 "description": "Exempeldokument",
                 "id": Array [
                   "28",
@@ -217,7 +244,7 @@ describe('#rentalsservice', () => {
                 "link": "http://www.fastapi.se/apidocprop/v1/Documents/example.txt",
               },
               Object {
-                "className": "Internt",
+                "className": "mocked",
                 "description": "Exempeldokument",
                 "id": Array [
                   "29",
@@ -229,7 +256,7 @@ describe('#rentalsservice', () => {
             "guid": "1659C2F3-D5F3-453F-8AAF-F5ECE065A273",
             "id": "123456",
             "name": "Lägenhet",
-            "type": "Lägenhet",
+            "type": "mocked",
           },
           Object {
             "addresses": Array [
@@ -328,7 +355,7 @@ describe('#rentalsservice', () => {
             "guid": "2E3C4967-0654-46B7-9DEA-5F31F7AD66D5",
             "id": "OBJ-0110101",
             "name": "1 Rum + Kök",
-            "type": "Lägenhet",
+            "type": "mocked",
           },
           Object {
             "addresses": Array [
@@ -416,14 +443,14 @@ describe('#rentalsservice', () => {
             "guid": "DB2D3C11-5576-419E-85C1-B6C7E5ECD095",
             "id": "OBJ-0110102",
             "name": "3 Rum + Kök",
-            "type": "Lägenhet",
+            "type": "mocked",
           },
         ]
       `)
     })
   })
 
-  describe('#getLeaseContract', () => {
+  describe('#getRental', () => {
     test('uses fast api adapter to get contract', async () => {
       ;(client.get as jest.Mock).mockResolvedValueOnce(fi2SpatiSystemJson)
 
@@ -510,7 +537,7 @@ describe('#rentalsservice', () => {
           "description": "Lägenhet",
           "documents": Array [
             Object {
-              "className": "Internt",
+              "className": "mocked",
               "description": "Exempeldokument",
               "id": Array [
                 "28",
@@ -518,7 +545,7 @@ describe('#rentalsservice', () => {
               "link": "http://www.fastapi.se/apidocprop/v1/Documents/example.txt",
             },
             Object {
-              "className": "Internt",
+              "className": "mocked",
               "description": "Exempeldokument",
               "id": Array [
                 "29",
@@ -530,7 +557,7 @@ describe('#rentalsservice', () => {
           "guid": "1659C2F3-D5F3-453F-8AAF-F5ECE065A273",
           "id": "123456",
           "name": "Lägenhet",
-          "type": "Lägenhet",
+          "type": "mocked",
         }
       `)
     })
@@ -544,7 +571,7 @@ describe('#rentalsservice', () => {
       expect(result.documents.length).toEqual(2)
       expect(result.documents[0]).toMatchInlineSnapshot(`
         Object {
-          "className": "Internt",
+          "className": "mocked",
           "description": "Exempeldokument",
           "id": Array [
             "28",
@@ -552,6 +579,29 @@ describe('#rentalsservice', () => {
           "link": "http://www.fastapi.se/apidocprop/v1/Documents/example.txt",
         }
       `)
+    })
+  })
+
+  describe('authorized routes', () => {
+    beforeEach(() => {
+      ;(authMiddleware as jest.Mock).mockImplementation((req, res, next) => {
+        req.auth = {}
+        next()
+      })
+    })
+
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it('GET /leasecontracts is protected', async () => {
+      ;(client.get as jest.Mock).mockResolvedValueOnce(fi2SpatiSystemsJson)
+      await verifyGetRouteIsProtected('/rentals')
+    })
+
+    it('GET /leasecontracts/:id is protected', async () => {
+      ;(client.get as jest.Mock).mockResolvedValueOnce(fi2SpatiSystemJson)
+      await verifyGetRouteIsProtected('/rentals/1')
     })
   })
 })

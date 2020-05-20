@@ -102,6 +102,7 @@ export const routes = (app: Application) => {
     '/auth/refresh-token',
     authMiddleware,
     asyncHandler(async (req: Request, res: Response) => {
+      console.log('handling request')
       if (!req.auth) {
         res.status(401).send('Unauthorized, token missing')
       } else {
@@ -133,5 +134,8 @@ export const routes = (app: Application) => {
    *      '401':
    *        description: 'Unauthorized'
    */
-  app.get('/auth/test', authMiddleware, (_req, res) => res.send('Authorization OK'))
+  app.get('/auth/test', authMiddleware, (_req, res) => {
+    console.log('test')
+    res.send('Authorization OK')
+  })
 }
