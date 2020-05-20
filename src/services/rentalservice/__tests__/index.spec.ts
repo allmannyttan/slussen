@@ -594,12 +594,12 @@ describe('#rentalsservice', () => {
       jest.resetAllMocks()
     })
 
-    it('GET /leasecontracts is protected', async () => {
+    it('GET /rentals is protected', async () => {
       ;(client.get as jest.Mock).mockResolvedValueOnce(fi2SpatiSystemsJson)
       await verifyGetRouteIsProtected('/rentals')
     })
 
-    it('GET /leasecontracts/:id is protected', async () => {
+    it('GET /rentals/:id is protected', async () => {
       ;(client.get as jest.Mock).mockResolvedValueOnce(fi2SpatiSystemJson)
       await verifyGetRouteIsProtected('/rentals/1')
     })
