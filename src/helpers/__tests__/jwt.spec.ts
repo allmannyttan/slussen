@@ -6,8 +6,9 @@ import {
   setUserLocked,
   getUser,
 } from '@app/middleware/auth/databaseHelper'
-import { User } from '../types'
+import { User, UserTokenInfo } from '../types'
 import createHttpError from 'http-errors'
+import config from '../../config'
 
 jest.mock('@app/config', () => ({
   auth: {
@@ -146,6 +147,145 @@ describe('#jwt', () => {
       await createToken('username', 'password')
 
       expect(setUserFailedLoginAttempts).toHaveBeenCalledWith(validUser.id, 0)
+    })
+  })
+
+  describe('#refreshToken', () => {
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    test('it gets the user from the database', async () => {
+      await refreshToken({ username: 'username', sub: '1337', exp: 1111, iat: 2222 })
+
+      expect(getUser).toHaveBeenCalledWith('username')
+    })
+
+    test('it creates a token at successful login', async () => {
+      const result = await refreshToken({ username: 'username', sub: '1337', exp: 1111, iat: 2222 })
+
+      expect(result.token).toEqual('the token')
+    })
+
+    test('it creates tokens with proper parameters', async () => {
+      await refreshToken({ username: 'username', sub: '1337', exp: 1111, iat: 2222 })
+
+      expect(jwt.sign).toHaveBeenCalledWith(
+        {
+          sub: validUser.id,
+          username: validUser.username,
+        },
+        'a secret',
+        {
+          expiresIn: 'en vecka',
+        }
+      )
+    })
+
+    test('it logs and throws error if user is missing', async () => {
+      ;(getUser as jest.Mock).mockResolvedValue(null)
+
+      try {
+        await refreshToken({ username: 'username', sub: '1337', exp: 1111, iat: 2222 })
+      } catch (e) {
+        expect(console.error).toHaveBeenCalledWith(new Error(`No such user: username.`))
+        expect(e).toBeInstanceOf(createHttpError.HttpError)
+        expect(e.status).toEqual(401)
+      }
+    })
+
+    test('it logs and throws error if user is locked', async () => {
+      validUser.locked = true
+
+      try {
+        await refreshToken({ username: 'username', sub: '1337', exp: 1111, iat: 2222 })
+      } catch (e) {
+        expect(console.error).toHaveBeenCalledWith(new Error(`User locked: ${validUser.id}.`))
+        expect(e).toBeInstanceOf(createHttpError.HttpError)
+        expect(e.status).toEqual(401)
+      }
+    })
+
+    test('it logs and throws error if user is disabled', async () => {
+      validUser.disabled = true
+
+      try {
+        await refreshToken({ username: 'username', sub: '1337', exp: 1111, iat: 2222 })
+      } catch (e) {
+        expect(console.error).toHaveBeenCalledWith(new Error(`User disabled: ${validUser.id}.`))
+        expect(e).toBeInstanceOf(createHttpError.HttpError)
+        expect(e.status).toEqual(401)
+      }
+    })
+  })
+
+  describe('#authorize', () => {
+    const refreshedToken: UserTokenInfo = {
+      sub: 'a sub',
+      username: 'a username',
+    }
+    const headers = { authorization: 'a token' }
+
+    beforeEach(() => {
+      ;(jwt.verify as jest.Mock).mockReturnValue(refreshedToken)
+    })
+
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    test('it uses authorization header to verify token', () => {
+      authorize(headers)
+
+      expect(jwt.verify).toHaveBeenCalledWith('a token', config.auth.secret)
+    })
+
+    test('it removes "Bearer" from authorization header', () => {
+      headers.authorization = 'Bearer a token'
+      authorize(headers)
+
+      expect(jwt.verify).toHaveBeenCalledWith('a token', config.auth.secret)
+    })
+
+    test('it returns an object with property "auth" holding the new jwt', () => {
+      const result = authorize(headers)
+
+      expect(result).toHaveProperty('auth')
+      expect(result.auth).toEqual(refreshedToken)
+    })
+
+    test('it throws unathorized error if authorization header is missing', () => {
+      try {
+        authorize({})
+      } catch (e) {
+        expect(e).toBeInstanceOf(createHttpError.HttpError)
+        expect(e.status).toEqual(401)
+        expect(e.message).toEqual('Unauthorized')
+      }
+    })
+
+    test('it throws unathorized error if jwt.verity trows an error', () => {
+      ;(jwt.verify as jest.Mock).mockImplementation(() => {
+        throw Error('test fails')
+      })
+      try {
+        authorize(headers)
+      } catch (e) {
+        expect(e.status).toEqual(401)
+        expect(e.message).toEqual('test fails')
+      }
+    })
+
+    test('it throws unathorized error if jwt.verity does not find a proper user', () => {
+      ;(jwt.verify as jest.Mock).mockReturnValue('this string')
+
+      try {
+        authorize(headers)
+      } catch (e) {
+        expect(e).toBeInstanceOf(createHttpError.HttpError)
+        expect(e.status).toEqual(401)
+        expect(e.message).toEqual('Unauthorized')
+      }
     })
   })
 })
