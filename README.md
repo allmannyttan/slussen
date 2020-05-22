@@ -45,7 +45,7 @@ FAST_API**BASE_URL=https://...
 
 ## Dependencies
 
-A PostgreSQL database, started using `docker-compose`.
+A PostgreSQL database, started using `docker-compose -f docker-compose-db-only.yml up`.
 Database migrations will set up the database on `npm start` and `npm run dev`.
 
 ## Starting
