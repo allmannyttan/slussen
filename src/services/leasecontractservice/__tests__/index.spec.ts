@@ -10,11 +10,12 @@ import helper from '@app/helpers/fastAPIXmlListHelper'
 
 import supertest from 'supertest'
 
+jest.mock('@app/adapters/postgres')
 jest.mock('@app/middleware/auth')
 jest.mock('@app/adapters/fastapiadapter')
 jest.mock('@app/helpers/fastAPIXmlListHelper')
 jest.mock('@app/config', () => ({
-  port: 3334,
+  port: 0,
   fastAPI: {
     baseUrl: 'test',
   },
@@ -23,7 +24,7 @@ jest.mock('@app/config', () => ({
   },
 }))
 
-import { app } from '../../../server'
+import app from '../../../server'
 
 const verifyGetRouteIsProtected = async (route: string) => {
   try {

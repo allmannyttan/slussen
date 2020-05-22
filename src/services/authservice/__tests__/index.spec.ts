@@ -1,20 +1,20 @@
-import { authMiddleware } from '@app/middleware/auth'
-import { createToken, refreshToken } from '@app/helpers/jwt'
+import { authMiddleware } from '../../../middleware/auth'
+import { createToken, refreshToken } from '../../../helpers/jwt'
 
 import supertest from 'supertest'
 
-jest.mock('@app/config', () => ({
-  port: 3333,
+jest.mock('../../../config', () => ({
+  port: 0,
   auth: {
     secret: 'a secret',
   },
 }))
 
-jest.mock('@app/middleware/auth')
-jest.mock('@app/helpers/jwt')
-jest.mock('@app/helpers/hash')
+jest.mock('../../../middleware/auth')
+jest.mock('../../../helpers/jwt')
+jest.mock('../../../helpers/hash')
 
-import { app } from '../../../server'
+import server from '../../../server'
 
 let errorMock: jest.Mock
 let logMock: jest.Mock
@@ -35,7 +35,7 @@ beforeEach(() => {
 
 const verifyGetRouteIsProtected = async (route: string) => {
   try {
-    await supertest(app).get(route).expect(200)
+    await supertest(server).get(route).expect(200)
     expect(authMiddleware).toHaveBeenCalledTimes(1)
   } catch (error) {
     fail(error)

@@ -11,7 +11,7 @@ import express from 'express'
 import cors from 'cors'
 import errorMiddleware from '@app/middleware/errorhandler'
 
-export const app = express()
+const app = express()
 app.set('etag', 'strong')
 app.use(cors())
 app.use(bodyParser.json())
@@ -36,3 +36,5 @@ app.listen(port, () => {
   `)
 })
 app.use(errorMiddleware)
+
+export default app
