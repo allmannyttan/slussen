@@ -69,6 +69,21 @@ $ npm run dev
 This starts the api here http://localhost:4000
 Swagger generated docs are available on http://localhost:4000/api-docs
 
+## Authorization
+This API uses JWT for auth. The token should be passed in `Authorization` header to protected routes.
+These routes are usefull.
+
+`POST /auth/generate-token` to generate a token. Post this object 
+```
+{username: 'your username', password: 'your cleartext password'}
+```
+
+`GET /auth/refresh-token` to refresh token
+
+`GET /auth/test` to test if a token is valid
+
+`GET /auth/generate-password-hash?password=<cleartext password>` to genererate a salt and hash to write to database when creating a user
+
 ## Sandbox example URLs
 
 Get all tenants (i.e. partners with class 16)
