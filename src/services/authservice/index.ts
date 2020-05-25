@@ -31,7 +31,7 @@ export const routes = (app: Application) => {
   app.get(
     '/auth/generate-password-hash',
     asyncHandler(async (req: Request, res: Response) => {
-      const saltAndHash = await hash.createSaltAndHash(req.query.password)
+      const saltAndHash = await hash.createSaltAndHash(req.query.password as string)
       res.json(saltAndHash)
     })
   )
