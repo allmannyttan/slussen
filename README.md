@@ -40,12 +40,12 @@ DATABASE_URL=postgres://postgres:postgrespassword@127.0.0.1:5432/api-db
 Translate fields in config.json by converting to uppercase and replacing . with \_\_, and camelCase with snake_case. Examples:
 
 PORT=4000
-POSTGRES**HOST=localhost
-FAST_API**BASE_URL=https://...
+POSTGRES__HOST=localhost
+FAST_API__BASE_URL=https://...
 
 ## Dependencies
 
-A PostgreSQL database, started using `docker-compose`.
+A PostgreSQL database, started using `docker-compose -f docker-compose-db-only.yml up`.
 Database migrations will set up the database on `npm start` and `npm run dev`.
 
 ## Starting
@@ -68,6 +68,31 @@ $ npm run dev
 
 This starts the api here http://localhost:4000
 Swagger generated docs are available on http://localhost:4000/api-docs
+
+## Authorization
+
+### Token-based login
+
+This API uses JWT for auth. The token should be passed in `Authorization` header to protected routes.
+
+These routes are useful:
+
+`POST /auth/generate-token` to generate a token. Post this object 
+```
+{username: 'your username', password: 'your cleartext password'}
+```
+
+`GET /auth/refresh-token` to refresh token
+
+### User creation
+
+You currently have to create the API users in the database by hand.
+
+`GET /auth/generate-password-hash?password=<cleartext password>` to genererate a salt and hash to write to database when creating a user
+
+### Development tools
+
+`GET /auth/test` to test if a token is valid
 
 ## Sandbox example URLs
 

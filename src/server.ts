@@ -1,5 +1,11 @@
 import { port } from './config'
-import routes, { tenantRoutes, leaseContactRoutes, rentalRoutes, healthRoutes } from './routes'
+import routes, {
+  tenantRoutes,
+  leaseContactRoutes,
+  rentalRoutes,
+  healthRoutes,
+  authRoutes,
+} from './routes'
 import bodyParser from 'body-parser'
 import express from 'express'
 import cors from 'cors'
@@ -15,6 +21,7 @@ app.use(
   })
 )
 
+authRoutes(app)
 tenantRoutes(app)
 leaseContactRoutes(app)
 rentalRoutes(app)
@@ -29,3 +36,5 @@ app.listen(port, () => {
   `)
 })
 app.use(errorMiddleware)
+
+export default app

@@ -16,6 +16,7 @@ import {
   Fi2SpatiSystemResponse,
   Fi2SpatiSystemsResponse,
 } from './types'
+import { authMiddleware } from '@app/middleware/auth'
 
 const getPart = (parts: Fi2Value[], partName: string): string => {
   const partNode = parts.filter((part: Fi2Value) => part.fi2value_code === partName)
@@ -37,7 +38,9 @@ const getAreas = (areas: Fi2Area[]): Area[] => {
       measuredDate: area.fi2area_measureddate,
       measuredType: area.fi2area_measuredtype,
       derivedFrom: area.fi2area_derivedfrom,
-      perimeter: area.fi2area_perimeter ? area.fi2area_perimeter.$t + ' ' + area.fi2area_perimeter.unit : '',
+      perimeter: area.fi2area_perimeter
+        ? area.fi2area_perimeter.$t + ' ' + area.fi2area_perimeter.unit
+        : '',
     }
   })
 }
@@ -113,6 +116,16 @@ export const routes = (app: Application) => {
    *  get:
    *    summary: Gets all rental units
    *    description: Retrieves all rental units in the system. There is currently no way of filtering or doing API-side searches.
+   *    parameters:
+   *      - in: header
+   *        name: authorization
+   *        schema:
+   *          type: string
+   *        required: true
+   *    security:
+   *      type: http
+   *      scheme: bearer
+   *      bearerFormat: JWT
    *    responses:
    *      '200':
    *        description: 'List of rental units'
@@ -120,9 +133,12 @@ export const routes = (app: Application) => {
    *            type: array
    *            items:
    *              $ref: '#/definitions/Rental'
+   *      '401':
+   *        description: 'Unauthorized'
    */
   app.get(
     '/rentals',
+    authMiddleware,
     asyncHandler(async (_req: Request, res: Response) => res.json(await getRentals()))
   )
 
@@ -132,7 +148,16 @@ export const routes = (app: Application) => {
    *  get:
    *    summary: Gets a rental unit by id
    *    description: Retrieves a rental unit by its id
+   *    security:
+   *      type: http
+   *      scheme: bearer
+   *      bearerFormat: JWT
    *    parameters:
+   *      - in: header
+   *        name: authorization
+   *        schema:
+   *          type: string
+   *        required: true
    *      - in: path
    *        name: id
    *        type: string
@@ -143,11 +168,14 @@ export const routes = (app: Application) => {
    *        description: 'Returns the rental unit with the specified id'
    *        schema:
    *          $ref: '#/definitions/Rental'
+   *      '401':
+   *        description: 'Unauthorized'
    *      '404':
    *        description: 'No rental unit with the specified id exists'
    */
   app.get(
     '/rentals/:id',
+    authMiddleware,
     asyncHandler(async (_req: Request, res: Response) => res.json(await getRental(_req.params.id)))
   )
 }

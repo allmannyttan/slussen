@@ -5,22 +5,43 @@ import {
 } from '../__fixtures__/fastAPIAdapterResult.fixture'
 import { client } from '@app/adapters/fastapiadapter'
 import service from '../index'
-import config from '../../../config'
+import { authMiddleware } from '@app/middleware/auth'
+import helper from '@app/helpers/fastAPIXmlListHelper'
 
+import supertest from 'supertest'
+
+jest.mock('@app/adapters/postgres')
+jest.mock('@app/middleware/auth')
 jest.mock('@app/adapters/fastapiadapter')
-jest.mock('../../../config')
+jest.mock('@app/helpers/fastAPIXmlListHelper')
+jest.mock('@app/config', () => ({
+  port: 0,
+  fastAPI: {
+    baseUrl: 'test',
+  },
+  auth: {
+    secret: 'a secret',
+  },
+}))
+
+import app from '../../../server'
+
+const verifyGetRouteIsProtected = async (route: string) => {
+  try {
+    await supertest(app).get(route).expect(200)
+    expect(authMiddleware).toHaveBeenCalledTimes(1)
+  } catch (error) {
+    fail(error)
+  }
+}
 
 describe('#leasecontractservice', () => {
   beforeEach(() => {
-    //console.log = jest.fn()
+    console.log = jest.fn()
     console.error = jest.fn()
 
     jest.resetAllMocks()
-
-    config.fastAPI = {
-      baseUrl: 'test',
-      accessToken: 'test',
-    }
+    ;(helper.getNameFromClasslist as jest.Mock).mockReturnValue('mocked')
   })
 
   describe('#getLeaseContracts', () => {
@@ -43,7 +64,7 @@ describe('#leasecontractservice', () => {
           Object {
             "changeDate": "2014-03-12T11:54:18",
             "changedBy": "",
-            "className": "Bostadsavtal",
+            "className": "mocked",
             "createDate": "2015-04-23T09:13:17",
             "createdBy": "",
             "currentEndDate": "2020-08-01",
@@ -60,19 +81,19 @@ describe('#leasecontractservice', () => {
             "noticedBy": "",
             "partners": Array [
               Object {
-                "className": "Hyresgäst",
+                "className": "mocked",
                 "id": "PARTN-147",
-                "roleName": "Hyresgäst",
+                "roleName": "mocked",
               },
               Object {
-                "className": "Hyresgäst",
+                "className": "mocked",
                 "id": "PARTN-162",
-                "roleName": "Hyresgäst",
+                "roleName": "mocked",
               },
               Object {
-                "className": "Hyresgäst",
+                "className": "mocked",
                 "id": "PARTN-273",
-                "roleName": "Hyresgäst",
+                "roleName": "mocked",
               },
             ],
             "renewalDate": "2020-05-01",
@@ -87,7 +108,7 @@ describe('#leasecontractservice', () => {
           Object {
             "changeDate": "2014-03-12T11:54:18",
             "changedBy": "Script",
-            "className": "Bostadsavtal",
+            "className": "mocked",
             "createDate": "2008-03-16T11:41:13",
             "createdBy": "Script",
             "currentEndDate": "2020-08-01",
@@ -104,24 +125,24 @@ describe('#leasecontractservice', () => {
             "noticedBy": "",
             "partners": Array [
               Object {
-                "className": "Hyresgäst",
+                "className": "mocked",
                 "id": "PARTN-32",
-                "roleName": "Hyresgäst",
+                "roleName": "mocked",
               },
               Object {
-                "className": "Hyresgäst",
+                "className": "mocked",
                 "id": "PARTN-33",
-                "roleName": "Hyresgäst",
+                "roleName": "mocked",
               },
               Object {
-                "className": "Hyresgäst",
+                "className": "mocked",
                 "id": "PARTN-140",
-                "roleName": "Hyresgäst",
+                "roleName": "mocked",
               },
               Object {
-                "className": "Hyresgäst",
+                "className": "mocked",
                 "id": "PARTN-9",
-                "roleName": "Hyresgäst",
+                "roleName": "mocked",
               },
             ],
             "renewalDate": "2020-05-01",
@@ -136,7 +157,7 @@ describe('#leasecontractservice', () => {
           Object {
             "changeDate": "2014-03-12T11:54:18",
             "changedBy": "Script",
-            "className": "Bostadsavtal",
+            "className": "mocked",
             "createDate": "1996-01-10T09:42:09",
             "createdBy": "Script",
             "currentEndDate": "2020-08-01",
@@ -153,24 +174,24 @@ describe('#leasecontractservice', () => {
             "noticedBy": "",
             "partners": Array [
               Object {
-                "className": "Hyresgäst",
+                "className": "mocked",
                 "id": "PARTN-194",
-                "roleName": "Hyresgäst",
+                "roleName": "mocked",
               },
               Object {
-                "className": "Hyresgäst",
+                "className": "mocked",
                 "id": "PARTN-229",
-                "roleName": "Hyresgäst",
+                "roleName": "mocked",
               },
               Object {
-                "className": "Hyresgäst",
+                "className": "mocked",
                 "id": "PARTN-283",
-                "roleName": "Hyresgäst",
+                "roleName": "mocked",
               },
               Object {
-                "className": "Hyresgäst",
+                "className": "mocked",
                 "id": "PARTN-58",
-                "roleName": "Hyresgäst",
+                "roleName": "mocked",
               },
             ],
             "renewalDate": "2020-05-01",
@@ -206,7 +227,7 @@ describe('#leasecontractservice', () => {
         Object {
           "changeDate": "2015-11-18T09:25:46",
           "changedBy": "Script",
-          "className": "Hyresavtal",
+          "className": "mocked",
           "createDate": "2015-11-18T09:25:46",
           "createdBy": "Script",
           "currentEndDate": "2020-11-18",
@@ -214,7 +235,7 @@ describe('#leasecontractservice', () => {
           "description": "Kontraktsbeskrivning",
           "documents": Array [
             Object {
-              "className": "Internt",
+              "className": "mocked",
               "description": "Exempeldokument",
               "id": "23",
               "link": "http://www.fastapi.se/apidocprop/v1/Documents/example.txt",
@@ -225,14 +246,14 @@ describe('#leasecontractservice', () => {
           "id": "12345",
           "initialDate": "2010-11-18T09:25:46",
           "noticeDate": "2018-11-18",
-          "noticeStatus": "Definitivt",
+          "noticeStatus": "mocked",
           "noticeTime": "3",
           "noticedBy": "HG",
           "partners": Array [
             Object {
-              "className": "Hyresgäst",
+              "className": "mocked",
               "id": "12345",
-              "roleName": "Hyresgäst",
+              "roleName": "mocked",
             },
           ],
           "renewalDate": "2020-08-18",
@@ -242,7 +263,7 @@ describe('#leasecontractservice', () => {
           },
           "signDate": "2009-11-18",
           "terminatedDate": "2020-11-18",
-          "terminationReason": "",
+          "terminationReason": "mocked",
         }
       `)
     })
@@ -256,12 +277,34 @@ describe('#leasecontractservice', () => {
       expect(result.documents.length).toEqual(1)
       expect(result.documents[0]).toMatchInlineSnapshot(`
         Object {
-          "className": "Internt",
+          "className": "mocked",
           "description": "Exempeldokument",
           "id": "23",
           "link": "http://www.fastapi.se/apidocprop/v1/Documents/example.txt",
         }
       `)
+    })
+  })
+
+  describe('authorized routes', () => {
+    beforeEach(() => {
+      ;(authMiddleware as jest.Mock).mockImplementation((req, res, next) => {
+        req.auth = {}
+        next()
+      })
+    })
+    afterEach(() => {
+      jest.resetAllMocks()
+    })
+
+    it('GET /leasecontracts is protected', async () => {
+      ;(client.get as jest.Mock).mockResolvedValueOnce(fi2LeaseContractsJson)
+      await verifyGetRouteIsProtected('/leasecontracts')
+    })
+
+    it('GET /leasecontracts/:id is protected', async () => {
+      ;(client.get as jest.Mock).mockResolvedValueOnce(fi2LeaseContractJson)
+      await verifyGetRouteIsProtected('/leasecontracts/1')
     })
   })
 })
