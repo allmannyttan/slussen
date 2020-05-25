@@ -12,7 +12,7 @@
     "migrate:down": "node-pg-migrate down",
     "migrate": "node-pg-migrate -f migrate-config.json",
     "prod": "tsc && node ./dist/lib/server.js",
-    "start": "node-pg-migrate up && ts-node -r tsconfig-paths/register src/server.ts",
+    "start": "node-pg-migrate up && ts-node --files -r tsconfig-paths/register src/server.ts",
     "test:ci": "jest --ci --forceExit",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",
