@@ -3,6 +3,7 @@ import { authMiddleware } from '@app/middleware/auth'
 import { client } from '@app/adapters/fastapiadapter'
 import asyncHandler from 'express-async-handler'
 import helper from '@app/helpers/fastAPIXmlListHelper'
+import moment from 'moment'
 
 import {
   Contract,
@@ -134,7 +135,9 @@ const createQueryString = (rentalid?: string) : string => {
     return ''
   }
 
-  return `?filter=${translations.rentalid}:'${rentalid}'`
+  const today = moment().format('YYYY-MM-DD')
+
+  return `?filter=${translations.rentalid}:'${rentalid}';fi2lease_currenddate>'${today}'`
 }
 
 const getLeaseContracts = async (rentalid?: string): Promise<Contract[]> => {
