@@ -1,13 +1,9 @@
 import { Client } from 'pg'
 
 import { postgres as config } from '@app/config'
+import { SQLStatement } from 'sql-template-strings'
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(() => resolve(), ms))
-
-interface TemplateString {
-  text: string
-  values: never[]
-}
 
 async function connect(attemptNo = 0): Promise<Client> {
   try {
@@ -32,7 +28,7 @@ export const client = async (): Promise<Client> => {
   return client
 }
 
-export const query = async <T>(sql: string | TemplateString, params = []): Promise<T[]> => {
+export const query = async <T>(sql: string | SQLStatement, params = [] as any): Promise<T[]> => {
   // when using `sql-template-strings`
   if (typeof sql !== 'string') {
     params = sql.values

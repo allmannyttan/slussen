@@ -1,15 +1,43 @@
 import { fi2PartnersJson, fi2SinglePartnerJson } from '../__fixtures__/fastAPIAdapterResult.fixture'
 import { client } from '@app/adapters/fastapiadapter'
 import service from '../index'
+import { authMiddleware } from '@app/middleware/auth'
+import helper from '@app/helpers/fastAPIXmlListHelper'
 
+import supertest from 'supertest'
+
+jest.mock('@app/adapters/postgres')
 jest.mock('@app/adapters/fastapiadapter')
+jest.mock('@app/helpers/fastAPIXmlListHelper')
+jest.mock('@app/middleware/auth')
+jest.mock('@app/config', () => ({
+  port: 0,
+  fastAPI: {
+    baseUrl: 'test',
+  },
+  auth: {
+    secret: 'a secret',
+  },
+}))
+
+import server from '../../../server'
+
+const verifyGetRouteIsProtected = async (route: string) => {
+  try {
+    await supertest(server).get(route).expect(200)
+    expect(authMiddleware).toHaveBeenCalledTimes(1)
+  } catch (error) {
+    fail(error)
+  }
+}
 
 describe('#tenantservice', () => {
   beforeEach(() => {
-    //console.log = jest.fn()
+    console.log = jest.fn()
     console.error = jest.fn()
 
     jest.resetAllMocks()
+    ;(helper.getNameFromClasslist as jest.Mock).mockReturnValue('mocked')
   })
 
   describe('#getTenants', () => {
@@ -58,7 +86,7 @@ describe('#tenantservice', () => {
             ],
             "changeDate": "2015-11-18T09:21:06",
             "changedBy": "Script",
-            "className": "Hyresgäst",
+            "className": "mocked",
             "contact": Object {
               "emailAddresses": Array [
                 Object {
@@ -184,7 +212,7 @@ describe('#tenantservice', () => {
           ],
           "changeDate": "2015-11-18T09:21:06",
           "changedBy": "Script",
-          "className": "Hyresgäst",
+          "className": "mocked",
           "contact": Object {
             "emailAddresses": Array [
               Object {
@@ -263,6 +291,29 @@ describe('#tenantservice', () => {
           "socialSecurityNumber": "811010-1010",
         }
       `)
+    })
+  })
+
+  describe('authorized routes', () => {
+    beforeEach(() => {
+      ;(authMiddleware as jest.Mock).mockImplementation((req, res, next) => {
+        req.auth = {}
+        next()
+      })
+    })
+
+    afterEach(async () => {
+      jest.resetAllMocks()
+    })
+
+    it('GET /tenants is protected', async () => {
+      ;(client.get as jest.Mock).mockResolvedValueOnce(fi2PartnersJson)
+      await verifyGetRouteIsProtected('/tenants')
+    })
+
+    it('GET /tenants/:id is protected', async () => {
+      ;(client.get as jest.Mock).mockResolvedValueOnce(fi2SinglePartnerJson)
+      await verifyGetRouteIsProtected('/tenants/1')
     })
   })
 })

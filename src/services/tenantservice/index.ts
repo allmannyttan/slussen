@@ -16,6 +16,7 @@ import {
   Tenant,
   Fi2PartnerResponse,
 } from './types'
+import { authMiddleware } from '@app/middleware/auth'
 
 const getSocialSecurityNumber = (ids: Fi2Ids): string => {
   const ssnNode = ids.fi2_id.filter((id: Fi2ValueUsage) => id.usage === 'Ssn')
@@ -131,6 +132,16 @@ export const routes = (app: Application) => {
    *  get:
    *    summary: Gets all tenants
    *    description: Retrieves all tenants in the system. There is currently no way of filtering or doing API-side searches.
+   *    parameters:
+   *      - in: header
+   *        name: authorization
+   *        schema:
+   *          type: string
+   *        required: true
+   *    security:
+   *      type: http
+   *      scheme: bearer
+   *      bearerFormat: JWT
    *    responses:
    *      '200':
    *        description: 'List of tenants'
@@ -138,9 +149,12 @@ export const routes = (app: Application) => {
    *            type: array
    *            items:
    *              $ref: '#/definitions/Tenant'
+   *      '401':
+   *        description: 'Unauthorized'
    */
   app.get(
     '/tenants',
+    authMiddleware,
     asyncHandler(async (_req: Request, res: Response) => res.json(await getTenants()))
   ),
     /**
@@ -149,7 +163,16 @@ export const routes = (app: Application) => {
      *  get:
      *    summary: Gets a tenant by id
      *    description: Retrieves a tenant by its id
+     *    security:
+     *      type: http
+     *      scheme: bearer
+     *      bearerFormat: JWT
      *    parameters:
+     *      - in: header
+     *        name: authorization
+     *        schema:
+     *          type: string
+     *        required: true
      *      - in: path
      *        name: id
      *        type: string
@@ -160,12 +183,15 @@ export const routes = (app: Application) => {
      *        description: 'Returns the tenant with the specified id'
      *        schema:
      *          $ref: '#/definitions/Tenant'
+     *      '401':
+     *        description: 'Unauthorized'
      *      '404':
      *        description: 'No tenant with the specified id exists'
      */
 
     app.get(
       '/tenants/:id',
+      authMiddleware,
       asyncHandler(async (_req: Request, res: Response) =>
         res.json(await getTenant(_req.params.id))
       )

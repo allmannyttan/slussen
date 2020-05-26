@@ -1,4 +1,5 @@
 import { Application, Request, Response } from 'express'
+import { authMiddleware } from '@app/middleware/auth'
 import { client } from '@app/adapters/fastapiadapter'
 import asyncHandler from 'express-async-handler'
 import helper from '@app/helpers/fastAPIXmlListHelper'
@@ -159,10 +160,19 @@ export const routes = (app: Application) => {
    *    description: Retrieves all lease contracts for rentals in the system. Currently the only way of finding a contract for a specific tenant is to retrieve all and filter on the client side. API-side filters will be added later on.
    *    parameters:
    *      - in: query
-   *        description: "Filter for rental IDs, supports simple wildcards (example: rentalid=11*)."
    *        name: rentalid
+   *        description: "Filter for rental IDs, supports simple wildcards (example: rentalid=11*)."
    *        required: false
    *        type: string
+   *      - in: header
+   *        name: authorization
+   *        schema:
+   *          type: string
+   *        required: true
+   *    security:
+   *      type: http
+   *      scheme: bearer
+   *      bearerFormat: JWT
    *    responses:
    *      '200':
    *        description: 'List of contracts'
@@ -170,11 +180,15 @@ export const routes = (app: Application) => {
    *            type: array
    *            items:
    *              $ref: '#/definitions/Contract'
+   *      '401':
+   *        description: 'Unauthorized'
    */
   app.get(
     '/leasecontracts',
-    asyncHandler(async (_req: Request, res: Response) => res.json(await getLeaseContracts(_req.query.rentalid)))
+    authMiddleware,
+    asyncHandler(async (_req: Request, res: Response) => res.json(await getLeaseContracts(<string>_req.query.rentalid)))
   )
+
   /**
    * @swagger
    * /leasecontracts/{id}:
@@ -182,21 +196,33 @@ export const routes = (app: Application) => {
    *    summary: Gets a contract by id
    *    description: Retrieves a lease contract by its id. Currently the only way of finding a contract for a specific tenant is to retrieve all and filter on the client side. API-side filters will be added later on.
    *    parameters:
+   *      - in: header
+   *        name: authorization
+   *        schema:
+   *          type: string
+   *        required: true
    *      - in: path
    *        name: id
    *        type: integer
    *        required: true
    *        description: contract id
+   *    security:
+   *      type: http
+   *      scheme: bearer
+   *      bearerFormat: JWT
    *    responses:
    *      '200':
    *        description: 'Returns the lease contract with the specified id'
    *        schema:
    *          $ref: '#/definitions/Contract'
+   *      '401':
+   *        description: 'Unauthorized'
    *      '404':
    *        description: 'No contract with the specified id exists'
    */
   app.get(
     '/leasecontracts/:id',
+    authMiddleware,
     asyncHandler(async (_req: Request, res: Response) =>
       res.json(await getLeaseContract(_req.params.id))
     )

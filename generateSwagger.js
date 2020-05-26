@@ -18,6 +18,9 @@ const rentalSchema = tsj.createGenerator(config).createSchema(config.type)
 config.path = 'src/services/leasecontractservice/types.ts'
 const leaseContractSchema = tsj.createGenerator(config).createSchema(config.type)
 
+// config.path = 'src/services/authservice/types.ts'
+// const leaseContractSchema = tsj.createGenerator(config).createSchema(config.type)
+
 const options = {
   swaggerDefinition: {
     // Like the one described here: https://swagger.io/specification/#infoObject
@@ -33,6 +36,7 @@ const options = {
     'src/services/tenantservice/index.ts',
     'src/services/leasecontractservice/index.ts',
     'src/services/rentalservice/index.ts',
+    'src/services/authservice/index.ts',
   ],
 }
 
