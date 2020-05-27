@@ -7,7 +7,7 @@ import { client } from '@app/adapters/fastapiadapter'
 import service from '../index'
 import { authMiddleware } from '@app/middleware/auth'
 import helper from '@app/helpers/fastAPIXmlListHelper'
-
+import moment from 'moment'
 import supertest from 'supertest'
 
 jest.mock('@app/adapters/postgres')
@@ -51,7 +51,7 @@ describe('#leasecontractservice', () => {
       await service.getLeaseContracts()
 
       expect(client.get).toHaveBeenCalledTimes(1)
-      expect(client.get).toHaveBeenCalledWith({ url: 'fi2leasecontract/' })
+      expect(client.get).toHaveBeenCalledWith({ url: `fi2leasecontract/?filter=fi2lease_currenddate>'${moment().format('YYYY-MM-DD')}'` })
     })
 
     test('returns contracts in correct format', async () => {

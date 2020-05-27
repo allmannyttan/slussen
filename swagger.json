@@ -1,11 +1,11 @@
 {
+  "openapi": "3.0.0",
   "info": {
     "title": "FastAPIAPI",
     "version": "0.1.0",
     "description": "Modern front till fastAPI"
   },
   "basePath": "/",
-  "swagger": "2.0",
   "paths": {
     "/tenants": {
       "get": {
@@ -32,7 +32,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Tenant"
+                "$ref": "#/components/schemas/Tenant"
               }
             }
           },
@@ -72,7 +72,7 @@
           "200": {
             "description": "Returns the tenant with the specified id",
             "schema": {
-              "$ref": "#/definitions/Tenant"
+              "$ref": "#/components/schemas/Tenant"
             }
           },
           "401": {
@@ -91,10 +91,17 @@
         "parameters": [
           {
             "in": "query",
-            "description": "Filter for rental IDs, supports simple wildcards (example: rentalid=11*).",
             "name": "rentalid",
+            "description": "Filter for rental IDs, supports simple wildcards (example: rentalid=11*).",
             "required": false,
             "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "includeexpired",
+            "required": false,
+            "description": "If true, expired lease contracts are included in results",
+            "default": false
           },
           {
             "in": "header",
@@ -106,9 +113,7 @@
           }
         ],
         "security": {
-          "type": "http",
-          "scheme": "bearer",
-          "bearerFormat": "JWT"
+          "bearerAuth": []
         },
         "responses": {
           "200": {
@@ -116,7 +121,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Contract"
+                "$ref": "#/components/schema/Contract"
               }
             }
           },
@@ -148,15 +153,13 @@
           }
         ],
         "security": {
-          "type": "http",
-          "scheme": "bearer",
-          "bearerFormat": "JWT"
+          "bearerAuth": []
         },
         "responses": {
           "200": {
             "description": "Returns the lease contract with the specified id",
             "schema": {
-              "$ref": "#/definitions/Contract"
+              "$ref": "#/components/schemas/Contract"
             }
           },
           "401": {
@@ -193,7 +196,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/Rental"
+                "$ref": "#/components/schemas/Rental"
               }
             }
           },
@@ -233,7 +236,7 @@
           "200": {
             "description": "Returns the rental unit with the specified id",
             "schema": {
-              "$ref": "#/definitions/Rental"
+              "$ref": "#/components/schemas/Rental"
             }
           },
           "401": {
@@ -382,473 +385,479 @@
       }
     }
   },
-  "definitions": {
-    "Tenant": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "socialSecurityNumber": {
-          "type": "string"
-        },
-        "changedBy": {
-          "type": "string"
-        },
-        "changeDate": {
-          "type": "string"
-        },
-        "createdBy": {
-          "type": "string"
-        },
-        "createDate": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "fullName": {
-          "type": "string"
-        },
-        "phoneNumbers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/PhoneNumber"
+  "components": {
+    "schemas": {
+      "Tenant": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "socialSecurityNumber": {
+            "type": "string"
+          },
+          "changedBy": {
+            "type": "string"
+          },
+          "changeDate": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createDate": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "phoneNumbers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PhoneNumber"
+            }
+          },
+          "emailAddresses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmailAddress"
+            }
+          },
+          "addresses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Address"
+            }
+          },
+          "contact": {
+            "$ref": "#/components/schemas/Contact"
+          },
+          "className": {
+            "type": "string"
           }
         },
-        "emailAddresses": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/EmailAddress"
+        "required": [
+          "id",
+          "name",
+          "fullName",
+          "className"
+        ],
+        "additionalProperties": false
+      },
+      "Address": {
+        "type": "object",
+        "properties": {
+          "guid": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "street": {
+            "type": "string"
+          },
+          "box": {
+            "type": "string"
+          },
+          "co": {
+            "type": "string"
+          },
+          "attention": {
+            "type": "string"
+          },
+          "zipCode": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "country": {
+            "type": "string"
           }
         },
-        "addresses": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Address"
+        "required": [
+          "street",
+          "box",
+          "co",
+          "attention"
+        ],
+        "additionalProperties": false
+      },
+      "PhoneNumber": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "number": {
+            "type": "string"
           }
         },
-        "contact": {
-          "$ref": "#/definitions/Contact"
-        },
-        "className": {
-          "type": "string"
-        }
+        "required": [
+          "type",
+          "number"
+        ],
+        "additionalProperties": false
       },
-      "required": [
-        "id",
-        "name",
-        "fullName",
-        "className"
-      ],
-      "additionalProperties": false
-    },
-    "Address": {
-      "type": "object",
-      "properties": {
-        "guid": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "street": {
-          "type": "string"
-        },
-        "box": {
-          "type": "string"
-        },
-        "co": {
-          "type": "string"
-        },
-        "attention": {
-          "type": "string"
-        },
-        "zipCode": {
-          "type": "string"
-        },
-        "city": {
-          "type": "string"
-        },
-        "country": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "street",
-        "box",
-        "co",
-        "attention"
-      ],
-      "additionalProperties": false
-    },
-    "PhoneNumber": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string"
-        },
-        "number": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "number"
-      ],
-      "additionalProperties": false
-    },
-    "EmailAddress": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string"
-        },
-        "address": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "address"
-      ],
-      "additionalProperties": false
-    },
-    "Contact": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string"
-        },
-        "firstName": {
-          "type": "string"
-        },
-        "lastName": {
-          "type": "string"
-        },
-        "fullName": {
-          "type": "string"
-        },
-        "phoneNumbers": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/PhoneNumber"
+      "EmailAddress": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
           }
         },
-        "emailAddresses": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/EmailAddress"
-          }
-        }
+        "required": [
+          "type",
+          "address"
+        ],
+        "additionalProperties": false
       },
-      "required": [
-        "type",
-        "firstName",
-        "lastName",
-        "fullName"
-      ],
-      "additionalProperties": false
-    },
-    "Rental": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string"
-        },
-        "id": {
-          "type": "string"
-        },
-        "guid": {
-          "type": "string"
-        },
-        "changedBy": {
-          "type": "string"
-        },
-        "changeDate": {
-          "type": "string"
-        },
-        "createdBy": {
-          "type": "string"
-        },
-        "createDate": {
-          "type": "string"
-        },
-        "documents": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Document"
+      "Contact": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "phoneNumbers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PhoneNumber"
+            }
+          },
+          "emailAddresses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EmailAddress"
+            }
           }
         },
-        "areas": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Area"
+        "required": [
+          "type",
+          "firstName",
+          "lastName",
+          "fullName"
+        ],
+        "additionalProperties": false
+      },
+      "Rental": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "guid": {
+            "type": "string"
+          },
+          "changedBy": {
+            "type": "string"
+          },
+          "changeDate": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createDate": {
+            "type": "string"
+          },
+          "documents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Document"
+            }
+          },
+          "areas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Area"
+            }
+          },
+          "name": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "addresses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Address"
+            }
           }
         },
-        "name": {
-          "type": "string"
-        },
-        "fullName": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "addresses": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Address"
-          }
-        }
+        "required": [
+          "type",
+          "id",
+          "changedBy",
+          "changeDate",
+          "createdBy",
+          "createDate",
+          "documents",
+          "areas",
+          "name",
+          "fullName",
+          "description",
+          "addresses"
+        ],
+        "additionalProperties": false
       },
-      "required": [
-        "type",
-        "id",
-        "changedBy",
-        "changeDate",
-        "createdBy",
-        "createDate",
-        "documents",
-        "areas",
-        "name",
-        "fullName",
-        "description",
-        "addresses"
-      ],
-      "additionalProperties": false
-    },
-    "Area": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "type": "string"
-        },
-        "size": {
-          "type": "string"
-        },
-        "status": {
-          "type": "string"
-        },
-        "measuredBy": {
-          "type": "string"
-        },
-        "measuredDate": {
-          "type": "string"
-        },
-        "measuredType": {
-          "type": "string"
-        },
-        "derivedFrom": {
-          "type": "string"
-        },
-        "perimeter": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "type",
-        "size",
-        "status",
-        "measuredBy",
-        "measuredDate",
-        "measuredType",
-        "derivedFrom",
-        "perimeter"
-      ],
-      "additionalProperties": false
-    },
-    "Document": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "link": {
-          "type": "string"
-        }
-      },
-      "required": [
-        "id",
-        "description",
-        "link"
-      ],
-      "additionalProperties": false
-    },
-    "Contract": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "guid": {
-          "type": "string"
-        },
-        "currentEndDate": {
-          "type": "string"
-        },
-        "changedBy": {
-          "type": "string"
-        },
-        "changeDate": {
-          "type": "string"
-        },
-        "className": {
-          "type": "string"
-        },
-        "createdBy": {
-          "type": "string"
-        },
-        "createDate": {
-          "type": "string"
-        },
-        "date": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "endingDate": {
-          "type": "string"
-        },
-        "initialDate": {
-          "type": "string"
-        },
-        "noticedBy": {
-          "type": "string"
-        },
-        "noticeStatus": {
-          "type": "string"
-        },
-        "noticeDate": {
-          "type": "string"
-        },
-        "noticeTime": {
-          "type": "number"
-        },
-        "renewalDate": {
-          "type": "string"
-        },
-        "signDate": {
-          "type": "string"
-        },
-        "terminatedDate": {
-          "type": "string"
-        },
-        "terminationReason": {
-          "type": "string"
-        },
-        "partners": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ContractPartner"
+      "Area": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "measuredBy": {
+            "type": "string"
+          },
+          "measuredDate": {
+            "type": "string"
+          },
+          "measuredType": {
+            "type": "string"
+          },
+          "derivedFrom": {
+            "type": "string"
+          },
+          "perimeter": {
+            "type": "string"
           }
         },
-        "documents": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ContractDocument"
+        "required": [
+          "type",
+          "size",
+          "status",
+          "measuredBy",
+          "measuredDate",
+          "measuredType",
+          "derivedFrom",
+          "perimeter"
+        ],
+        "additionalProperties": false
+      },
+      "Document": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string"
           }
         },
-        "rentalObject": {
-          "$ref": "#/definitions/ContractRentalObject"
-        }
+        "required": [
+          "id",
+          "description",
+          "link"
+        ],
+        "additionalProperties": false
       },
-      "required": [
-        "id",
-        "currentEndDate",
-        "changedBy",
-        "changeDate",
-        "className",
-        "createdBy",
-        "createDate",
-        "date",
-        "description",
-        "endingDate",
-        "initialDate",
-        "noticedBy",
-        "noticeStatus",
-        "noticeDate",
-        "noticeTime",
-        "renewalDate",
-        "signDate",
-        "terminatedDate",
-        "terminationReason",
-        "partners",
-        "documents",
-        "rentalObject"
-      ],
-      "additionalProperties": false
-    },
-    "ContractPartner": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
+      "Contract": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "guid": {
+            "type": "string"
+          },
+          "currentEndDate": {
+            "type": "string"
+          },
+          "changedBy": {
+            "type": "string"
+          },
+          "changeDate": {
+            "type": "string"
+          },
+          "className": {
+            "type": "string"
+          },
+          "createdBy": {
+            "type": "string"
+          },
+          "createDate": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "endingDate": {
+            "type": "string"
+          },
+          "initialDate": {
+            "type": "string"
+          },
+          "noticedBy": {
+            "type": "string"
+          },
+          "noticeStatus": {
+            "type": "string"
+          },
+          "noticeDate": {
+            "type": "string"
+          },
+          "noticeTime": {
+            "type": "number"
+          },
+          "renewalDate": {
+            "type": "string"
+          },
+          "signDate": {
+            "type": "string"
+          },
+          "terminatedDate": {
+            "type": "string"
+          },
+          "terminationReason": {
+            "type": "string"
+          },
+          "partners": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContractPartner"
+            }
+          },
+          "documents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContractDocument"
+            }
+          },
+          "rentalObject": {
+            "$ref": "#/components/schemas/ContractRentalObject"
+          }
         },
-        "className": {
-          "type": "string"
-        },
-        "roleName": {
-          "type": "string"
-        }
+        "required": [
+          "id",
+          "currentEndDate",
+          "changedBy",
+          "changeDate",
+          "className",
+          "createdBy",
+          "createDate",
+          "date",
+          "description",
+          "endingDate",
+          "initialDate",
+          "noticedBy",
+          "noticeStatus",
+          "noticeDate",
+          "noticeTime",
+          "renewalDate",
+          "signDate",
+          "terminatedDate",
+          "terminationReason",
+          "partners",
+          "documents",
+          "rentalObject"
+        ],
+        "additionalProperties": false
       },
-      "required": [
-        "id",
-        "className",
-        "roleName"
-      ],
-      "additionalProperties": false
-    },
-    "ContractDocument": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
+      "ContractPartner": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "className": {
+            "type": "string"
+          },
+          "roleName": {
+            "type": "string"
+          }
         },
-        "description": {
-          "type": "string"
-        },
-        "link": {
-          "type": "string"
-        }
+        "required": [
+          "id",
+          "className",
+          "roleName"
+        ],
+        "additionalProperties": false
       },
-      "required": [
-        "id",
-        "description",
-        "link"
-      ],
-      "additionalProperties": false
-    },
-    "ContractRentalObject": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "$ref": "#/definitions/RentalType"
+      "ContractDocument": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string"
+          }
         },
-        "id": {
-          "type": "string"
-        }
+        "required": [
+          "id",
+          "description",
+          "link"
+        ],
+        "additionalProperties": false
       },
-      "required": [
-        "type",
-        "id"
-      ],
-      "additionalProperties": false
+      "ContractRentalObject": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/RentalType"
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "RentalType": {
+        "type": "string",
+        "enum": [
+          "Rental",
+          "Unknown"
+        ]
+      }
     },
-    "RentalType": {
-      "type": "string",
-      "enum": [
-        "Rental",
-        "Unknown"
-      ]
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     }
   },
-  "responses": {},
-  "parameters": {},
-  "securityDefinitions": {},
   "tags": []
 }

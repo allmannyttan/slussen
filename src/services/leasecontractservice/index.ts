@@ -126,22 +126,27 @@ const transformContracts = (fi2Contracts: Fi2LeaseContractsResponse): Contract[]
 /**
  * Creates a query string for fastAPI from a number of parameters.
  */
-const createQueryString = (rentalid?: string) : string => {
-  const translations = {
-    rentalid: 'fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id'
+const createQueryString = (rentalid?: string, includeexpired?: string) : string => {
+  let filter = []
+
+  if (rentalid) {
+    filter.push(`fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'${rentalid}'`)
   }
 
-  if (!rentalid) {
+  if (!includeexpired) {
+    const today = moment().format('YYYY-MM-DD')
+    filter.push(`fi2lease_currenddate>'${today}'`)
+  }
+
+  if (filter.length > 0) {
+    return '?filter=' + filter.join(';')
+  } else {
     return ''
   }
-
-  const today = moment().format('YYYY-MM-DD')
-
-  return `?filter=${translations.rentalid}:'${rentalid}';fi2lease_currenddate>'${today}'`
 }
 
-const getLeaseContracts = async (rentalid?: string): Promise<Contract[]> => {
-  const querystring = createQueryString(rentalid)
+const getLeaseContracts = async (rentalid?: string, includeexpired?: string): Promise<Contract[]> => {
+  const querystring = createQueryString(rentalid, includeexpired)
   const contracts: Fi2LeaseContractsResponse = await client.get({ url: `fi2leasecontract/${querystring}` })
   const result = transformContracts(contracts)
   return result
@@ -167,29 +172,32 @@ export const routes = (app: Application) => {
    *        description: "Filter for rental IDs, supports simple wildcards (example: rentalid=11*)."
    *        required: false
    *        type: string
+   *      - in: query
+   *        name: includeexpired
+   *        required: false
+   *        description: "If true, expired lease contracts are included in results"
+   *        default: false
    *      - in: header
    *        name: authorization
    *        schema:
    *          type: string
    *        required: true
    *    security:
-   *      type: http
-   *      scheme: bearer
-   *      bearerFormat: JWT
+   *      bearerAuth: []
    *    responses:
    *      '200':
    *        description: 'List of contracts'
    *        schema:
    *            type: array
    *            items:
-   *              $ref: '#/definitions/Contract'
+   *              $ref: '#/components/schemas/Contract'
    *      '401':
    *        description: 'Unauthorized'
    */
   app.get(
     '/leasecontracts',
     authMiddleware,
-    asyncHandler(async (_req: Request, res: Response) => res.json(await getLeaseContracts(<string>_req.query.rentalid)))
+    asyncHandler(async (_req: Request, res: Response) => res.json(await getLeaseContracts(<string>_req.query.rentalid, <string>_req.query.includeexpired)))
   )
 
   /**
@@ -210,14 +218,12 @@ export const routes = (app: Application) => {
    *        required: true
    *        description: contract id
    *    security:
-   *      type: http
-   *      scheme: bearer
-   *      bearerFormat: JWT
+   *      bearerAuth: []
    *    responses:
    *      '200':
    *        description: 'Returns the lease contract with the specified id'
    *        schema:
-   *          $ref: '#/definitions/Contract'
+   *          $ref: '#/components/schemas/Contract'
    *      '401':
    *        description: 'Unauthorized'
    *      '404':
