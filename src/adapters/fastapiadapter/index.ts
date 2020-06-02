@@ -33,6 +33,7 @@ const innerGet = async <T = any>(request: FastAPIRequest) => {
         'fi2cont_email',
         'fi2spsys_area',
         'fi2spsys_address',
+        'fi2spsys_value'
       ],
     })
   )

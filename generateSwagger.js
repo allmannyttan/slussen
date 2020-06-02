@@ -18,12 +18,10 @@ const rentalSchema = tsj.createGenerator(config).createSchema(config.type)
 config.path = 'src/services/leasecontractservice/types.ts'
 const leaseContractSchema = tsj.createGenerator(config).createSchema(config.type)
 
-// config.path = 'src/services/authservice/types.ts'
-// const leaseContractSchema = tsj.createGenerator(config).createSchema(config.type)
-
 const options = {
   swaggerDefinition: {
     // Like the one described here: https://swagger.io/specification/#infoObject
+    openapi: '3.0.0',
     info: {
       title: 'FastAPIAPI', // Title (required)
       version: '0.1.0', // Version (required)
@@ -41,19 +39,31 @@ const options = {
 }
 
 const specs = swaggerJsdoc(options)
-specs.definitions = {}
-specs.definitions.Tenant = tenantSchema.definitions.Tenant
-specs.definitions.Address = tenantSchema.definitions.Address
-specs.definitions.PhoneNumber = tenantSchema.definitions.PhoneNumber
-specs.definitions.EmailAddress = tenantSchema.definitions.EmailAddress
-specs.definitions.Contact = tenantSchema.definitions.Contact
-specs.definitions.Rental = rentalSchema.definitions.Rental
-specs.definitions.Area = rentalSchema.definitions.Area
-specs.definitions.Document = rentalSchema.definitions.Document
-specs.definitions.Contract = leaseContractSchema.definitions.Contract
-specs.definitions.ContractPartner = leaseContractSchema.definitions.ContractPartner
-specs.definitions.ContractDocument = leaseContractSchema.definitions.ContractDocument
-specs.definitions.ContractRentalObject = leaseContractSchema.definitions.ContractRentalObject
-specs.definitions.RentalType = leaseContractSchema.definitions.RentalType
+specs.components = {}
+specs.components.schemas = {}
+specs.components.schemas.Tenant = tenantSchema.definitions.Tenant
+specs.components.schemas.Address = tenantSchema.definitions.Address
+specs.components.schemas.PhoneNumber = tenantSchema.definitions.PhoneNumber
+specs.components.schemas.EmailAddress = tenantSchema.definitions.EmailAddress
+specs.components.schemas.Contact = tenantSchema.definitions.Contact
+specs.components.schemas.Rental = rentalSchema.definitions.Rental
+specs.components.schemas.Area = rentalSchema.definitions.Area
+specs.components.schemas.Document = rentalSchema.definitions.Document
+specs.components.schemas.Contract = leaseContractSchema.definitions.Contract
+specs.components.schemas.ContractPartner = leaseContractSchema.definitions.ContractPartner
+specs.components.schemas.ContractDocument = leaseContractSchema.definitions.ContractDocument
+specs.components.schemas.ContractRentalObject = leaseContractSchema.definitions.ContractRentalObject
+specs.components.schemas.RentalType = leaseContractSchema.definitions.RentalType
+specs.components.securitySchemes = {
+  bearerAuth: {
+    type: 'http',
+    scheme: 'bearer',
+    bearerFormat: 'JWT'
+  }
+}
 
-fs.writeFileSync('swagger.json', JSON.stringify(specs, null, 2))
+let specJson = JSON.stringify(specs, null, 2)
+// Make it OpenAPI 3 compliant
+specJson = specJson.replace(/"\$ref": "#\/definitions\//gm, '"$$ref": "#/components/schemas/')
+
+fs.writeFileSync('swagger.json', specJson)

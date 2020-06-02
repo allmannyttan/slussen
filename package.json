@@ -34,6 +34,7 @@
     "express": "4.17.1",
     "express-async-handler": "1.1.4",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.26.0",
     "node-pg-migrate": "4.6.2",
     "pg": "8.0.3",
     "sql-template-strings": "^2.2.2",

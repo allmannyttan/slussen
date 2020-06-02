@@ -6,6 +6,7 @@ export interface Config {
     baseUrl: string
     user: string
     password: string
+    limit: number
   }
   paths: {
     classlists: string
@@ -30,6 +31,9 @@ const config = configPackage({
   file: `${__dirname}/../config.json`,
   defaults: {
     port: 4000,
+    fastAPI: {
+      limit: 5000
+    },
     paths: {
       classlists: `${__dirname}/fastAPIXml/classlists/`,
       valuelists: `${__dirname}/fastAPIXml/valuelists/`,

@@ -3,6 +3,10 @@ import { authMiddleware } from '@app/middleware/auth'
 import { client } from '@app/adapters/fastapiadapter'
 import asyncHandler from 'express-async-handler'
 import helper from '@app/helpers/fastAPIXmlListHelper'
+import moment from 'moment'
+import tenantService from '@app/services/tenantservice'
+import rentalService from '@app/services/rentalservice'
+import { fastAPI } from '@app/config'
 
 import {
   Contract,
@@ -17,6 +21,8 @@ import {
   Fi2ParentObject,
   ContractRentalObject,
   RentalType,
+  Tenant,
+  Rental,
 } from './types'
 
 const getPart = (parts: Fi2Value[], partName: string): string => {
@@ -116,14 +122,103 @@ const transformContract = (fi2: Fi2LeaseContract): Contract => {
 
 const transformContracts = (fi2Contracts: Fi2LeaseContractsResponse): Contract[] => {
   if (fi2Contracts.fi2simplemessage && fi2Contracts.fi2simplemessage.fi2leasecontract) {
-    return fi2Contracts.fi2simplemessage.fi2leasecontract.map(transformContract)
+    const contracts = fi2Contracts.fi2simplemessage.fi2leasecontract.map(transformContract)
+
+    // If there are partners in the result, implant them as tenants in the right contracts
+    if (fi2Contracts.fi2simplemessage.fi2partner) {
+      const tenants = fi2Contracts.fi2simplemessage.fi2partner.map(tenantService.transformTenant)
+      const tenantsById: { [id: string]: Tenant } = {}
+
+      for (const tenant of tenants) {
+        tenantsById[tenant.id] = tenant
+      }
+
+      for (const contract of contracts) {
+        for (const partner of contract.partners) {
+          partner.tenant = tenantsById[partner.id]
+        }
+      }
+    }
+
+    // If there are spatisystems in the result, implant them as rentals in the right contracts
+    if (fi2Contracts.fi2simplemessage.fi2spatisystem) {
+      const rentals = fi2Contracts.fi2simplemessage.fi2spatisystem.map(
+        rentalService.transformRental
+      )
+      const rentalsById: { [id: string]: Rental } = {}
+
+      for (const rental of rentals) {
+        rentalsById[rental.id] = rental
+      }
+
+      for (const contract of contracts) {
+        contract.rentalObject.rental = rentalsById[contract.rentalObject.id]
+      }
+    }
+
+    return contracts
   } else {
     return []
   }
 }
 
-const getLeaseContracts = async (): Promise<Contract[]> => {
-  const contracts: Fi2LeaseContractsResponse = await client.get({ url: `fi2leasecontract/` })
+/**
+ * Creates a query string for fastAPI from a number of parameters.
+ */
+const createQueryString = (
+  rentalid?: string,
+  includeExpired?: boolean,
+  includeTenants?: boolean,
+  includeRentals?: boolean
+): string => {
+  const filter = []
+  const include = []
+  const querystring = []
+
+  querystring.push(`limit=${fastAPI.limit}`)
+
+  if (rentalid) {
+    filter.push(`fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'${rentalid}'`)
+  }
+
+  if (!includeExpired) {
+    const today = moment().format('YYYY-MM-DD')
+    filter.push(`fi2lease_currenddate>'${today}'`)
+  }
+
+  if (includeTenants) {
+    include.push('fi2partner')
+  }
+
+  if (includeRentals) {
+    include.push('fi2spatisystem')
+  }
+
+  if (include.length > 0) {
+    querystring.push('include=' + include.join(','))
+  }
+
+  if (filter.length > 0) {
+    querystring.push('filter=' + filter.join(';'))
+  }
+
+  if (querystring.length > 0) {
+    return '?' + querystring.join('&')
+  } else {
+    return ''
+  }
+}
+
+const getLeaseContracts = async (
+  rentalId?: string,
+  includeExpired?: boolean,
+  includeTentants?: boolean,
+  includeRentals?: boolean
+): Promise<Contract[]> => {
+  const querystring = createQueryString(rentalId, includeExpired, includeTentants, includeRentals)
+  const contracts: Fi2LeaseContractsResponse = await client.get({
+    url: `fi2leasecontract/${querystring}`,
+  })
   const result = transformContracts(contracts)
   return result
 }
@@ -143,29 +238,53 @@ export const routes = (app: Application) => {
    *    summary: Gets all contracts for rentals
    *    description: Retrieves all lease contracts for rentals in the system. Currently the only way of finding a contract for a specific tenant is to retrieve all and filter on the client side. API-side filters will be added later on.
    *    parameters:
+   *      - in: query
+   *        name: rentalid
+   *        description: "Filter for rental IDs, supports simple wildcards (example: rentalid=11*)."
+   *        required: false
+   *        type: string
+   *      - in: query
+   *        name: includeexpired
+   *        required: false
+   *        description: "If true, expired lease contracts are included in results"
+   *        default: false
+   *      - in: query
+   *        name: includetenants
+   *        required: false
+   *        description: "If true, the full tenant (partner) objects are included as subobjects in each contract"
+   *        default: false
    *      - in: header
    *        name: authorization
    *        schema:
    *          type: string
    *        required: true
    *    security:
-   *      type: http
-   *      scheme: bearer
-   *      bearerFormat: JWT
+   *      bearerAuth: []
    *    responses:
    *      '200':
    *        description: 'List of contracts'
-   *        schema:
-   *            type: array
-   *            items:
-   *              $ref: '#/definitions/Contract'
+   *        content:
+   *          application/json:
+   *            schema:
+   *              type: array
+   *              items:
+   *                $ref: '#/components/schemas/Contract'
    *      '401':
    *        description: 'Unauthorized'
    */
   app.get(
     '/leasecontracts',
     authMiddleware,
-    asyncHandler(async (_req: Request, res: Response) => res.json(await getLeaseContracts()))
+    asyncHandler(async (_req: Request, res: Response) =>
+      res.json(
+        await getLeaseContracts(
+          _req.query.rentalid as string,
+          /true/i.test(_req.query.includeexpired as string),
+          /true/i.test(_req.query.includetenants as string),
+          /true/i.test(_req.query.includerentals as string)
+        )
+      )
+    )
   )
 
   /**
@@ -186,14 +305,14 @@ export const routes = (app: Application) => {
    *        required: true
    *        description: contract id
    *    security:
-   *      type: http
-   *      scheme: bearer
-   *      bearerFormat: JWT
+   *      bearerAuth: []
    *    responses:
    *      '200':
    *        description: 'Returns the lease contract with the specified id'
-   *        schema:
-   *          $ref: '#/definitions/Contract'
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/components/schemas/Contract'
    *      '401':
    *        description: 'Unauthorized'
    *      '404':

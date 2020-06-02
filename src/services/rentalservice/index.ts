@@ -129,10 +129,12 @@ export const routes = (app: Application) => {
    *    responses:
    *      '200':
    *        description: 'List of rental units'
-   *        schema:
-   *            type: array
-   *            items:
-   *              $ref: '#/definitions/Rental'
+   *        content:
+   *          application/json:
+   *            schema:
+   *                type: array
+   *                items:
+   *                  $ref: '#/contents/schemas/Rental'
    *      '401':
    *        description: 'Unauthorized'
    */
@@ -166,8 +168,10 @@ export const routes = (app: Application) => {
    *    responses:
    *      '200':
    *        description: 'Returns the rental unit with the specified id'
-   *        schema:
-   *          $ref: '#/definitions/Rental'
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/contents/schemas/Rental'
    *      '401':
    *        description: 'Unauthorized'
    *      '404':
@@ -183,4 +187,5 @@ export const routes = (app: Application) => {
 export default {
   getRental,
   getRentals,
+  transformRental
 }

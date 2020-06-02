@@ -69,5 +69,39 @@ export interface Fi2Document {
 }
 
 export interface Fi2Ids {
-  fi2_id: Fi2ValueUsage
+  fi2_id: Fi2ValueUsage[]
+}
+
+export interface Fi2PartnerName {
+  $t: string
+  lang: string
+  usage: string
+}
+
+export interface Fi2Contact {
+  guid: string
+  fi2contact_class: Fi2Class
+  fi2cont_fname: string
+  fi2cont_mname: string
+  fi2cont_lname: string
+  fi2cont_fullname: string
+  fi2cont_tel: Fi2ValueUsage[]
+  fi2cont_email: Fi2ValueUsage[]
+  fi2cont_address: Fi2Address[]
+}
+
+export interface Fi2Partner {
+  id: string
+  xmlns?: string
+  fi2part_ids: Fi2Ids
+  fi2part_class: Fi2Class
+  fi2part_value: Fi2Value[]
+  fi2part_name: Fi2PartnerName
+  fi2part_fullname: string
+  fi2part_reference: string
+  fi2part_tel: Fi2ValueUsage[]
+  fi2part_email: Fi2ValueUsage[]
+  fi2part_web: string
+  fi2part_address: Fi2Address[]
+  fi2part_contact: Fi2Contact
 }
