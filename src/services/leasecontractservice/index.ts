@@ -4,6 +4,9 @@ import { client } from '@app/adapters/fastapiadapter'
 import asyncHandler from 'express-async-handler'
 import helper from '@app/helpers/fastAPIXmlListHelper'
 import moment from 'moment'
+import tenantService from '@app/services/tenantservice'
+import rentalService from '@app/services/rentalservice'
+import { fastAPI } from '@app/config'
 
 import {
   Contract,
@@ -18,6 +21,8 @@ import {
   Fi2ParentObject,
   ContractRentalObject,
   RentalType,
+  Tenant,
+  Rental
 } from './types'
 
 const getPart = (parts: Fi2Value[], partName: string): string => {
@@ -117,7 +122,39 @@ const transformContract = (fi2: Fi2LeaseContract): Contract => {
 
 const transformContracts = (fi2Contracts: Fi2LeaseContractsResponse): Contract[] => {
   if (fi2Contracts.fi2simplemessage && fi2Contracts.fi2simplemessage.fi2leasecontract) {
-    return fi2Contracts.fi2simplemessage.fi2leasecontract.map(transformContract)
+    const contracts = fi2Contracts.fi2simplemessage.fi2leasecontract.map(transformContract)
+
+    // If there are partners in the result, implant them as tenants in the right contracts
+    if (fi2Contracts.fi2simplemessage.fi2partner) {
+      const tenants = fi2Contracts.fi2simplemessage.fi2partner.map(tenantService.transformTenant)
+      const tenantsById: { [id: string]: Tenant } = {}
+
+      for (let tenant of tenants) {
+        tenantsById[tenant.id] = tenant
+      }
+
+      for (let contract of contracts) {
+        for (let partner of contract.partners) {
+          partner.tenant = tenantsById[partner.id]
+        }
+      }
+    }
+
+    // If there are spatisystems in the result, implant them as rentals in the right contracts
+    if (fi2Contracts.fi2simplemessage.fi2spatisystem) {
+      const rentals = fi2Contracts.fi2simplemessage.fi2spatisystem.map(rentalService.transformRental)
+      const rentalsById: { [id: string]: Rental } = {}
+
+      for (let rental of rentals) {
+        rentalsById[rental.id] = rental
+      }
+
+      for (let contract of contracts) {
+        contract.rentalObject.rental = rentalsById[contract.rentalObject.id]
+      }
+    }
+
+    return contracts
   } else {
     return []
   }
@@ -126,27 +163,47 @@ const transformContracts = (fi2Contracts: Fi2LeaseContractsResponse): Contract[]
 /**
  * Creates a query string for fastAPI from a number of parameters.
  */
-const createQueryString = (rentalid?: string, includeexpired?: string) : string => {
+const createQueryString = (rentalid?: string, includeExpired?: boolean, includeTenants?: boolean, includeRentals?: boolean) : string => {
   let filter = []
+  let include = []
+  let querystring = []
+
+  querystring.push(`limit=${fastAPI.limit}`)
 
   if (rentalid) {
     filter.push(`fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'${rentalid}'`)
   }
 
-  if (!includeexpired) {
+  if (!includeExpired) {
     const today = moment().format('YYYY-MM-DD')
     filter.push(`fi2lease_currenddate>'${today}'`)
   }
 
+  if (includeTenants) {
+    include.push('fi2partner')
+  }
+
+  if (includeRentals) {
+    include.push('fi2spatisystem')
+  }
+
+  if (include.length > 0) {
+    querystring.push('include=' + include.join(','))
+  }
+
   if (filter.length > 0) {
-    return '?filter=' + filter.join(';')
+    querystring.push('filter=' + filter.join(';'))
+  }
+
+  if (querystring.length > 0) {
+    return '?' + querystring.join('&')
   } else {
     return ''
   }
 }
 
-const getLeaseContracts = async (rentalid?: string, includeexpired?: string): Promise<Contract[]> => {
-  const querystring = createQueryString(rentalid, includeexpired)
+const getLeaseContracts = async (rentalId?: string, includeExpired?: boolean, includeTentants?: boolean, includeRentals?: boolean): Promise<Contract[]> => {
+  const querystring = createQueryString(rentalId, includeExpired, includeTentants, includeRentals)
   const contracts: Fi2LeaseContractsResponse = await client.get({ url: `fi2leasecontract/${querystring}` })
   const result = transformContracts(contracts)
   return result
@@ -177,6 +234,11 @@ export const routes = (app: Application) => {
    *        required: false
    *        description: "If true, expired lease contracts are included in results"
    *        default: false
+   *      - in: query
+   *        name: includetenants
+   *        required: false
+   *        description: "If true, the full tenant (partner) objects are included as subobjects in each contract"
+   *        default: false
    *      - in: header
    *        name: authorization
    *        schema:
@@ -187,17 +249,25 @@ export const routes = (app: Application) => {
    *    responses:
    *      '200':
    *        description: 'List of contracts'
-   *        schema:
-   *            type: array
-   *            items:
-   *              $ref: '#/components/schemas/Contract'
+   *        content:
+   *          application/json:
+   *            schema:
+   *              type: array
+   *              items:
+   *                $ref: '#/components/schemas/Contract'
    *      '401':
    *        description: 'Unauthorized'
    */
   app.get(
     '/leasecontracts',
     authMiddleware,
-    asyncHandler(async (_req: Request, res: Response) => res.json(await getLeaseContracts(<string>_req.query.rentalid, <string>_req.query.includeexpired)))
+    asyncHandler(async (_req: Request, res: Response) => res.json(
+      await getLeaseContracts(<string>_req.query.rentalid, 
+        (/true/i).test(<string>_req.query.includeexpired), 
+        (/true/i).test(<string>_req.query.includetenants),
+        (/true/i).test(<string>_req.query.includerentals)
+      ))
+    )
   )
 
   /**
@@ -222,8 +292,10 @@ export const routes = (app: Application) => {
    *    responses:
    *      '200':
    *        description: 'Returns the lease contract with the specified id'
-   *        schema:
-   *          $ref: '#/components/schemas/Contract'
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/components/schemas/Contract'
    *      '401':
    *        description: 'Unauthorized'
    *      '404':

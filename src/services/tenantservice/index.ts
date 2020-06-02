@@ -1,14 +1,13 @@
 import { Application, Request, Response } from 'express'
 import { client } from '@app/adapters/fastapiadapter'
 import { convertAddress } from '@app/helpers/converters'
-import { Fi2Value, Fi2ValueUsage } from '@app/commonTypes/types'
+import { Fi2Value, Fi2ValueUsage, Fi2Contact } from '@app/commonTypes/types'
 import asyncHandler from 'express-async-handler'
 import helper from '@app/helpers/fastAPIXmlListHelper'
 
 import {
   Contact,
   EmailAddress,
-  Fi2Contact,
   Fi2Ids,
   Fi2Partner,
   Fi2PartnersResponse,
@@ -106,17 +105,17 @@ const transformTenant = (tenantRaw: Fi2Partner): Tenant => {
   return tenant
 }
 
-const transformTenants = (tenantsRaw: Fi2PartnersResponse): Tenant[] => {
-  if (tenantsRaw.fi2simplemessage && tenantsRaw.fi2simplemessage.fi2partner) {
-    return tenantsRaw.fi2simplemessage.fi2partner.map(transformTenant)
-  } else {
-    return []
-  }
+const transformTenants = (fi2Tenants: Fi2Partner[]): Tenant[] => {
+  return fi2Tenants.map(transformTenant)
 }
 
 const getTenants = async (): Promise<Tenant[]> => {
-  const result = await client.get({ url: "fi2partner?filter=fi2part_class.fi2class_code:'16'" })
-  return transformTenants(result)
+  const result: Fi2PartnersResponse = await client.get({ url: "fi2partner?filter=fi2part_class.fi2class_code:'16'" })
+  if (result.fi2simplemessage && result.fi2simplemessage.fi2partner) {
+     return transformTenants(result.fi2simplemessage.fi2partner)
+  } else {
+    return []
+  }
 }
 
 const getTenant = async (id: string): Promise<Tenant> => {
@@ -145,10 +144,12 @@ export const routes = (app: Application) => {
    *    responses:
    *      '200':
    *        description: 'List of tenants'
-   *        schema:
-   *            type: array
-   *            items:
-   *              $ref: '#/definitions/Tenant'
+   *        content:
+   *          application/json:
+   *            schema:
+   *              type: array
+   *              items:
+   *                $ref: '#/definitions/Tenant'
    *      '401':
    *        description: 'Unauthorized'
    */
@@ -157,48 +158,51 @@ export const routes = (app: Application) => {
     authMiddleware,
     asyncHandler(async (_req: Request, res: Response) => res.json(await getTenants()))
   ),
-    /**
-     * @swagger
-     * /tenants/{id}:
-     *  get:
-     *    summary: Gets a tenant by id
-     *    description: Retrieves a tenant by its id
-     *    security:
-     *      type: http
-     *      scheme: bearer
-     *      bearerFormat: JWT
-     *    parameters:
-     *      - in: header
-     *        name: authorization
-     *        schema:
-     *          type: string
-     *        required: true
-     *      - in: path
-     *        name: id
-     *        type: string
-     *        required: true
-     *        description: tenant id
-     *    responses:
-     *      '200':
-     *        description: 'Returns the tenant with the specified id'
-     *        schema:
-     *          $ref: '#/definitions/Tenant'
-     *      '401':
-     *        description: 'Unauthorized'
-     *      '404':
-     *        description: 'No tenant with the specified id exists'
-     */
 
-    app.get(
-      '/tenants/:id',
-      authMiddleware,
-      asyncHandler(async (_req: Request, res: Response) =>
-        res.json(await getTenant(_req.params.id))
-      )
+  /**
+   * @swagger
+   * /tenants/{id}:
+   *  get:
+   *    summary: Gets a tenant by id
+   *    description: Retrieves a tenant by its id
+   *    security:
+   *      type: http
+   *      scheme: bearer
+   *      bearerFormat: JWT
+   *    parameters:
+   *      - in: header
+   *        name: authorization
+   *        schema:
+   *          type: string
+   *        required: true
+   *      - in: path
+   *        name: id
+   *        type: string
+   *        required: true
+   *        description: tenant id
+   *    responses:
+   *      '200':
+   *        description: 'Returns the tenant with the specified id'
+   *        content:
+   *          application/json:
+   *            schema:
+   *              $ref: '#/definitions/Tenant'
+   *      '401':
+   *        description: 'Unauthorized'
+   *      '404':
+   *        description: 'No tenant with the specified id exists'
+   */
+  app.get(
+    '/tenants/:id',
+    authMiddleware,
+    asyncHandler(async (_req: Request, res: Response) =>
+      res.json(await getTenant(_req.params.id))
     )
+  )
 }
 
 export default {
   getTenants,
   getTenant,
+  transformTenant
 }

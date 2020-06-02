@@ -29,10 +29,14 @@
         "responses": {
           "200": {
             "description": "List of tenants",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/Tenant"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tenant"
+                  }
+                }
               }
             }
           },
@@ -71,8 +75,12 @@
         "responses": {
           "200": {
             "description": "Returns the tenant with the specified id",
-            "schema": {
-              "$ref": "#/components/schemas/Tenant"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tenant"
+                }
+              }
             }
           },
           "401": {
@@ -104,6 +112,13 @@
             "default": false
           },
           {
+            "in": "query",
+            "name": "includetenants",
+            "required": false,
+            "description": "If true, the full tenant (partner) objects are included as subobjects in each contract",
+            "default": false
+          },
+          {
             "in": "header",
             "name": "authorization",
             "schema": {
@@ -118,10 +133,14 @@
         "responses": {
           "200": {
             "description": "List of contracts",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schema/Contract"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Contract"
+                  }
+                }
               }
             }
           },
@@ -158,8 +177,12 @@
         "responses": {
           "200": {
             "description": "Returns the lease contract with the specified id",
-            "schema": {
-              "$ref": "#/components/schemas/Contract"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Contract"
+                }
+              }
             }
           },
           "401": {
@@ -193,10 +216,14 @@
         "responses": {
           "200": {
             "description": "List of rental units",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/Rental"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/contents/schemas/Rental"
+                  }
+                }
               }
             }
           },
@@ -235,8 +262,12 @@
         "responses": {
           "200": {
             "description": "Returns the rental unit with the specified id",
-            "schema": {
-              "$ref": "#/components/schemas/Rental"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/contents/schemas/Rental"
+                }
+              }
             }
           },
           "401": {
@@ -798,6 +829,9 @@
           },
           "roleName": {
             "type": "string"
+          },
+          "tenant": {
+            "$ref": "#/components/schemas/Tenant"
           }
         },
         "required": [
@@ -835,6 +869,9 @@
           },
           "id": {
             "type": "string"
+          },
+          "rental": {
+            "$ref": "#/components/schemas/Rental"
           }
         },
         "required": [

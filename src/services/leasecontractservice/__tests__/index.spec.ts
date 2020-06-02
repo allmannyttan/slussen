@@ -18,6 +18,7 @@ jest.mock('@app/config', () => ({
   port: 0,
   fastAPI: {
     baseUrl: 'test',
+    limit: 1234
   },
   auth: {
     secret: 'a secret',
@@ -51,7 +52,7 @@ describe('#leasecontractservice', () => {
       await service.getLeaseContracts()
 
       expect(client.get).toHaveBeenCalledTimes(1)
-      expect(client.get).toHaveBeenCalledWith({ url: `fi2leasecontract/?filter=fi2lease_currenddate>'${moment().format('YYYY-MM-DD')}'` })
+      expect(client.get).toHaveBeenCalledWith({ url: `fi2leasecontract/?limit=1234&filter=fi2lease_currenddate>'${moment().format('YYYY-MM-DD')}'` })
     })
 
     test('returns contracts in correct format', async () => {
@@ -266,6 +267,51 @@ describe('#leasecontractservice', () => {
           "terminationReason": "mocked",
         }
       `)
+    })
+
+    test('creates appropriate querystring for rentalid filter', async () => {
+      ;(client.get as jest.Mock).mockResolvedValueOnce(fi2LeaseContractsJson)
+
+      await service.getLeaseContracts('foo')
+
+      expect(client.get).toHaveBeenCalledTimes(1)
+      expect(client.get).toHaveBeenCalledWith({ url: `fi2leasecontract/?limit=1234&filter=fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'foo';fi2lease_currenddate>'${moment().format('YYYY-MM-DD')}'` })
+    })
+
+    test('creates appropriate querystring for includeexpired', async () => {
+      ;(client.get as jest.Mock).mockResolvedValueOnce(fi2LeaseContractsJson)
+
+      await service.getLeaseContracts(null, true)
+
+      expect(client.get).toHaveBeenCalledTimes(1)
+      expect(client.get).toHaveBeenCalledWith({ url: `fi2leasecontract/?limit=1234` })
+    })
+
+    test('creates appropriate querystring for includetenants', async () => {
+      ;(client.get as jest.Mock).mockResolvedValueOnce(fi2LeaseContractsJson)
+
+      await service.getLeaseContracts(null, false, true)
+
+      expect(client.get).toHaveBeenCalledTimes(1)
+      expect(client.get).toHaveBeenCalledWith({ url: `fi2leasecontract/?limit=1234&include=fi2partner&filter=fi2lease_currenddate>'${moment().format('YYYY-MM-DD')}'` })
+    })
+
+    test('creates appropriate querystring for includerentals', async () => {
+      ;(client.get as jest.Mock).mockResolvedValueOnce(fi2LeaseContractsJson)
+
+      await service.getLeaseContracts(null, false, false, true)
+
+      expect(client.get).toHaveBeenCalledTimes(1)
+      expect(client.get).toHaveBeenCalledWith({ url: `fi2leasecontract/?limit=1234&include=fi2spatisystem&filter=fi2lease_currenddate>'${moment().format('YYYY-MM-DD')}'` })
+    })
+
+    test('creates appropriate querystring for all parameters', async () => {
+      ;(client.get as jest.Mock).mockResolvedValueOnce(fi2LeaseContractsJson)
+
+      await service.getLeaseContracts('foo', true, true, true)
+
+      expect(client.get).toHaveBeenCalledTimes(1)
+      expect(client.get).toHaveBeenCalledWith({ url: `fi2leasecontract/?limit=1234&include=fi2partner,fi2spatisystem&filter=fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'foo'` })
     })
 
     test('handles documents correctly', async () => {
