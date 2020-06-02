@@ -22,7 +22,7 @@ import {
   ContractRentalObject,
   RentalType,
   Tenant,
-  Rental
+  Rental,
 } from './types'
 
 const getPart = (parts: Fi2Value[], partName: string): string => {
@@ -129,12 +129,12 @@ const transformContracts = (fi2Contracts: Fi2LeaseContractsResponse): Contract[]
       const tenants = fi2Contracts.fi2simplemessage.fi2partner.map(tenantService.transformTenant)
       const tenantsById: { [id: string]: Tenant } = {}
 
-      for (let tenant of tenants) {
+      for (const tenant of tenants) {
         tenantsById[tenant.id] = tenant
       }
 
-      for (let contract of contracts) {
-        for (let partner of contract.partners) {
+      for (const contract of contracts) {
+        for (const partner of contract.partners) {
           partner.tenant = tenantsById[partner.id]
         }
       }
@@ -142,14 +142,16 @@ const transformContracts = (fi2Contracts: Fi2LeaseContractsResponse): Contract[]
 
     // If there are spatisystems in the result, implant them as rentals in the right contracts
     if (fi2Contracts.fi2simplemessage.fi2spatisystem) {
-      const rentals = fi2Contracts.fi2simplemessage.fi2spatisystem.map(rentalService.transformRental)
+      const rentals = fi2Contracts.fi2simplemessage.fi2spatisystem.map(
+        rentalService.transformRental
+      )
       const rentalsById: { [id: string]: Rental } = {}
 
-      for (let rental of rentals) {
+      for (const rental of rentals) {
         rentalsById[rental.id] = rental
       }
 
-      for (let contract of contracts) {
+      for (const contract of contracts) {
         contract.rentalObject.rental = rentalsById[contract.rentalObject.id]
       }
     }
@@ -163,10 +165,15 @@ const transformContracts = (fi2Contracts: Fi2LeaseContractsResponse): Contract[]
 /**
  * Creates a query string for fastAPI from a number of parameters.
  */
-const createQueryString = (rentalid?: string, includeExpired?: boolean, includeTenants?: boolean, includeRentals?: boolean) : string => {
-  let filter = []
-  let include = []
-  let querystring = []
+const createQueryString = (
+  rentalid?: string,
+  includeExpired?: boolean,
+  includeTenants?: boolean,
+  includeRentals?: boolean
+): string => {
+  const filter = []
+  const include = []
+  const querystring = []
 
   querystring.push(`limit=${fastAPI.limit}`)
 
@@ -202,9 +209,16 @@ const createQueryString = (rentalid?: string, includeExpired?: boolean, includeT
   }
 }
 
-const getLeaseContracts = async (rentalId?: string, includeExpired?: boolean, includeTentants?: boolean, includeRentals?: boolean): Promise<Contract[]> => {
+const getLeaseContracts = async (
+  rentalId?: string,
+  includeExpired?: boolean,
+  includeTentants?: boolean,
+  includeRentals?: boolean
+): Promise<Contract[]> => {
   const querystring = createQueryString(rentalId, includeExpired, includeTentants, includeRentals)
-  const contracts: Fi2LeaseContractsResponse = await client.get({ url: `fi2leasecontract/${querystring}` })
+  const contracts: Fi2LeaseContractsResponse = await client.get({
+    url: `fi2leasecontract/${querystring}`,
+  })
   const result = transformContracts(contracts)
   return result
 }
@@ -261,12 +275,15 @@ export const routes = (app: Application) => {
   app.get(
     '/leasecontracts',
     authMiddleware,
-    asyncHandler(async (_req: Request, res: Response) => res.json(
-      await getLeaseContracts(<string>_req.query.rentalid, 
-        (/true/i).test(<string>_req.query.includeexpired), 
-        (/true/i).test(<string>_req.query.includetenants),
-        (/true/i).test(<string>_req.query.includerentals)
-      ))
+    asyncHandler(async (_req: Request, res: Response) =>
+      res.json(
+        await getLeaseContracts(
+          _req.query.rentalid as string,
+          /true/i.test(_req.query.includeexpired as string),
+          /true/i.test(_req.query.includetenants as string),
+          /true/i.test(_req.query.includerentals as string)
+        )
+      )
     )
   )
 
