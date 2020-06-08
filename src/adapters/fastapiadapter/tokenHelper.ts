@@ -20,7 +20,8 @@ export const getNewAccessToken = async (): Promise<string> => {
 const isInvalidAccessTokenError = (error: Error): boolean => {
   return (
     error.message === 'Request failed with status code 403' ||
-    error.message === NO_TOKENS_IN_DB_ERROR
+    error.message === NO_TOKENS_IN_DB_ERROR ||
+    error.message === 'Request failed with status code 400'
   )
 }
 

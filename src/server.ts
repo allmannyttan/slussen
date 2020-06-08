@@ -30,7 +30,7 @@ routes(app)
 
 app.listen(port, () => {
   console.log(`
-    API is running
+    🏠 API is running 
     ------------------------
     REST: http://localhost:${port}
   `)
