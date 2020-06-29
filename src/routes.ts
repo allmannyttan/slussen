@@ -12,7 +12,7 @@ export { authRoutes, tenantRoutes, leaseContactRoutes, rentalRoutes, healthRoute
 
 export default (app: Application) => {
   app.get('/', (_req, res) =>
-    res.send(`<h1>fastAPI REST API</h1> <a href="/api-docs">Documentation available here</a>`)
+    res.redirect('/api-docs')
   )
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }))
 }
