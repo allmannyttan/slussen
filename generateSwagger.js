@@ -18,14 +18,16 @@ const rentalSchema = tsj.createGenerator(config).createSchema(config.type)
 config.path = 'src/services/leasecontractservice/types.ts'
 const leaseContractSchema = tsj.createGenerator(config).createSchema(config.type)
 
+const description = fs.readFileSync('./description.md').toString()
+
 const options = {
   swaggerDefinition: {
     // Like the one described here: https://swagger.io/specification/#infoObject
     openapi: '3.0.0',
     info: {
-      title: 'FastAPIAPI', // Title (required)
+      title: 'Slussen', // Title (required)
       version: '0.1.0', // Version (required)
-      description: 'Modern front till fastAPI', // Description (optional)
+      description: description
     },
     basePath: '/', // Base path (optional)
   },
