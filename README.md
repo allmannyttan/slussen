@@ -1,4 +1,4 @@
-# Svensk allmännytta
+# Slussen
 
 Code in this repo uses Version 1 of fastAPI, without "tillgäggspaket".
 Documentation of fastAPI is available here http://www.fastapi.se/apidocprop/v1/
