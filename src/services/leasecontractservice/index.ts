@@ -233,9 +233,16 @@ const getLeaseContract = async (id: string): Promise<Contract> => {
 export const routes = (app: Application) => {
   /**
    * @swagger
+   * tags:
+   *   name: Lease contracts
+   */
+
+  /**
+   * @swagger
    * /leasecontracts:
    *  get:
    *    summary: Gets all contracts for rentals
+   *    tags: [Lease contracts]
    *    description: Retrieves all lease contracts for rentals in the system. Currently the only way of finding a contract for a specific tenant is to retrieve all and filter on the client side. API-side filters will be added later on.
    *    parameters:
    *      - in: query
@@ -259,7 +266,7 @@ export const routes = (app: Application) => {
    *          type: string
    *        required: true
    *    security:
-   *      bearerAuth: []
+   *      - bearerAuth: []
    *    responses:
    *      '200':
    *        description: 'List of contracts'
@@ -292,6 +299,7 @@ export const routes = (app: Application) => {
    * /leasecontracts/{id}:
    *  get:
    *    summary: Gets a contract by id
+   *    tags: [Lease contracts]
    *    description: Retrieves a lease contract by its id. Currently the only way of finding a contract for a specific tenant is to retrieve all and filter on the client side. API-side filters will be added later on.
    *    parameters:
    *      - in: header
@@ -305,7 +313,7 @@ export const routes = (app: Application) => {
    *        required: true
    *        description: contract id
    *    security:
-   *      bearerAuth: []
+   *      - bearerAuth: []
    *    responses:
    *      '200':
    *        description: 'Returns the lease contract with the specified id'

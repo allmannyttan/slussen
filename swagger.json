@@ -3,13 +3,16 @@
   "info": {
     "title": "Slussen",
     "version": "0.1.0",
-    "description": "**Slussen** is a simplified API gateway to [fastAPI](http://www.fastapi.se). \n\nSlussen currently supports retreiving three kinds of objects from fastAPI version 1:\n* **tentants** (fi2partners with partner class id 16)\n* **contracts** (fi2contracts)\n* **rentalobjects** (fi2spatisystems)\n\nThe object types have been renamed to make more sense for integration partners without explicit knowledge of fi2xml.\n\nSlussen uses **JSON** instead of XML. The reason for this is increased operability with different programming languages and platforms, as well as more lightweight parsing (more suitable for mobile platforms)\n\nSlussen uses a simplified filter functionality, both for limiting result sets and including related objects. Instead of the generic query style filters of fastAPI each field or included object has its own query parameter (i.e. \"includetenants=true\").\n\nSome parameters have also been set to \"should work for most\" defaults (for instance page size for queries is set to 5000 instead of 10) to make it easier to get started. These parameters should be reviewed before going to production.\n"
+    "description": "**Slussen** is a simplified API gateway to [fastAPI](http://www.fastapi.se). \n\nSlussen currently supports retreiving three kinds of objects from fastAPI version 1:\n* **tentants** (fi2partners with partner class id 16)\n* **contracts** (fi2contracts)\n* **rentalobjects** (fi2spatisystems)\n\nThe object types have been renamed to make more sense for integration partners without explicit knowledge of fi2xml.\n\nSlussen uses **JSON** instead of XML. The reason for this is increased operability with different programming languages and platforms, as well as more lightweight parsing (more suitable for mobile platforms).\n\nSlussen uses a simplified filter functionality, both for limiting result sets and including related objects. Instead of the generic query style filters of fastAPI each field or included object has its own query parameter (i.e. \"includetenants=true\").\n\nSome parameters have also been set to \"should work for most\" defaults (for instance page size for queries is set to 5000 instead of 10) to make it easier to get started. These parameters should be reviewed before going to production.\n"
   },
   "basePath": "/",
   "paths": {
     "/tenants": {
       "get": {
         "summary": "Gets all tenants",
+        "tags": [
+          "Tenants"
+        ],
         "description": "Retrieves all tenants in the system. There is currently no way of filtering or doing API-side searches.",
         "parameters": [
           {
@@ -21,11 +24,15 @@
             "required": true
           }
         ],
-        "security": {
-          "type": "http",
-          "scheme": "bearer",
-          "bearerFormat": "JWT"
-        },
+        "security": [
+          {
+            "BearerAuth": {
+              "type": "http",
+              "scheme": "bearer",
+              "bearerFormat": "JWT"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of tenants",
@@ -49,12 +56,19 @@
     "/tenants/{id}": {
       "get": {
         "summary": "Gets a tenant by id",
+        "tags": [
+          "Tenants"
+        ],
         "description": "Retrieves a tenant by its id",
-        "security": {
-          "type": "http",
-          "scheme": "bearer",
-          "bearerFormat": "JWT"
-        },
+        "security": [
+          {
+            "BearerAuth": {
+              "type": "http",
+              "scheme": "bearer",
+              "bearerFormat": "JWT"
+            }
+          }
+        ],
         "parameters": [
           {
             "in": "header",
@@ -95,6 +109,9 @@
     "/leasecontracts": {
       "get": {
         "summary": "Gets all contracts for rentals",
+        "tags": [
+          "Lease contracts"
+        ],
         "description": "Retrieves all lease contracts for rentals in the system. Currently the only way of finding a contract for a specific tenant is to retrieve all and filter on the client side. API-side filters will be added later on.",
         "parameters": [
           {
@@ -127,9 +144,11 @@
             "required": true
           }
         ],
-        "security": {
-          "bearerAuth": []
-        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of contracts",
@@ -153,6 +172,9 @@
     "/leasecontracts/{id}": {
       "get": {
         "summary": "Gets a contract by id",
+        "tags": [
+          "Lease contracts"
+        ],
         "description": "Retrieves a lease contract by its id. Currently the only way of finding a contract for a specific tenant is to retrieve all and filter on the client side. API-side filters will be added later on.",
         "parameters": [
           {
@@ -171,9 +193,11 @@
             "description": "contract id"
           }
         ],
-        "security": {
-          "bearerAuth": []
-        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Returns the lease contract with the specified id",
@@ -197,6 +221,9 @@
     "/rentals": {
       "get": {
         "summary": "Gets all rental units",
+        "tags": [
+          "Rentals"
+        ],
         "description": "Retrieves all rental units in the system. There is currently no way of filtering or doing API-side searches.",
         "parameters": [
           {
@@ -208,11 +235,15 @@
             "required": true
           }
         ],
-        "security": {
-          "type": "http",
-          "scheme": "bearer",
-          "bearerFormat": "JWT"
-        },
+        "security": [
+          {
+            "BearerAuth": {
+              "type": "http",
+              "scheme": "bearer",
+              "bearerFormat": "JWT"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "List of rental units",
@@ -221,7 +252,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/contents/schemas/Rental"
+                    "$ref": "#/components/schemas/Rental"
                   }
                 }
               }
@@ -236,12 +267,19 @@
     "/rentals/{id}": {
       "get": {
         "summary": "Gets a rental unit by id",
+        "tags": [
+          "Rentals"
+        ],
         "description": "Retrieves a rental unit by its id",
-        "security": {
-          "type": "http",
-          "scheme": "bearer",
-          "bearerFormat": "JWT"
-        },
+        "security": [
+          {
+            "BearerAuth": {
+              "type": "http",
+              "scheme": "bearer",
+              "bearerFormat": "JWT"
+            }
+          }
+        ],
         "parameters": [
           {
             "in": "header",
@@ -265,7 +303,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/contents/schemas/Rental"
+                  "$ref": "#/components/schemas/Rental"
                 }
               }
             }
@@ -282,6 +320,9 @@
     "/auth/generate-password-hash": {
       "get": {
         "summary": "Generates a salt and hashes the given password using that salt.",
+        "tags": [
+          "Auth"
+        ],
         "description": "Generates a salt and hashes the given password using that salt. Pass cleartext password as query parameter.",
         "parameters": [
           {
@@ -313,6 +354,9 @@
     "/auth/generate-token": {
       "post": {
         "summary": "Generates a jwt",
+        "tags": [
+          "Auth"
+        ],
         "description": "Validates username + password and returns a valid token to be used in authorization header.",
         "requestBody": {
           "required": true,
@@ -350,6 +394,9 @@
     "/auth/refresh-token": {
       "get": {
         "summary": "Renews a jwt token",
+        "tags": [
+          "Auth"
+        ],
         "description": "Validates username + password and returns a valid token to be used in authorization header.",
         "parameters": [
           {
@@ -361,11 +408,15 @@
             "required": true
           }
         ],
-        "security": {
-          "type": "http",
-          "scheme": "bearer",
-          "bearerFormat": "JWT"
-        },
+        "security": [
+          {
+            "BearerAuth": {
+              "type": "http",
+              "scheme": "bearer",
+              "bearerFormat": "JWT"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "A valid token",
@@ -387,6 +438,9 @@
     "/auth/test": {
       "post": {
         "summary": "Verifies a authorization token.",
+        "tags": [
+          "Auth"
+        ],
         "parameters": [
           {
             "in": "header",
@@ -397,11 +451,15 @@
             "required": true
           }
         ],
-        "security": {
-          "type": "http",
-          "scheme": "bearer",
-          "bearerFormat": "JWT"
-        },
+        "security": [
+          {
+            "BearerAuth": {
+              "type": "http",
+              "scheme": "bearer",
+              "bearerFormat": "JWT"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Result of the validation.",
@@ -896,5 +954,18 @@
       }
     }
   },
-  "tags": []
+  "tags": [
+    {
+      "name": "Tenants"
+    },
+    {
+      "name": "Lease contracts"
+    },
+    {
+      "name": "Rentals"
+    },
+    {
+      "name": "Auth"
+    }
+  ]
 }

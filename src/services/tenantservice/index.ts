@@ -110,9 +110,11 @@ const transformTenants = (fi2Tenants: Fi2Partner[]): Tenant[] => {
 }
 
 const getTenants = async (): Promise<Tenant[]> => {
-  const result: Fi2PartnersResponse = await client.get({ url: "fi2partner?filter=fi2part_class.fi2class_code:'16'" })
+  const result: Fi2PartnersResponse = await client.get({
+    url: "fi2partner?filter=fi2part_class.fi2class_code:'16'",
+  })
   if (result.fi2simplemessage && result.fi2simplemessage.fi2partner) {
-     return transformTenants(result.fi2simplemessage.fi2partner)
+    return transformTenants(result.fi2simplemessage.fi2partner)
   } else {
     return []
   }
@@ -127,9 +129,16 @@ const getTenant = async (id: string): Promise<Tenant> => {
 export const routes = (app: Application) => {
   /**
    * @swagger
+   * tags:
+   *   name: Tenants
+   */
+
+  /**
+   * @swagger
    * /tenants:
    *  get:
    *    summary: Gets all tenants
+   *    tags: [Tenants]
    *    description: Retrieves all tenants in the system. There is currently no way of filtering or doing API-side searches.
    *    parameters:
    *      - in: header
@@ -138,9 +147,10 @@ export const routes = (app: Application) => {
    *          type: string
    *        required: true
    *    security:
-   *      type: http
-   *      scheme: bearer
-   *      bearerFormat: JWT
+   *      - BearerAuth:
+   *          type: http
+   *          scheme: bearer
+   *          bearerFormat: JWT
    *    responses:
    *      '200':
    *        description: 'List of tenants'
@@ -158,51 +168,52 @@ export const routes = (app: Application) => {
     authMiddleware,
     asyncHandler(async (_req: Request, res: Response) => res.json(await getTenants()))
   ),
-
-  /**
-   * @swagger
-   * /tenants/{id}:
-   *  get:
-   *    summary: Gets a tenant by id
-   *    description: Retrieves a tenant by its id
-   *    security:
-   *      type: http
-   *      scheme: bearer
-   *      bearerFormat: JWT
-   *    parameters:
-   *      - in: header
-   *        name: authorization
-   *        schema:
-   *          type: string
-   *        required: true
-   *      - in: path
-   *        name: id
-   *        type: string
-   *        required: true
-   *        description: tenant id
-   *    responses:
-   *      '200':
-   *        description: 'Returns the tenant with the specified id'
-   *        content:
-   *          application/json:
-   *            schema:
-   *              $ref: '#/definitions/Tenant'
-   *      '401':
-   *        description: 'Unauthorized'
-   *      '404':
-   *        description: 'No tenant with the specified id exists'
-   */
-  app.get(
-    '/tenants/:id',
-    authMiddleware,
-    asyncHandler(async (_req: Request, res: Response) =>
-      res.json(await getTenant(_req.params.id))
+    /**
+     * @swagger
+     * /tenants/{id}:
+     *  get:
+     *    summary: Gets a tenant by id
+     *    tags: [Tenants]
+     *    description: Retrieves a tenant by its id
+     *    security:
+     *      - BearerAuth:
+     *          type: http
+     *          scheme: bearer
+     *          bearerFormat: JWT
+     *    parameters:
+     *      - in: header
+     *        name: authorization
+     *        schema:
+     *          type: string
+     *        required: true
+     *      - in: path
+     *        name: id
+     *        type: string
+     *        required: true
+     *        description: tenant id
+     *    responses:
+     *      '200':
+     *        description: 'Returns the tenant with the specified id'
+     *        content:
+     *          application/json:
+     *            schema:
+     *              $ref: '#/definitions/Tenant'
+     *      '401':
+     *        description: 'Unauthorized'
+     *      '404':
+     *        description: 'No tenant with the specified id exists'
+     */
+    app.get(
+      '/tenants/:id',
+      authMiddleware,
+      asyncHandler(async (_req: Request, res: Response) =>
+        res.json(await getTenant(_req.params.id))
+      )
     )
-  )
 }
 
 export default {
   getTenants,
   getTenant,
-  transformTenant
+  transformTenant,
 }

@@ -112,9 +112,16 @@ const getRental = async (id: string): Promise<Rental> => {
 export const routes = (app: Application) => {
   /**
    * @swagger
+   * tags:
+   *   name: Rentals
+   */
+
+  /**
+   * @swagger
    * /rentals:
    *  get:
    *    summary: Gets all rental units
+   *    tags: [Rentals]
    *    description: Retrieves all rental units in the system. There is currently no way of filtering or doing API-side searches.
    *    parameters:
    *      - in: header
@@ -123,9 +130,10 @@ export const routes = (app: Application) => {
    *          type: string
    *        required: true
    *    security:
-   *      type: http
-   *      scheme: bearer
-   *      bearerFormat: JWT
+   *      - BearerAuth:
+   *          type: http
+   *          scheme: bearer
+   *          bearerFormat: JWT
    *    responses:
    *      '200':
    *        description: 'List of rental units'
@@ -134,7 +142,7 @@ export const routes = (app: Application) => {
    *            schema:
    *                type: array
    *                items:
-   *                  $ref: '#/contents/schemas/Rental'
+   *                  $ref: '#/components/schemas/Rental'
    *      '401':
    *        description: 'Unauthorized'
    */
@@ -149,11 +157,13 @@ export const routes = (app: Application) => {
    * /rentals/{id}:
    *  get:
    *    summary: Gets a rental unit by id
+   *    tags: [Rentals]
    *    description: Retrieves a rental unit by its id
    *    security:
-   *      type: http
-   *      scheme: bearer
-   *      bearerFormat: JWT
+   *      - BearerAuth:
+   *          type: http
+   *          scheme: bearer
+   *          bearerFormat: JWT
    *    parameters:
    *      - in: header
    *        name: authorization
@@ -171,7 +181,7 @@ export const routes = (app: Application) => {
    *        content:
    *          application/json:
    *            schema:
-   *              $ref: '#/contents/schemas/Rental'
+   *              $ref: '#/components/schemas/Rental'
    *      '401':
    *        description: 'Unauthorized'
    *      '404':
@@ -187,5 +197,5 @@ export const routes = (app: Application) => {
 export default {
   getRental,
   getRentals,
-  transformRental
+  transformRental,
 }

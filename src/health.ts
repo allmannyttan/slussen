@@ -1,6 +1,5 @@
 import { Application, Request, Response } from 'express'
 import { performance } from 'perf_hooks'
-import tenantService from '@app/services/tenantservice'
 import { query } from '@app/adapters/postgres'
 import { getNewAccessToken } from '@app/adapters/fastapiadapter/tokenHelper'
 
