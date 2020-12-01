@@ -41,12 +41,12 @@
     "xml2json": "0.12.0"
   },
   "devDependencies": {
-    "@types/http-errors": "^1.6.3",
-    "@types/jsonwebtoken": "^8.5.0",
     "@iteam/eslint-config-node": "0.3.0",
     "@types/cors": "2.8.6",
     "@types/express": "4.17.4",
+    "@types/http-errors": "^1.6.3",
     "@types/jest": "25.2.1",
+    "@types/jsonwebtoken": "^8.5.0",
     "@types/pg": "7.14.3",
     "@types/supertest": "^2.0.9",
     "@types/swagger-jsdoc": "^3.0.2",
@@ -62,8 +62,8 @@
     "supertest": "^4.0.2",
     "swagger-jsdoc": "^6.0.0-rc.3",
     "ts-jest": "25.3.1",
-    "ts-node": "8.8.2",
-    "ts-node-dev": "1.0.0-pre.44",
+    "ts-node": "9.0.0",
+    "ts-node-dev": "1.0.0",
     "ts-to-json": "^0.65.1",
     "tsconfig-paths": "3.9.0"
   },
