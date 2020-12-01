@@ -124,7 +124,7 @@ export const routes = (app: Application) => {
    * @swagger
    * /auth/test:
    *  post:
-   *    summary: Verifies a authorization token.
+   *    summary: Verifies an authorization token.
    *    tags: [Auth]
    *    parameters:
    *      - in: header

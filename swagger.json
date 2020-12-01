@@ -3,7 +3,7 @@
   "info": {
     "title": "Slussen",
     "version": "0.1.0",
-    "description": "**Slussen** is a simplified API gateway to [fastAPI](http://www.fastapi.se). \n\nSlussen currently supports retreiving three kinds of objects from fastAPI version 1:\n* **tentants** (fi2partners with partner class id 16)\n* **contracts** (fi2contracts)\n* **rentalobjects** (fi2spatisystems)\n\nThe object types have been renamed to make more sense for integration partners without explicit knowledge of fi2xml.\n\nSlussen uses **JSON** instead of XML. The reason for this is increased operability with different programming languages and platforms, as well as more lightweight parsing (more suitable for mobile platforms).\n\nSlussen uses a simplified filter functionality, both for limiting result sets and including related objects. Instead of the generic query style filters of fastAPI each field or included object has its own query parameter (i.e. \"includetenants=true\").\n\nSome parameters have also been set to \"should work for most\" defaults (for instance page size for queries is set to 5000 instead of 10) to make it easier to get started. These parameters should be reviewed before going to production.\n"
+    "description": "# About\n\n**Slussen** is a simplified API gateway to [fastAPI](http://www.fastapi.se).\n\nSlussen currently supports retreiving three kinds of objects from fastAPI version 1:\n\n- **tentants** (fi2partners with partner class id 16)\n- **contracts** (fi2contracts)\n- **rentalobjects** (fi2spatisystems)\n\nThe object types have been renamed to make more sense for integration partners without explicit knowledge of fi2xml.\n\nSlussen uses **JSON** instead of XML. The reason for this is increased operability with different programming languages and platforms, as well as more lightweight parsing (more suitable for mobile platforms).\n\nSlussen uses a simplified filter functionality, both for limiting result sets and including related objects. Instead of the generic query style filters of fastAPI each field or included object has its own query parameter (i.e. \"includetenants=true\").\n\nSome parameters have also been set to \"should work for most\" defaults (for instance page size for queries is set to 5000 instead of 10) to make it easier to get started. These parameters should be reviewed before going to production.\n\n## Getting started\n\nThis API uses JWT for auth. The token should be passed in `Authorization` header to protected routes.\n\nThese routes are useful:\n\n`POST /auth/generate-token` to generate a token. Post this object\n\n```\n{username: 'your username', password: 'your cleartext password'}\n```\n\n`GET /auth/refresh-token` to refresh token\n\n### User creation\n\nYou currently have to create the API users in the database by hand.\n\n`GET /auth/generate-password-hash?password=<cleartext password>` to genererate a salt and hash to write to database when creating a user\n\n### Development tools\n\n`GET /auth/test` to test if a token is valid\n\n## More info\n\nSource code for this project and more info on how to setup your own development environment can be found at https://github.com/Allmannyttans-Digitaliseringsinitiativ/slussen\n"
   },
   "basePath": "/",
   "paths": {
@@ -437,7 +437,7 @@
     },
     "/auth/test": {
       "post": {
-        "summary": "Verifies a authorization token.",
+        "summary": "Verifies an authorization token.",
         "tags": [
           "Auth"
         ],
