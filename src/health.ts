@@ -63,7 +63,7 @@ const checkDbAccess = async (): Promise<SystemHealthInfo> => {
   }
 }
 
-const checkHealth = async (): Promise<HealthResponse> => {
+export const checkHealth = async (): Promise<HealthResponse> => {
   const health: SystemHealthInfo[] = [await checkFastAPIAccess(), await checkDbAccess()]
 
   return {
