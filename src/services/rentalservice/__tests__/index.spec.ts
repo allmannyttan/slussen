@@ -18,6 +18,7 @@ jest.mock('@app/config', () => ({
   port: 0,
   fastAPI: {
     baseUrl: 'test',
+    limit: 50,
   },
   auth: {
     secret: 'a secret',
@@ -51,7 +52,7 @@ describe('#rentalsservice', () => {
       await service.getRentals()
 
       expect(client.get).toHaveBeenCalledTimes(1)
-      expect(client.get).toHaveBeenCalledWith({ url: 'fi2spatisystem/' })
+      expect(client.get).toHaveBeenCalledWith({ url: 'fi2spatisystem/?limit=50' })
     })
 
     test('returns rentals in correct format', async () => {

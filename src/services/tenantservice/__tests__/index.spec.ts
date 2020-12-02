@@ -14,6 +14,7 @@ jest.mock('@app/config', () => ({
   port: 0,
   fastAPI: {
     baseUrl: 'test',
+    limit: 50,
   },
   auth: {
     secret: 'a secret',
@@ -48,7 +49,7 @@ describe('#tenantservice', () => {
 
       expect(client.get).toHaveBeenCalledTimes(1)
       expect(client.get).toHaveBeenCalledWith({
-        url: "fi2partner?filter=fi2part_class.fi2class_code:'16'",
+        url: "fi2partner?filter=fi2part_class.fi2class_code:'16'&limit=50",
       })
     })
 
