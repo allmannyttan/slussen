@@ -26,6 +26,12 @@ describe('#getAccessTokenFromDb', () => {
     expect(accessToken).toEqual(mockedAccessToken)
   })
 
+  test('calls query with string', async () => {
+    await getAccessTokenFromDb()
+
+    expect(postgres.query).toHaveBeenCalledWith(expect.any(String))
+  })
+
   test('returns null when no accessToken', async () => {
     postgres.query.mockResolvedValueOnce([])
 
@@ -46,10 +52,24 @@ describe('#setAccessTokenInDb', () => {
     RETURNING id`)
   })
 
+  test('calls query with string', async () => {
+    await setAccessTokenInDb(mockedAccessToken)
+
+    expect(postgres.query).toHaveBeenCalledWith(expect.any(String))
+  })
+
   test('returns id', async () => {
     postgres.query.mockResolvedValueOnce([mockedReturningId])
     const id = await setAccessTokenInDb(mockedAccessToken)
 
     expect(id).toEqual(mockedReturningId)
+  })
+
+  test('returns null when no returned id', async () => {
+    postgres.query.mockResolvedValueOnce([])
+
+    const id = await setAccessTokenInDb(mockedAccessToken)
+
+    expect(id).toEqual(null)
   })
 })

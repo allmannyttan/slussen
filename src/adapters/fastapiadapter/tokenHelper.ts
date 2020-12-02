@@ -6,15 +6,19 @@ import { FastAPIRequest } from './types'
 const NO_TOKENS_IN_DB_ERROR = 'Access token missing in DB.'
 
 export const getNewAccessToken = async (): Promise<string> => {
-  const loginResult: AxiosResponse<any> = await axios.get(
-    `login?user=${fastAPI.user}&password=${fastAPI.password}`,
-    {
-      baseURL: fastAPI.baseUrl,
-    }
-  )
+  try {
+    const loginResult: AxiosResponse<any> = await axios.get(
+      `login?user=${fastAPI.user}&password=${fastAPI.password}`,
+      {
+        baseURL: fastAPI.baseUrl,
+      }
+    )
 
-  const token: string = loginResult.headers['access-token']
-  return token
+    const token: string = loginResult.headers['access-token']
+    return token
+  } catch (error) {
+    throw new Error(error)
+  }
 }
 
 const isInvalidAccessTokenError = (error: Error): boolean => {
