@@ -32,7 +32,7 @@ const config = configPackage({
   defaults: {
     port: 4000,
     fastAPI: {
-      limit: 5000
+      limit: 50,
     },
     paths: {
       classlists: `${__dirname}/fastAPIXml/classlists/`,

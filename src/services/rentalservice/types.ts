@@ -1,4 +1,12 @@
-import { Fi2Address, Address, Fi2Value, Fi2Class, Fi2ParentObject, Fi2Document, Fi2Ids } from '@app/commonTypes/types';
+import {
+  Fi2Address,
+  Address,
+  Fi2Value,
+  Fi2Class,
+  Fi2ParentObject,
+  Fi2Document,
+  Fi2Ids,
+} from '@app/commonTypes/types'
 
 export interface Rental {
   type: string
@@ -45,13 +53,13 @@ export interface Fi2AreaStatus {
 
 export interface Fi2Area {
   fi2area_code: string
-  fi2area_value: { $t: string, unit: string }
+  fi2area_value: { $t: string; unit: string }
   fi2area_status: Fi2AreaStatus
   fi2area_measuredby: string
   fi2area_measureddate: string
   fi2area_measuredtype: string
   fi2area_derivedfrom: string
-  fi2area_perimeter: { $t: string, unit: string }
+  fi2area_perimeter: { $t: string; unit: string }
 }
 
 export interface Fi2SpatiSystem {
@@ -70,11 +78,11 @@ export interface Fi2SpatiSystem {
 }
 
 export interface Fi2SpatiSystemsResponse {
-  fi2simplemessage: {
-    fi2spatisystem: Fi2SpatiSystem[]
+  fi2simplemessage?: {
+    fi2spatisystem: Fi2SpatiSystem | Fi2SpatiSystem[]
   }
 }
-  
+
 export interface Fi2SpatiSystemResponse {
   fi2spatisystem: Fi2SpatiSystem
 }

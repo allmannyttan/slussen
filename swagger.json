@@ -22,6 +22,22 @@
               "type": "string"
             },
             "required": true
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The number of items to skip before starting to collect the result set"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The number of items to return"
           }
         ],
         "security": [
@@ -136,6 +152,22 @@
             "default": false
           },
           {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The number of items to skip before starting to collect the result set"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The number of items to return"
+          },
+          {
             "in": "header",
             "name": "authorization",
             "schema": {
@@ -233,6 +265,22 @@
               "type": "string"
             },
             "required": true
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The number of items to skip before starting to collect the result set"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "The number of items to return"
           }
         ],
         "security": [

@@ -38,7 +38,7 @@ export interface Tenant {
 /********** Fi2XML types **********/
 export interface Fi2PartnersResponse {
   fi2simplemessage: {
-    fi2partner: Fi2Partner[]
+    fi2partner: Fi2Partner | Fi2Partner[]
   }
 }
 

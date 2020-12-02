@@ -16,6 +16,7 @@ import {
   Fi2PartnerResponse,
 } from './types'
 import { authMiddleware } from '@app/middleware/auth'
+import { fastAPI } from '@app/config'
 
 const getSocialSecurityNumber = (ids: Fi2Ids): string => {
   const ssnNode = ids.fi2_id.filter((id: Fi2ValueUsage) => id.usage === 'Ssn')
@@ -109,15 +110,22 @@ const transformTenants = (fi2Tenants: Fi2Partner[]): Tenant[] => {
   return fi2Tenants.map(transformTenant)
 }
 
-const getTenants = async (): Promise<Tenant[]> => {
+const getTenants = async (limit?: number, offset?: number): Promise<Tenant[]> => {
   const result: Fi2PartnersResponse = await client.get({
-    url: "fi2partner?filter=fi2part_class.fi2class_code:'16'",
+    url: `fi2partner?filter=fi2part_class.fi2class_code:'16'&limit=${limit ?? fastAPI.limit}${
+      offset !== undefined ? `&offset=${offset}` : ''
+    }`,
   })
-  if (result.fi2simplemessage && result.fi2simplemessage.fi2partner) {
-    return transformTenants(result.fi2simplemessage.fi2partner)
-  } else {
+
+  if (!result.fi2simplemessage?.fi2partner) {
     return []
   }
+
+  if ('id' in result.fi2simplemessage.fi2partner) {
+    return transformTenants([result.fi2simplemessage.fi2partner])
+  }
+
+  return transformTenants(result.fi2simplemessage.fi2partner)
 }
 
 const getTenant = async (id: string): Promise<Tenant> => {
@@ -146,6 +154,16 @@ export const routes = (app: Application) => {
    *        schema:
    *          type: string
    *        required: true
+   *      - in: query
+   *        name: offset
+   *        schema:
+   *          type: integer
+   *        description: The number of items to skip before starting to collect the result set
+   *      - in: query
+   *        name: limit
+   *        schema:
+   *          type: integer
+   *        description: The number of items to return
    *    security:
    *      - BearerAuth:
    *          type: http
@@ -166,7 +184,14 @@ export const routes = (app: Application) => {
   app.get(
     '/tenants',
     authMiddleware,
-    asyncHandler(async (_req: Request, res: Response) => res.json(await getTenants()))
+    asyncHandler(async (req: Request, res: Response) =>
+      res.json(
+        await getTenants(
+          typeof req.query.limit === 'string' ? parseInt(req.query.limit) : undefined,
+          typeof req.query.offset === 'string' ? parseInt(req.query.offset) : undefined
+        )
+      )
+    )
   ),
     /**
      * @swagger

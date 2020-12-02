@@ -17,6 +17,7 @@ import {
   Fi2SpatiSystemsResponse,
 } from './types'
 import { authMiddleware } from '@app/middleware/auth'
+import { fastAPI } from '@app/config'
 
 const getPart = (parts: Fi2Value[], partName: string): string => {
   const partNode = parts.filter((part: Fi2Value) => part.fi2value_code === partName)
@@ -88,15 +89,27 @@ const transformRental = (fi2: Fi2SpatiSystem): Rental => {
 }
 
 const transformRentals = (fiSpatiSystems: Fi2SpatiSystemsResponse): Rental[] => {
-  if (fiSpatiSystems.fi2simplemessage && fiSpatiSystems.fi2simplemessage.fi2spatisystem) {
-    return fiSpatiSystems.fi2simplemessage.fi2spatisystem.map(transformRental)
-  } else {
+  const rentals = fiSpatiSystems.fi2simplemessage?.fi2spatisystem
+
+  if (!rentals) {
     return []
   }
+
+  if ('id' in rentals) {
+    return [transformRental(rentals)]
+  }
+
+  return rentals.map(transformRental)
 }
 
-const getRentals = async (): Promise<Rental[]> => {
-  const fi2SpatiSystems: Fi2SpatiSystemsResponse = await client.get({ url: `fi2spatisystem/` })
+const getRentals = async (limit?: number, offset?: number): Promise<Rental[]> => {
+  const filters = `?limit=${limit ?? fastAPI.limit}${
+    offset !== undefined ? `&offset=${offset}` : ''
+  }`
+
+  const fi2SpatiSystems: Fi2SpatiSystemsResponse = await client.get({
+    url: `fi2spatisystem/${filters}`,
+  })
   const result = transformRentals(fi2SpatiSystems)
 
   return result
@@ -129,6 +142,16 @@ export const routes = (app: Application) => {
    *        schema:
    *          type: string
    *        required: true
+   *      - in: query
+   *        name: offset
+   *        schema:
+   *          type: integer
+   *        description: The number of items to skip before starting to collect the result set
+   *      - in: query
+   *        name: limit
+   *        schema:
+   *          type: integer
+   *        description: The number of items to return
    *    security:
    *      - BearerAuth:
    *          type: http
@@ -149,7 +172,14 @@ export const routes = (app: Application) => {
   app.get(
     '/rentals',
     authMiddleware,
-    asyncHandler(async (_req: Request, res: Response) => res.json(await getRentals()))
+    asyncHandler(async (req: Request, res: Response) =>
+      res.json(
+        await getRentals(
+          typeof req.query.limit === 'string' ? parseInt(req.query.limit) : undefined,
+          typeof req.query.offset === 'string' ? parseInt(req.query.offset) : undefined
+        )
+      )
+    )
   )
 
   /**

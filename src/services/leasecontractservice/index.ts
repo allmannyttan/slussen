@@ -121,8 +121,11 @@ const transformContract = (fi2: Fi2LeaseContract): Contract => {
 }
 
 const transformContracts = (fi2Contracts: Fi2LeaseContractsResponse): Contract[] => {
-  if (fi2Contracts.fi2simplemessage && fi2Contracts.fi2simplemessage.fi2leasecontract) {
-    const contracts = fi2Contracts.fi2simplemessage.fi2leasecontract.map(transformContract)
+  if (fi2Contracts.fi2simplemessage?.fi2leasecontract) {
+    const contracts =
+      'id' in fi2Contracts.fi2simplemessage.fi2leasecontract
+        ? [transformContract(fi2Contracts.fi2simplemessage.fi2leasecontract)]
+        : fi2Contracts.fi2simplemessage.fi2leasecontract.map(transformContract)
 
     // If there are partners in the result, implant them as tenants in the right contracts
     if (fi2Contracts.fi2simplemessage.fi2partner) {
@@ -169,13 +172,19 @@ const createQueryString = (
   rentalid?: string,
   includeExpired?: boolean,
   includeTenants?: boolean,
-  includeRentals?: boolean
+  includeRentals?: boolean,
+  limit?: number,
+  offset?: number
 ): string => {
   const filter = []
   const include = []
   const querystring = []
 
-  querystring.push(`limit=${fastAPI.limit}`)
+  querystring.push(`limit=${limit ?? fastAPI.limit}`)
+
+  if (offset !== undefined) {
+    querystring.push(`offset=${offset}`)
+  }
 
   if (rentalid) {
     filter.push(`fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'${rentalid}'`)
@@ -213,9 +222,19 @@ const getLeaseContracts = async (
   rentalId?: string,
   includeExpired?: boolean,
   includeTentants?: boolean,
-  includeRentals?: boolean
+  includeRentals?: boolean,
+  limit?: number,
+  offset?: number
 ): Promise<Contract[]> => {
-  const querystring = createQueryString(rentalId, includeExpired, includeTentants, includeRentals)
+  const querystring = createQueryString(
+    rentalId,
+    includeExpired,
+    includeTentants,
+    includeRentals,
+    limit,
+    offset
+  )
+
   const contracts: Fi2LeaseContractsResponse = await client.get({
     url: `fi2leasecontract/${querystring}`,
   })
@@ -260,6 +279,16 @@ export const routes = (app: Application) => {
    *        required: false
    *        description: "If true, the full tenant (partner) objects are included as subobjects in each contract"
    *        default: false
+   *      - in: query
+   *        name: offset
+   *        schema:
+   *          type: integer
+   *        description: The number of items to skip before starting to collect the result set
+   *      - in: query
+   *        name: limit
+   *        schema:
+   *          type: integer
+   *        description: The number of items to return
    *      - in: header
    *        name: authorization
    *        schema:
@@ -288,7 +317,9 @@ export const routes = (app: Application) => {
           _req.query.rentalid as string,
           /true/i.test(_req.query.includeexpired as string),
           /true/i.test(_req.query.includetenants as string),
-          /true/i.test(_req.query.includerentals as string)
+          /true/i.test(_req.query.includerentals as string),
+          typeof _req.query.limit === 'string' ? parseInt(_req.query.limit) : undefined,
+          typeof _req.query.offset === 'string' ? parseInt(_req.query.offset) : undefined
         )
       )
     )
