@@ -1,4 +1,4 @@
-import { Application } from 'express'
+import { Application, static as ExpressStatic } from 'express'
 
 import { routes as authRoutes } from './services/authservice'
 import { routes as tenantRoutes } from './services/tenantservice'
@@ -10,6 +10,7 @@ import documentation from './documentation'
 export { authRoutes, tenantRoutes, leaseContactRoutes, rentalRoutes, healthRoutes }
 
 export default (app: Application) => {
+  app.use(ExpressStatic('public'))
   app.get('/', (_req, res) => res.redirect('/api-docs'))
   app.get('/docs/swagger.json', (_, res) => {
     res.sendFile('swagger.json', { root: '.' })

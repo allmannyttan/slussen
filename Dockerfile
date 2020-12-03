@@ -15,6 +15,7 @@ COPY @types /app/@types
 COPY tsconfig.json /app/
 COPY swagger.json /app/
 COPY src /app/src
+COPY public /app/public
 COPY migrations /app/migrations
 
 WORKDIR /app

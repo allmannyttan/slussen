@@ -9,7 +9,7 @@ export default `<!DOCTYPE html>
       href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700"
       rel="stylesheet"
     />
-
+    <link rel="shortcut icon" href="/favicon.ico">
     <style>
       body {
         margin: 0;
