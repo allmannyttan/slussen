@@ -11,6 +11,7 @@ RUN apk --no-cache --virtual build-dependencies add \
 
 COPY package.json /app/
 COPY package-lock.json /app/
+COPY @types /app/@types
 COPY tsconfig.json /app/
 COPY swagger.json /app/
 COPY src /app/src
