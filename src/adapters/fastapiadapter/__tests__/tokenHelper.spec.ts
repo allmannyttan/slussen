@@ -1,7 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
 import { fastAPI } from '../../../config'
 import databaseHelper from '../databaseHelper'
-import { FastAPIRequest } from './types'
 import { getNewAccessToken, tokenRefresher } from '../tokenHelper'
 
 jest.mock('axios', () => ({
@@ -20,7 +19,7 @@ const accessTokenInDb = 'accessTokenInDb'
 
 jest.mock('xml2json')
 
-jest.mock('../dataBaseHelper', () => ({
+jest.mock('../databaseHelper', () => ({
   getAccessTokenFromDb: jest.fn().mockResolvedValue('accessTokenInDb'),
   setAccessTokenInDb: jest.fn().mockResolvedValue(7),
 }))
