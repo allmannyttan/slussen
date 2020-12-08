@@ -3,7 +3,7 @@ const { compilerOptions } = require('./tsconfig')
 
 module.exports = {
   collectCoverageFrom: ['**/*.ts', '!**/node_modules/**'],
-  coveragePathIgnorePatterns: ['<rootDir>/dist/', '/node_modules/'],
+  coveragePathIgnorePatterns: ['<rootDir>/dist/', '/node_modules/', '/@types/'],
   globals: {
     'ts-jest': {
       diagnostics: false,
@@ -15,9 +15,5 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   testMatch: ['**/__tests__/**/*.ts', '**/?(*.)+(spec|test).ts'],
-  watchPlugins: [
-    'jest-watch-typeahead/filename',
-    'jest-watch-typeahead/testname',
-  ],
+  watchPlugins: ['jest-watch-typeahead/filename', 'jest-watch-typeahead/testname'],
 }
-

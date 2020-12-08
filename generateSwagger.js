@@ -27,7 +27,10 @@ const options = {
     info: {
       title: 'Slussen', // Title (required)
       version: '0.1.0', // Version (required)
-      description: description
+      description: description,
+      'x-logo': {
+        url: '/logo.jpg',
+      },
     },
     basePath: '/', // Base path (optional)
   },
@@ -60,8 +63,8 @@ specs.components.securitySchemes = {
   bearerAuth: {
     type: 'http',
     scheme: 'bearer',
-    bearerFormat: 'JWT'
-  }
+    bearerFormat: 'JWT',
+  },
 }
 
 let specJson = JSON.stringify(specs, null, 2)

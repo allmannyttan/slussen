@@ -7,9 +7,16 @@ import { authMiddleware } from '@app/middleware/auth'
 export const routes = (app: Application) => {
   /**
    * @swagger
+   * tags:
+   *   name: Auth
+   */
+
+  /**
+   * @swagger
    * /auth/generate-password-hash:
    *  get:
    *    summary: Generates a salt and hashes the given password using that salt.
+   *    tags: [Auth]
    *    description: Generates a salt and hashes the given password using that salt. Pass cleartext password as query parameter.
    *    parameters:
    *      - in: query
@@ -41,6 +48,7 @@ export const routes = (app: Application) => {
    * /auth/generate-token:
    *  post:
    *    summary: Generates a jwt
+   *    tags: [Auth]
    *    description: Validates username + password and returns a valid token to be used in authorization header.
    *    requestBody:
    *      required: true
@@ -76,6 +84,7 @@ export const routes = (app: Application) => {
    * /auth/refresh-token:
    *  get:
    *    summary: Renews a jwt token
+   *    tags: [Auth]
    *    description: Validates username + password and returns a valid token to be used in authorization header.
    *    parameters:
    *      - in: header
@@ -84,17 +93,18 @@ export const routes = (app: Application) => {
    *          type: string
    *        required: true
    *    security:
-   *      type: http
-   *      scheme: bearer
-   *      bearerFormat: JWT
+   *      - BearerAuth:
+   *          type: http
+   *          scheme: bearer
+   *          bearerFormat: JWT
    *    responses:
    *      '200':
    *        description: 'A valid token'
    *        schema:
-   *            type: object
-   *            properties:
-   *              token:
-   *                type: string
+   *          type: object
+   *          properties:
+   *            token:
+   *              type: string
    *      '401':
    *        description: 'Unauthorized'
    */
@@ -114,7 +124,8 @@ export const routes = (app: Application) => {
    * @swagger
    * /auth/test:
    *  post:
-   *    summary: Verifies a authorization token.
+   *    summary: Verifies an authorization token.
+   *    tags: [Auth]
    *    parameters:
    *      - in: header
    *        name: authorization
@@ -122,9 +133,10 @@ export const routes = (app: Application) => {
    *          type: string
    *        required: true
    *    security:
-   *      type: http
-   *      scheme: bearer
-   *      bearerFormat: JWT
+   *      - BearerAuth:
+   *          type: http
+   *          scheme: bearer
+   *          bearerFormat: JWT
    *    responses:
    *      '200':
    *        description: 'Result of the validation.'

@@ -4,10 +4,15 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": ".",
     "paths": {
-      "@app/*": ["src/*"]
+      "@app/*": [
+        "src/*"
+      ]
     },
     "esModuleInterop": true,
-    "lib": ["esnext", "dom"],
+    "lib": [
+      "esnext",
+      "dom"
+    ],
     "module": "commonjs",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
@@ -18,7 +23,13 @@
     "outDir": "dist/lib",
     "sourceMap": true,
     "target": "esnext",
+    "typeRoots": [
+      "@types",
+      "node_modules/@types"
+    ],
     "strict": true
   },
-  "exclude": ["**/__tests__"]
+  "exclude": [
+    "**/__tests__"
+  ]
 }

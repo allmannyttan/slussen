@@ -1,5 +1,5 @@
 
-FROM node:13.2.0-alpine
+FROM node:14.15.1-alpine
 
 # Fixes for Python missing for node-gyp
 # --no-cache: download package index on-the-fly, no need to cleanup afterwards
@@ -11,9 +11,11 @@ RUN apk --no-cache --virtual build-dependencies add \
 
 COPY package.json /app/
 COPY package-lock.json /app/
+COPY @types /app/@types
 COPY tsconfig.json /app/
 COPY swagger.json /app/
 COPY src /app/src
+COPY public /app/public
 COPY migrations /app/migrations
 
 WORKDIR /app

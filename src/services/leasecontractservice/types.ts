@@ -1,6 +1,13 @@
-import { Fi2Value, Fi2Class, Fi2ParentObject, Fi2Document, Fi2Ids, Fi2Partner } from '@app/commonTypes/types';
+import {
+  Fi2Value,
+  Fi2Class,
+  Fi2ParentObject,
+  Fi2Document,
+  Fi2Ids,
+  Fi2Partner,
+} from '@app/commonTypes/types'
 import { Tenant } from '@app/services/tenantservice/types'
-import { Rental, Fi2SpatiSystem } from '@app/services/rentalservice/types';
+import { Rental, Fi2SpatiSystem } from '@app/services/rentalservice/types'
 
 export interface Contract {
   id: string
@@ -95,8 +102,8 @@ export interface Fi2LeaseContract {
 }
 
 export interface Fi2LeaseContractsResponse {
-  fi2simplemessage: {
-    fi2leasecontract: Fi2LeaseContract[]
+  fi2simplemessage?: {
+    fi2leasecontract: Fi2LeaseContract | Fi2LeaseContract[]
     fi2partner: Fi2Partner[]
     fi2spatisystem: Fi2SpatiSystem[]
   }

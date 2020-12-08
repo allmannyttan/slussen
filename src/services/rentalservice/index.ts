@@ -17,6 +17,7 @@ import {
   Fi2SpatiSystemsResponse,
 } from './types'
 import { authMiddleware } from '@app/middleware/auth'
+import { fastAPI } from '@app/config'
 
 const getPart = (parts: Fi2Value[], partName: string): string => {
   const partNode = parts.filter((part: Fi2Value) => part.fi2value_code === partName)
@@ -88,16 +89,28 @@ const transformRental = (fi2: Fi2SpatiSystem): Rental => {
 }
 
 const transformRentals = (fiSpatiSystems: Fi2SpatiSystemsResponse): Rental[] => {
-  if (fiSpatiSystems.fi2simplemessage && fiSpatiSystems.fi2simplemessage.fi2spatisystem) {
-    return fiSpatiSystems.fi2simplemessage.fi2spatisystem.map(transformRental)
-  } else {
+  const rentals = fiSpatiSystems.fi2simplemessage?.fi2spatisystem
+
+  if (!rentals) {
     return []
   }
+
+  if ('id' in rentals) {
+    return [transformRental(rentals)]
+  }
+
+  return rentals.map(transformRental)
 }
 
-const getRentals = async (): Promise<Rental[]> => {
+const getRentals = async (limit?: number, offset?: number): Promise<Rental[]> => {
   try {
-    const fi2SpatiSystems: Fi2SpatiSystemsResponse = await client.get({ url: `fi2spatisystem/` })
+    const filters = `?limit=${limit ?? fastAPI.limit}${
+      offset !== undefined ? `&offset=${offset}` : ''
+    }`
+
+    const fi2SpatiSystems: Fi2SpatiSystemsResponse = await client.get({
+      url: `fi2spatisystem/${filters}`,
+    })
     const result = transformRentals(fi2SpatiSystems)
 
     return result
@@ -120,9 +133,16 @@ const getRental = async (id: string): Promise<Rental> => {
 export const routes = (app: Application) => {
   /**
    * @swagger
+   * tags:
+   *   name: Rentals
+   */
+
+  /**
+   * @swagger
    * /rentals:
    *  get:
    *    summary: Gets all rental units
+   *    tags: [Rentals]
    *    description: Retrieves all rental units in the system. There is currently no way of filtering or doing API-side searches.
    *    parameters:
    *      - in: header
@@ -130,10 +150,21 @@ export const routes = (app: Application) => {
    *        schema:
    *          type: string
    *        required: true
+   *      - in: query
+   *        name: offset
+   *        schema:
+   *          type: integer
+   *        description: The number of items to skip before starting to collect the result set
+   *      - in: query
+   *        name: limit
+   *        schema:
+   *          type: integer
+   *        description: The number of items to return
    *    security:
-   *      type: http
-   *      scheme: bearer
-   *      bearerFormat: JWT
+   *      - BearerAuth:
+   *          type: http
+   *          scheme: bearer
+   *          bearerFormat: JWT
    *    responses:
    *      '200':
    *        description: 'List of rental units'
@@ -142,14 +173,21 @@ export const routes = (app: Application) => {
    *            schema:
    *                type: array
    *                items:
-   *                  $ref: '#/contents/schemas/Rental'
+   *                  $ref: '#/components/schemas/Rental'
    *      '401':
    *        description: 'Unauthorized'
    */
   app.get(
     '/rentals',
     authMiddleware,
-    asyncHandler(async (_req: Request, res: Response) => res.json(await getRentals()))
+    asyncHandler(async (req: Request, res: Response) =>
+      res.json(
+        await getRentals(
+          typeof req.query.limit === 'string' ? parseInt(req.query.limit) : undefined,
+          typeof req.query.offset === 'string' ? parseInt(req.query.offset) : undefined
+        )
+      )
+    )
   )
 
   /**
@@ -157,11 +195,13 @@ export const routes = (app: Application) => {
    * /rentals/{id}:
    *  get:
    *    summary: Gets a rental unit by id
+   *    tags: [Rentals]
    *    description: Retrieves a rental unit by its id
    *    security:
-   *      type: http
-   *      scheme: bearer
-   *      bearerFormat: JWT
+   *      - BearerAuth:
+   *          type: http
+   *          scheme: bearer
+   *          bearerFormat: JWT
    *    parameters:
    *      - in: header
    *        name: authorization
@@ -179,7 +219,7 @@ export const routes = (app: Application) => {
    *        content:
    *          application/json:
    *            schema:
-   *              $ref: '#/contents/schemas/Rental'
+   *              $ref: '#/components/schemas/Rental'
    *      '401':
    *        description: 'Unauthorized'
    *      '404':

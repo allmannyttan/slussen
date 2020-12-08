@@ -1,6 +1,5 @@
 import { Application, Request, Response } from 'express'
 import { performance } from 'perf_hooks'
-import tenantService from '@app/services/tenantservice'
 import { query } from '@app/adapters/postgres'
 import { getNewAccessToken } from '@app/adapters/fastapiadapter/tokenHelper'
 
@@ -44,7 +43,6 @@ const checkDbAccess = async (): Promise<SystemHealthInfo> => {
     const start = performance.now()
     const [{ now }] = await query<{ now: Date }>('SELECT NOW();')
     const end = performance.now()
-
     const access = now && now instanceof Date
     const responseTime = end - start
 
