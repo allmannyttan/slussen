@@ -18,7 +18,7 @@ jest.mock('@app/config', () => ({
   port: 0,
   fastAPI: {
     baseUrl: 'test',
-    limit: 1234
+    limit: 1234,
   },
   auth: {
     secret: 'a secret',
@@ -52,7 +52,11 @@ describe('#leasecontractservice', () => {
       await service.getLeaseContracts()
 
       expect(client.get).toHaveBeenCalledTimes(1)
-      expect(client.get).toHaveBeenCalledWith({ url: `fi2leasecontract/?limit=1234&filter=fi2lease_currenddate>'${moment().format('YYYY-MM-DD')}'` })
+      expect(client.get).toHaveBeenCalledWith({
+        url: `fi2leasecontract/?limit=1234&filter=fi2lease_currenddate>'${moment().format(
+          'YYYY-MM-DD'
+        )}'`,
+      })
     })
 
     test('returns contracts in correct format', async () => {
@@ -207,6 +211,17 @@ describe('#leasecontractservice', () => {
         ]
       `)
     })
+
+    test('throws error if client rejects', async () => {
+      ;(client.get as jest.Mock).mockRejectedValueOnce('error')
+
+      try {
+        await service.getLeaseContracts()
+      } catch (err) {
+        console.log(err)
+        expect(err).toEqual(new Error('error'))
+      }
+    })
   })
 
   describe('#getLeaseContract', () => {
@@ -275,7 +290,11 @@ describe('#leasecontractservice', () => {
       await service.getLeaseContracts('foo')
 
       expect(client.get).toHaveBeenCalledTimes(1)
-      expect(client.get).toHaveBeenCalledWith({ url: `fi2leasecontract/?limit=1234&filter=fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'foo';fi2lease_currenddate>'${moment().format('YYYY-MM-DD')}'` })
+      expect(client.get).toHaveBeenCalledWith({
+        url: `fi2leasecontract/?limit=1234&filter=fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'foo';fi2lease_currenddate>'${moment().format(
+          'YYYY-MM-DD'
+        )}'`,
+      })
     })
 
     test('creates appropriate querystring for includeexpired', async () => {
@@ -293,7 +312,11 @@ describe('#leasecontractservice', () => {
       await service.getLeaseContracts(null, false, true)
 
       expect(client.get).toHaveBeenCalledTimes(1)
-      expect(client.get).toHaveBeenCalledWith({ url: `fi2leasecontract/?limit=1234&include=fi2partner&filter=fi2lease_currenddate>'${moment().format('YYYY-MM-DD')}'` })
+      expect(client.get).toHaveBeenCalledWith({
+        url: `fi2leasecontract/?limit=1234&include=fi2partner&filter=fi2lease_currenddate>'${moment().format(
+          'YYYY-MM-DD'
+        )}'`,
+      })
     })
 
     test('creates appropriate querystring for includerentals', async () => {
@@ -302,7 +325,11 @@ describe('#leasecontractservice', () => {
       await service.getLeaseContracts(null, false, false, true)
 
       expect(client.get).toHaveBeenCalledTimes(1)
-      expect(client.get).toHaveBeenCalledWith({ url: `fi2leasecontract/?limit=1234&include=fi2spatisystem&filter=fi2lease_currenddate>'${moment().format('YYYY-MM-DD')}'` })
+      expect(client.get).toHaveBeenCalledWith({
+        url: `fi2leasecontract/?limit=1234&include=fi2spatisystem&filter=fi2lease_currenddate>'${moment().format(
+          'YYYY-MM-DD'
+        )}'`,
+      })
     })
 
     test('creates appropriate querystring for all parameters', async () => {
@@ -311,7 +338,9 @@ describe('#leasecontractservice', () => {
       await service.getLeaseContracts('foo', true, true, true)
 
       expect(client.get).toHaveBeenCalledTimes(1)
-      expect(client.get).toHaveBeenCalledWith({ url: `fi2leasecontract/?limit=1234&include=fi2partner,fi2spatisystem&filter=fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'foo'` })
+      expect(client.get).toHaveBeenCalledWith({
+        url: `fi2leasecontract/?limit=1234&include=fi2partner,fi2spatisystem&filter=fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'foo'`,
+      })
     })
 
     test('handles documents correctly', async () => {
@@ -329,6 +358,17 @@ describe('#leasecontractservice', () => {
           "link": "http://www.fastapi.se/apidocprop/v1/Documents/example.txt",
         }
       `)
+    })
+
+    test('throws error if client rejects', async () => {
+      ;(client.get as jest.Mock).mockRejectedValueOnce('error')
+
+      try {
+        await service.getLeaseContract('123')
+      } catch (err) {
+        console.log(err)
+        expect(err).toEqual(new Error('error'))
+      }
     })
   })
 
