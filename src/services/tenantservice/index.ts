@@ -206,13 +206,6 @@ export const routes = (app: Application) => {
      * /tenants/{id}:
      *  get:
      *    summary: Gets a tenant by id
-<<<<<<< HEAD
-     *    description: Retrieves a tenant by its id
-     *    security:
-     *      type: http
-     *      scheme: bearer
-     *      bearerFormat: JWT
-=======
      *    tags: [Tenants]
      *    description: Retrieves a tenant by its id
      *    security:
@@ -220,7 +213,6 @@ export const routes = (app: Application) => {
      *          type: http
      *          scheme: bearer
      *          bearerFormat: JWT
->>>>>>> @{-1}
      *    parameters:
      *      - in: header
      *        name: authorization
