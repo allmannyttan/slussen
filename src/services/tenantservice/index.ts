@@ -111,27 +111,35 @@ const transformTenants = (fi2Tenants: Fi2Partner[]): Tenant[] => {
 }
 
 const getTenants = async (limit?: number, offset?: number): Promise<Tenant[]> => {
-  const result: Fi2PartnersResponse = await client.get({
-    url: `fi2partner?filter=fi2part_class.fi2class_code:'16'&limit=${limit ?? fastAPI.limit}${
-      offset !== undefined ? `&offset=${offset}` : ''
-    }`,
-  })
+  try {
+    const result: Fi2PartnersResponse = await client.get({
+      url: `fi2partner?filter=fi2part_class.fi2class_code:'16'&limit=${limit ?? fastAPI.limit}${
+        offset !== undefined ? `&offset=${offset}` : ''
+      }`,
+    })
 
-  if (!result.fi2simplemessage?.fi2partner) {
-    return []
+    if (!result.fi2simplemessage?.fi2partner) {
+      return []
+    }
+
+    if ('id' in result.fi2simplemessage.fi2partner) {
+      return transformTenants([result.fi2simplemessage.fi2partner])
+    }
+
+    return transformTenants(result.fi2simplemessage.fi2partner)
+  } catch (err) {
+    throw new Error(err)
   }
-
-  if ('id' in result.fi2simplemessage.fi2partner) {
-    return transformTenants([result.fi2simplemessage.fi2partner])
-  }
-
-  return transformTenants(result.fi2simplemessage.fi2partner)
 }
 
 const getTenant = async (id: string): Promise<Tenant> => {
-  const tenant: Fi2PartnerResponse = await client.get({ url: `fi2partner/${id}` })
-  const result = transformTenant(tenant.fi2partner)
-  return result
+  try {
+    const tenant: Fi2PartnerResponse = await client.get({ url: `fi2partner/${id}` })
+    const result = transformTenant(tenant.fi2partner)
+    return result
+  } catch (err) {
+    throw new Error(err)
+  }
 }
 
 export const routes = (app: Application) => {

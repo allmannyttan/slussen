@@ -168,6 +168,17 @@ describe('#tenantservice', () => {
         ]
       `)
     })
+
+    test('throws error if client rejects', async () => {
+      ;(client.get as jest.Mock).mockRejectedValueOnce('error')
+
+      try {
+        await service.getTenants()
+      } catch (err) {
+        console.log(err)
+        expect(err).toEqual(new Error('error'))
+      }
+    })
   })
 
   describe('#getTenant', () => {
@@ -292,6 +303,17 @@ describe('#tenantservice', () => {
           "socialSecurityNumber": "811010-1010",
         }
       `)
+    })
+
+    test('throws error if client rejects', async () => {
+      ;(client.get as jest.Mock).mockRejectedValueOnce('error')
+
+      try {
+        await service.getTenant('123')
+      } catch (err) {
+        console.log(err)
+        expect(err).toEqual(new Error('error'))
+      }
     })
   })
 

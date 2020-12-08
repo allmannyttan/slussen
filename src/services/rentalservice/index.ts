@@ -103,23 +103,31 @@ const transformRentals = (fiSpatiSystems: Fi2SpatiSystemsResponse): Rental[] => 
 }
 
 const getRentals = async (limit?: number, offset?: number): Promise<Rental[]> => {
-  const filters = `?limit=${limit ?? fastAPI.limit}${
-    offset !== undefined ? `&offset=${offset}` : ''
-  }`
+  try {
+    const filters = `?limit=${limit ?? fastAPI.limit}${
+      offset !== undefined ? `&offset=${offset}` : ''
+    }`
 
-  const fi2SpatiSystems: Fi2SpatiSystemsResponse = await client.get({
-    url: `fi2spatisystem/${filters}`,
-  })
-  const result = transformRentals(fi2SpatiSystems)
+    const fi2SpatiSystems: Fi2SpatiSystemsResponse = await client.get({
+      url: `fi2spatisystem/${filters}`,
+    })
+    const result = transformRentals(fi2SpatiSystems)
 
-  return result
+    return result
+  } catch (err) {
+    throw new Error(err)
+  }
 }
 
 const getRental = async (id: string): Promise<Rental> => {
-  const rental: Fi2SpatiSystemResponse = await client.get({ url: `fi2spatisystem/${id}` })
-  const result = transformRental(rental.fi2spatisystem)
+  try {
+    const rental: Fi2SpatiSystemResponse = await client.get({ url: `fi2spatisystem/${id}` })
+    const result = transformRental(rental.fi2spatisystem)
 
-  return result
+    return result
+  } catch (err) {
+    throw new Error(err)
+  }
 }
 
 export const routes = (app: Application) => {

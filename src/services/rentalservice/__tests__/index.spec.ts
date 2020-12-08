@@ -450,6 +450,17 @@ describe('#rentalsservice', () => {
         ]
       `)
     })
+
+    test('throws error if client rejects', async () => {
+      ;(client.get as jest.Mock).mockRejectedValueOnce('error')
+
+      try {
+        await service.getRentals()
+      } catch (err) {
+        console.log(err)
+        expect(err).toEqual(new Error('error'))
+      }
+    })
   })
 
   describe('#getRental', () => {
@@ -581,6 +592,17 @@ describe('#rentalsservice', () => {
           "link": "http://www.fastapi.se/apidocprop/v1/Documents/example.txt",
         }
       `)
+    })
+
+    test('throws error if client rejects', async () => {
+      ;(client.get as jest.Mock).mockRejectedValueOnce('error')
+
+      try {
+        await service.getRental('123')
+      } catch (err) {
+        console.log(err)
+        expect(err).toEqual(new Error('error'))
+      }
     })
   })
 

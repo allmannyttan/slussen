@@ -226,27 +226,37 @@ const getLeaseContracts = async (
   limit?: number,
   offset?: number
 ): Promise<Contract[]> => {
-  const querystring = createQueryString(
-    rentalId,
-    includeExpired,
-    includeTentants,
-    includeRentals,
-    limit,
-    offset
-  )
+  try {
+    const querystring = createQueryString(
+      rentalId,
+      includeExpired,
+      includeTentants,
+      includeRentals,
+      limit,
+      offset
+    )
 
-  const contracts: Fi2LeaseContractsResponse = await client.get({
-    url: `fi2leasecontract/${querystring}`,
-  })
-  const result = transformContracts(contracts)
-  return result
+    const contracts: Fi2LeaseContractsResponse = await client.get({
+      url: `fi2leasecontract/${querystring}`,
+    })
+    const result = transformContracts(contracts)
+    return result
+  } catch (err) {
+    throw new Error(err)
+  }
 }
 
 const getLeaseContract = async (id: string): Promise<Contract> => {
-  const fi2Contract: Fi2LeaseContractResponse = await client.get({ url: `fi2leasecontract/${id}` })
+  try {
+    const fi2Contract: Fi2LeaseContractResponse = await client.get({
+      url: `fi2leasecontract/${id}`,
+    })
 
-  const result = transformContract(fi2Contract.fi2leasecontract)
-  return result
+    const result = transformContract(fi2Contract.fi2leasecontract)
+    return result
+  } catch (err) {
+    throw new Error(err)
+  }
 }
 
 export const routes = (app: Application) => {
