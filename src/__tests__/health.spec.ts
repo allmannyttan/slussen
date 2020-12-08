@@ -16,7 +16,7 @@ jest.mock('perf_hooks', () => ({
 }))
 
 jest.mock('../adapters/postgres', () => ({
-  query: jest.fn().mockResolvedValue([new Date()]),
+  query: jest.fn().mockResolvedValue([{ now: new Date() }]),
 }))
 
 const errorMessage = 'errorMessagex'

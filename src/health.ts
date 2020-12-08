@@ -42,7 +42,7 @@ const checkFastAPIAccess = async (): Promise<SystemHealthInfo> => {
 const checkDbAccess = async (): Promise<SystemHealthInfo> => {
   try {
     const start = performance.now()
-    const [now] = await query<Date>('SELECT NOW();')
+    const [{ now }] = await query<{ now: Date }>('SELECT NOW();')
     const end = performance.now()
 
     const access = now && now instanceof Date
