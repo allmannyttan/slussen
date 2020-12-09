@@ -134,7 +134,11 @@ const transformContracts = ({ fi2simplemessage }: Fi2LeaseContractsResponse): Co
 
   // If there are partners in the result, implant them as tenants in the right contracts
   if (fi2partner) {
-    const tenants = fi2partner.map(tenantService.transformTenant)
+    const tenants =
+      'id' in fi2partner
+        ? [tenantService.transformTenant(fi2partner)]
+        : fi2partner.map(tenantService.transformTenant)
+
     const tenantsById: { [id: string]: Tenant } = {}
 
     for (const tenant of tenants) {
