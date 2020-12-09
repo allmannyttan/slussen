@@ -105,7 +105,7 @@ export interface Fi2LeaseContractsResponse {
   fi2simplemessage?: {
     fi2leasecontract: Fi2LeaseContract | Fi2LeaseContract[]
     fi2partner: Fi2Partner[]
-    fi2spatisystem: Fi2SpatiSystem[]
+    fi2spatisystem: Fi2SpatiSystem | Fi2SpatiSystem[]
   }
 }
 

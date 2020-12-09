@@ -120,49 +120,52 @@ const transformContract = (fi2: Fi2LeaseContract): Contract => {
   return contract
 }
 
-const transformContracts = (fi2Contracts: Fi2LeaseContractsResponse): Contract[] => {
-  if (fi2Contracts.fi2simplemessage?.fi2leasecontract) {
-    const contracts =
-      'id' in fi2Contracts.fi2simplemessage.fi2leasecontract
-        ? [transformContract(fi2Contracts.fi2simplemessage.fi2leasecontract)]
-        : fi2Contracts.fi2simplemessage.fi2leasecontract.map(transformContract)
-
-    // If there are partners in the result, implant them as tenants in the right contracts
-    if (fi2Contracts.fi2simplemessage.fi2partner) {
-      const tenants = fi2Contracts.fi2simplemessage.fi2partner.map(tenantService.transformTenant)
-      const tenantsById: { [id: string]: Tenant } = {}
-
-      for (const tenant of tenants) {
-        tenantsById[tenant.id] = tenant
-      }
-
-      for (const contract of contracts) {
-        for (const partner of contract.partners) {
-          partner.tenant = tenantsById[partner.id]
-        }
-      }
-    }
-
-    // If there are spatisystems in the result, implant them as rentals in the right contracts
-    if (fi2Contracts.fi2simplemessage.fi2spatisystem) {
-      const rentals = fi2Contracts.fi2simplemessage.fi2spatisystem.map(
-        rentalService.transformRental
-      )
-      const rentalsById: { [id: string]: Rental } = {}
-
-      for (const rental of rentals) {
-        rentalsById[rental.id] = rental
-      }
-
-      for (const contract of contracts) {
-        contract.rentalObject.rental = rentalsById[contract.rentalObject.id]
-      }
-    }
-
-    return contracts
-  } else {
+const transformContracts = ({ fi2simplemessage }: Fi2LeaseContractsResponse): Contract[] => {
+  if (!fi2simplemessage?.fi2leasecontract) {
     return []
   }
+
+  const { fi2leasecontract, fi2partner, fi2spatisystem } = fi2simplemessage
+
+  const contracts =
+    'id' in fi2leasecontract
+      ? [transformContract(fi2leasecontract)]
+      : fi2leasecontract.map(transformContract)
+
+  // If there are partners in the result, implant them as tenants in the right contracts
+  if (fi2partner) {
+    const tenants = fi2partner.map(tenantService.transformTenant)
+    const tenantsById: { [id: string]: Tenant } = {}
+
+    for (const tenant of tenants) {
+      tenantsById[tenant.id] = tenant
+    }
+
+    for (const contract of contracts) {
+      for (const partner of contract.partners) {
+        partner.tenant = tenantsById[partner.id]
+      }
+    }
+  }
+
+  // If there are spatisystems in the result, implant them as rentals in the right contracts
+  if (fi2spatisystem) {
+    const rentals =
+      'id' in fi2spatisystem
+        ? [rentalService.transformRental(fi2spatisystem)]
+        : fi2spatisystem.map(rentalService.transformRental)
+    const rentalsById: { [id: string]: Rental } = {}
+
+    for (const rental of rentals) {
+      rentalsById[rental.id] = rental
+    }
+
+    for (const contract of contracts) {
+      contract.rentalObject.rental = rentalsById[contract.rentalObject.id]
+    }
+  }
+
+  return contracts
 }
 
 /**
