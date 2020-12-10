@@ -157,7 +157,7 @@ const transformContracts = ({ fi2simplemessage }: Fi2LeaseContractsResponse): Co
     const rentals = ('id' in fi2spatisystem
       ? [rentalService.transformRental(fi2spatisystem)]
       : fi2spatisystem.map(rentalService.transformRental)
-    ).filter((rental) => rental.type === 'Apartment')
+    ).filter((rental) => rental.type === 'Lägenhet')
 
     if (!rentals.length) {
       return []

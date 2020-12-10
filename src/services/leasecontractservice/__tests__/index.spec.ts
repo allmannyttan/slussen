@@ -344,8 +344,8 @@ describe('#leasecontractservice', () => {
       })
     })
 
-    test('Returns nothing if Rentals type is other than "Apartment"', async () => {
-      ;(helper.getNameFromClasslist as jest.Mock).mockReturnValue('Parking')
+    test('Returns nothing if Rentals type is other than "Lägenhet"', async () => {
+      ;(helper.getNameFromClasslist as jest.Mock).mockReturnValue('Parkering')
       ;(client.get as jest.Mock).mockResolvedValueOnce(fi2LeaseContractsJsonWithRentals)
 
       const result = await service.getLeaseContracts('foo', true, true, true)
@@ -357,8 +357,8 @@ describe('#leasecontractservice', () => {
       expect(result).toEqual([])
     })
 
-    test('Returns contracts if Rentals type is "Apartment"', async () => {
-      ;(helper.getNameFromClasslist as jest.Mock).mockReturnValue('Apartment')
+    test('Returns contracts if Rentals type is "Lägenhet"', async () => {
+      ;(helper.getNameFromClasslist as jest.Mock).mockReturnValue('Lägenhet')
       ;(client.get as jest.Mock).mockResolvedValueOnce(fi2LeaseContractsJsonWithRentals)
 
       const result = await service.getLeaseContracts('foo', true, true, true)

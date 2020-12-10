@@ -9,11 +9,11 @@ import {
 } from '@app/commonTypes/types'
 
 enum RentalType {
-  Apartment = 'Apartment',
+  Lägenhet = 'Lägenhet',
   Garage = 'Garage',
-  Parking = 'Parking',
-  Storage = 'Storage',
-  Premises = 'Premises',
+  Parkering = 'Parkering',
+  Förråd = 'Förråd',
+  Lokal = 'Lokal',
 }
 
 export interface Rental {
