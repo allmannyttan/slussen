@@ -2,6 +2,7 @@ import {
   fi2LeaseContractsJson,
   fi2LeaseContractJson,
   fi2LeaseContractWithDocumentJson,
+  fi2LeaseContractsJsonWithRentals,
 } from '../__fixtures__/fastAPIAdapterResult.fixture'
 import { client } from '@app/adapters/fastapiadapter'
 import service from '../index'
@@ -341,6 +342,32 @@ describe('#leasecontractservice', () => {
       expect(client.get).toHaveBeenCalledWith({
         url: `fi2leasecontract/?limit=1234&include=fi2partner,fi2spatisystem&filter=fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'foo'`,
       })
+    })
+
+    test('Returns nothing if Rentals type is other than "Apartment"', async () => {
+      ;(helper.getNameFromClasslist as jest.Mock).mockReturnValue('Parking')
+      ;(client.get as jest.Mock).mockResolvedValueOnce(fi2LeaseContractsJsonWithRentals)
+
+      const result = await service.getLeaseContracts('foo', true, true, true)
+
+      expect(client.get).toHaveBeenCalledTimes(1)
+      expect(client.get).toHaveBeenCalledWith({
+        url: `fi2leasecontract/?limit=1234&include=fi2partner,fi2spatisystem&filter=fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'foo'`,
+      })
+      expect(result).toEqual([])
+    })
+
+    test('Returns contracts if Rentals type is "Apartment"', async () => {
+      ;(helper.getNameFromClasslist as jest.Mock).mockReturnValue('Apartment')
+      ;(client.get as jest.Mock).mockResolvedValueOnce(fi2LeaseContractsJsonWithRentals)
+
+      const result = await service.getLeaseContracts('foo', true, true, true)
+
+      expect(client.get).toHaveBeenCalledTimes(1)
+      expect(client.get).toHaveBeenCalledWith({
+        url: `fi2leasecontract/?limit=1234&include=fi2partner,fi2spatisystem&filter=fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'foo'`,
+      })
+      expect(result).toHaveLength(1)
     })
 
     test('handles documents correctly', async () => {

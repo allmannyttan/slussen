@@ -8,8 +8,16 @@ import {
   Fi2Ids,
 } from '@app/commonTypes/types'
 
+enum RentalType {
+  Apartment = 'Apartment',
+  Garage = 'Garage',
+  Parking = 'Parking',
+  Storage = 'Storage',
+  Premises = 'Premises',
+}
+
 export interface Rental {
-  type: string
+  type: RentalType
   id: string
   guid?: string
   changedBy: string
