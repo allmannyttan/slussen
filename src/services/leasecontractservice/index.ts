@@ -154,10 +154,15 @@ const transformContracts = ({ fi2simplemessage }: Fi2LeaseContractsResponse): Co
 
   // If there are spatisystems in the result, implant them as rentals in the right contracts
   if (fi2spatisystem) {
-    const rentals =
-      'id' in fi2spatisystem
-        ? [rentalService.transformRental(fi2spatisystem)]
-        : fi2spatisystem.map(rentalService.transformRental)
+    const rentals = ('id' in fi2spatisystem
+      ? [rentalService.transformRental(fi2spatisystem)]
+      : fi2spatisystem.map(rentalService.transformRental)
+    ).filter((rental) => rental.type === 'Lägenhet')
+
+    if (!rentals.length) {
+      return []
+    }
+
     const rentalsById: { [id: string]: Rental } = {}
 
     for (const rental of rentals) {
@@ -246,6 +251,7 @@ const getLeaseContracts = async (
     const contracts: Fi2LeaseContractsResponse = await client.get({
       url: `fi2leasecontract/${querystring}`,
     })
+
     const result = transformContracts(contracts)
     return result
   } catch (err) {

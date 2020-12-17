@@ -70,7 +70,7 @@ const transformRental = (fi2: Fi2SpatiSystem): Rental => {
   const addresses: Address[] = fi2.fi2spsys_address ? fi2.fi2spsys_address.map(convertAddress) : []
 
   const rental: Rental = {
-    type: className,
+    type: className as Rental['type'],
     id: fi2.id,
     guid: fi2.guid,
     changedBy: getPart(fi2.fi2spsys_value, 'ChangedBy'),

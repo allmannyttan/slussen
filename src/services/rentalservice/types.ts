@@ -8,8 +8,16 @@ import {
   Fi2Ids,
 } from '@app/commonTypes/types'
 
+enum RentalType {
+  Lägenhet = 'Lägenhet',
+  Garage = 'Garage',
+  Parkering = 'Parkering',
+  Förråd = 'Förråd',
+  Lokal = 'Lokal',
+}
+
 export interface Rental {
-  type: string
+  type: RentalType
   id: string
   guid?: string
   changedBy: string
