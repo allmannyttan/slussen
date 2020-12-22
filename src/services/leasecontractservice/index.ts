@@ -186,7 +186,9 @@ const createQueryString = (
   includeTenants?: boolean,
   includeRentals?: boolean,
   limit?: number,
-  offset?: number
+  offset?: number,
+  from?: Date,
+  to?: Date
 ): string => {
   const filter = []
   const include = []
@@ -202,7 +204,16 @@ const createQueryString = (
     filter.push(`fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'${rentalid}'`)
   }
 
-  if (!includeExpired) {
+  if (from && to) {
+    const f = moment(from).format('YYYY-MM-DD')
+    const t = moment(to).format('YYYY-MM-DD')
+    filter.push(`fi2lease_currenddate>:'${f}'`)
+    filter.push(`fi2lease_initialdate<:'${t}'`)
+  } else if (from || to) {
+    const d = moment(from || to).format('YYYY-MM-DD')
+    filter.push(`fi2lease_currenddate>:'${d}'`)
+    filter.push(`fi2lease_initialdate<:'${d}'`)
+  } else if (!includeExpired) {
     const today = moment().format('YYYY-MM-DD')
     filter.push(`fi2lease_currenddate>'${today}'`)
   }
@@ -236,7 +247,9 @@ const getLeaseContracts = async (
   includeTentants?: boolean,
   includeRentals?: boolean,
   limit?: number,
-  offset?: number
+  offset?: number,
+  from?: Date,
+  to?: Date
 ): Promise<Contract[]> => {
   try {
     const querystring = createQueryString(
@@ -245,7 +258,9 @@ const getLeaseContracts = async (
       includeTentants,
       includeRentals,
       limit,
-      offset
+      offset,
+      from,
+      to
     )
 
     const contracts: Fi2LeaseContractsResponse = await client.get({
@@ -295,7 +310,7 @@ export const routes = (app: Application) => {
    *      - in: query
    *        name: includeexpired
    *        required: false
-   *        description: "If true, expired lease contracts are included in results"
+   *        description: "If true, expired lease contracts are included in results. Will be ignored if 'From' and/or 'To' is given"
    *        default: false
    *      - in: query
    *        name: includetenants
@@ -307,11 +322,25 @@ export const routes = (app: Application) => {
    *        schema:
    *          type: integer
    *        description: The number of items to skip before starting to collect the result set
+   *        required: false
    *      - in: query
    *        name: limit
    *        schema:
    *          type: integer
    *        description: The number of items to return
+   *        required: false
+   *      - in: query
+   *        name: from
+   *        schema:
+   *          type: date
+   *        description: Get contracts valid on given date. Use with "To" to recieve contracts valid between dates
+   *        required: false
+   *      - in: query
+   *        name: to
+   *        schema:
+   *          type: date
+   *        description: Get contracts valid on given date. Use with "From" to recieve contracts valid between dates
+   *        required: false
    *      - in: header
    *        name: authorization
    *        schema:
@@ -342,7 +371,9 @@ export const routes = (app: Application) => {
           /true/i.test(_req.query.includetenants as string),
           /true/i.test(_req.query.includerentals as string),
           typeof _req.query.limit === 'string' ? parseInt(_req.query.limit) : undefined,
-          typeof _req.query.offset === 'string' ? parseInt(_req.query.offset) : undefined
+          typeof _req.query.offset === 'string' ? parseInt(_req.query.offset) : undefined,
+          typeof _req.query.from === 'string' ? new Date(_req.query.from) : undefined,
+          typeof _req.query.to === 'string' ? new Date(_req.query.to) : undefined
         )
       )
     )

@@ -301,7 +301,7 @@ describe('#leasecontractservice', () => {
     test('creates appropriate querystring for includeexpired', async () => {
       ;(client.get as jest.Mock).mockResolvedValueOnce(fi2LeaseContractsJson)
 
-      await service.getLeaseContracts(null, true)
+      await service.getLeaseContracts(undefined, true)
 
       expect(client.get).toHaveBeenCalledTimes(1)
       expect(client.get).toHaveBeenCalledWith({ url: `fi2leasecontract/?limit=1234` })
@@ -310,7 +310,7 @@ describe('#leasecontractservice', () => {
     test('creates appropriate querystring for includetenants', async () => {
       ;(client.get as jest.Mock).mockResolvedValueOnce(fi2LeaseContractsJson)
 
-      await service.getLeaseContracts(null, false, true)
+      await service.getLeaseContracts(undefined, false, true)
 
       expect(client.get).toHaveBeenCalledTimes(1)
       expect(client.get).toHaveBeenCalledWith({
@@ -323,7 +323,7 @@ describe('#leasecontractservice', () => {
     test('creates appropriate querystring for includerentals', async () => {
       ;(client.get as jest.Mock).mockResolvedValueOnce(fi2LeaseContractsJson)
 
-      await service.getLeaseContracts(null, false, false, true)
+      await service.getLeaseContracts(undefined, false, false, true)
 
       expect(client.get).toHaveBeenCalledTimes(1)
       expect(client.get).toHaveBeenCalledWith({
