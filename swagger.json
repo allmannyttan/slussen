@@ -144,7 +144,7 @@
             "in": "query",
             "name": "includeexpired",
             "required": false,
-            "description": "If true, expired lease contracts are included in results",
+            "description": "If true, expired lease contracts are included in results. Will be ignored if 'From' and/or 'To' is given",
             "default": false
           },
           {
@@ -160,7 +160,8 @@
             "schema": {
               "type": "integer"
             },
-            "description": "The number of items to skip before starting to collect the result set"
+            "description": "The number of items to skip before starting to collect the result set",
+            "required": false
           },
           {
             "in": "query",
@@ -168,7 +169,26 @@
             "schema": {
               "type": "integer"
             },
-            "description": "The number of items to return"
+            "description": "The number of items to return",
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "schema": {
+              "type": "date"
+            },
+            "description": "Get contracts valid on given date. Use with \"To\" to recieve contracts valid between dates",
+            "required": false
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "schema": {
+              "type": "date"
+            },
+            "description": "Get contracts valid on given date. Use with \"From\" to recieve contracts valid between dates",
+            "required": false
           },
           {
             "in": "header",
@@ -698,7 +718,14 @@
         "type": "object",
         "properties": {
           "type": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "Lägenhet",
+              "Garage",
+              "Parkering",
+              "Förråd",
+              "Lokal"
+            ]
           },
           "id": {
             "type": "string"
