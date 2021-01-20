@@ -204,16 +204,17 @@ const createQueryString = (
     filter.push(`fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'${rentalid}'`)
   }
 
-  if (from && to) {
+  if (from) {
     const f = moment(from).format('YYYY-MM-DD')
+    filter.push(`fi2lease_initialdate>:'${f}'`)
+  }
+
+  if (to) {
     const t = moment(to).format('YYYY-MM-DD')
-    filter.push(`fi2lease_currenddate>:'${f}'`)
     filter.push(`fi2lease_initialdate<:'${t}'`)
-  } else if (from || to) {
-    const d = moment(from || to).format('YYYY-MM-DD')
-    filter.push(`fi2lease_currenddate>:'${d}'`)
-    filter.push(`fi2lease_initialdate<:'${d}'`)
-  } else if (!includeExpired) {
+  }
+
+  if (!includeExpired) {
     const today = moment().format('YYYY-MM-DD')
     filter.push(`fi2lease_currenddate>'${today}'`)
   }
