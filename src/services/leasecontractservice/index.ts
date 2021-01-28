@@ -236,6 +236,7 @@ const createQueryString = (
   }
 
   if (querystring.length > 0) {
+    console.debug('/leasecontracts querystring', querystring.join('&'))
     return '?' + querystring.join('&')
   } else {
     return ''
@@ -269,6 +270,7 @@ const getLeaseContracts = async (
     })
 
     const result = transformContracts(contracts)
+    console.debug('/leasecontracts retrieved', result.length, 'contracts')
     return result
   } catch (err) {
     throw new Error(err)
