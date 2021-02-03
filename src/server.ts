@@ -7,6 +7,7 @@ import routes, {
   authRoutes,
 } from './routes'
 import bodyParser from 'body-parser'
+import timeout from 'connect-timeout'
 import express from 'express'
 import cors from 'cors'
 import errorMiddleware from '@app/middleware/errorhandler'
@@ -27,6 +28,8 @@ leaseContactRoutes(app)
 rentalRoutes(app)
 healthRoutes(app)
 routes(app)
+
+app.use(timeout('300s'))
 
 app.listen(port, () => {
   console.log(`

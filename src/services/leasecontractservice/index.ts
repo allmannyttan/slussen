@@ -127,7 +127,7 @@ const transformContracts = ({ fi2simplemessage }: Fi2LeaseContractsResponse): Co
 
   const { fi2leasecontract, fi2partner, fi2spatisystem } = fi2simplemessage
 
-  const contracts =
+  let contracts =
     'id' in fi2leasecontract
       ? [transformContract(fi2leasecontract)]
       : fi2leasecontract.map(transformContract)
@@ -157,7 +157,9 @@ const transformContracts = ({ fi2simplemessage }: Fi2LeaseContractsResponse): Co
     const rentals = ('id' in fi2spatisystem
       ? [rentalService.transformRental(fi2spatisystem)]
       : fi2spatisystem.map(rentalService.transformRental)
-    ).filter((rental) => rental.type === 'Lägenhet')
+    )
+    
+    //rentals = rentals.filter((rental) => rental.type === 'Lägenhet')
 
     if (!rentals.length) {
       return []
@@ -172,6 +174,12 @@ const transformContracts = ({ fi2simplemessage }: Fi2LeaseContractsResponse): Co
     for (const contract of contracts) {
       contract.rentalObject.rental = rentalsById[contract.rentalObject.id]
     }
+
+    console.log('Contracts before filter', contracts.length)
+
+    contracts = contracts.filter((contract) => contract.rentalObject.rental && contract.rentalObject.rental.type === 'Lägenhet')
+
+    console.log('Contracts after filter', contracts.length)
   }
 
   return contracts
