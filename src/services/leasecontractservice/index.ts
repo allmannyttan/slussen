@@ -215,6 +215,9 @@ const createQueryString = (
   if (from) {
     const f = moment(from).format('YYYY-MM-DD')
     filter.push(`fi2lease_initialdate>:'${f}'`)
+  } else {
+    const f = moment().format('YYYY-MM-DD')
+    filter.push(`fi2lease_initialdate<:'${f}'`)
   }
 
   if (to) {

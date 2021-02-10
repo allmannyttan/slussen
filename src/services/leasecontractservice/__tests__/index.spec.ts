@@ -52,11 +52,11 @@ describe('#leasecontractservice', () => {
 
       await service.getLeaseContracts()
 
+      const today = moment().format('YYYY-MM-DD')
+
       expect(client.get).toHaveBeenCalledTimes(1)
       expect(client.get).toHaveBeenCalledWith({
-        url: `fi2leasecontract/?limit=1234&filter=fi2lease_currenddate>'${moment().format(
-          'YYYY-MM-DD'
-        )}'`,
+        url: `fi2leasecontract/?limit=1234&filter=fi2lease_initialdate<:'${today}';fi2lease_currenddate>'${today}'`,
       })
     })
 
@@ -290,11 +290,11 @@ describe('#leasecontractservice', () => {
 
       await service.getLeaseContracts('foo')
 
+      const today = moment().format('YYYY-MM-DD')
+
       expect(client.get).toHaveBeenCalledTimes(1)
       expect(client.get).toHaveBeenCalledWith({
-        url: `fi2leasecontract/?limit=1234&filter=fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'foo';fi2lease_currenddate>'${moment().format(
-          'YYYY-MM-DD'
-        )}'`,
+        url: `fi2leasecontract/?limit=1234&filter=fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'foo';fi2lease_initialdate<:'${today}';fi2lease_currenddate>'${today}'`,
       })
     })
 
@@ -303,8 +303,10 @@ describe('#leasecontractservice', () => {
 
       await service.getLeaseContracts(undefined, true)
 
+      const today = moment().format('YYYY-MM-DD')
+
       expect(client.get).toHaveBeenCalledTimes(1)
-      expect(client.get).toHaveBeenCalledWith({ url: `fi2leasecontract/?limit=1234` })
+      expect(client.get).toHaveBeenCalledWith({ url: `fi2leasecontract/?limit=1234&filter=fi2lease_initialdate<:'${today}'` })
     })
 
     test('creates appropriate querystring for includetenants', async () => {
@@ -312,11 +314,11 @@ describe('#leasecontractservice', () => {
 
       await service.getLeaseContracts(undefined, false, true)
 
+      const today = moment().format('YYYY-MM-DD')
+
       expect(client.get).toHaveBeenCalledTimes(1)
       expect(client.get).toHaveBeenCalledWith({
-        url: `fi2leasecontract/?limit=1234&include=fi2partner&filter=fi2lease_currenddate>'${moment().format(
-          'YYYY-MM-DD'
-        )}'`,
+        url: `fi2leasecontract/?limit=1234&include=fi2partner&filter=fi2lease_initialdate<:'${today}';fi2lease_currenddate>'${today}'`,
       })
     })
 
@@ -325,9 +327,11 @@ describe('#leasecontractservice', () => {
 
       await service.getLeaseContracts(undefined, false, false, true)
 
+      const today = moment().format('YYYY-MM-DD')
+
       expect(client.get).toHaveBeenCalledTimes(1)
       expect(client.get).toHaveBeenCalledWith({
-        url: `fi2leasecontract/?limit=1234&include=fi2spatisystem&filter=fi2lease_currenddate>'${moment().format(
+        url: `fi2leasecontract/?limit=1234&include=fi2spatisystem&filter=fi2lease_initialdate<:'${today}';fi2lease_currenddate>'${moment().format(
           'YYYY-MM-DD'
         )}'`,
       })
@@ -338,9 +342,11 @@ describe('#leasecontractservice', () => {
 
       await service.getLeaseContracts('foo', true, true, true)
 
+      const today = moment().format('YYYY-MM-DD')
+
       expect(client.get).toHaveBeenCalledTimes(1)
       expect(client.get).toHaveBeenCalledWith({
-        url: `fi2leasecontract/?limit=1234&include=fi2partner,fi2spatisystem&filter=fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'foo'`,
+        url: `fi2leasecontract/?limit=1234&include=fi2partner,fi2spatisystem&filter=fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'foo';fi2lease_initialdate<:'${today}'`,
       })
     })
 
@@ -350,9 +356,11 @@ describe('#leasecontractservice', () => {
 
       const result = await service.getLeaseContracts('foo', true, true, true)
 
+      const today = moment().format('YYYY-MM-DD')
+
       expect(client.get).toHaveBeenCalledTimes(1)
       expect(client.get).toHaveBeenCalledWith({
-        url: `fi2leasecontract/?limit=1234&include=fi2partner,fi2spatisystem&filter=fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'foo'`,
+        url: `fi2leasecontract/?limit=1234&include=fi2partner,fi2spatisystem&filter=fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'foo';fi2lease_initialdate<:'${today}'`,
       })
       expect(result).toEqual([])
     })
@@ -363,9 +371,11 @@ describe('#leasecontractservice', () => {
 
       const result = await service.getLeaseContracts('foo', true, true, true)
 
+      const today = moment().format('YYYY-MM-DD')
+
       expect(client.get).toHaveBeenCalledTimes(1)
       expect(client.get).toHaveBeenCalledWith({
-        url: `fi2leasecontract/?limit=1234&include=fi2partner,fi2spatisystem&filter=fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'foo'`,
+        url: `fi2leasecontract/?limit=1234&include=fi2partner,fi2spatisystem&filter=fi2lease_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'foo';fi2lease_initialdate<:'${today}'`,
       })
       expect(result).toHaveLength(1)
     })
