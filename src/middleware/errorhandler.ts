@@ -42,7 +42,8 @@ const errorMiddleware = (error: any, request: Request, response: Response, next:
   console.error(redact(error))
 
   const status = error.status || (error.response ? error.response.status : 500)
-  const message = error.message || 'Something went wrong'
+  let message = error.message || (error.response?.data?.message)
+  message = message ? message : 'Something went wrong'
   response.status(status).send({
     status,
     message,
