@@ -30,6 +30,7 @@ healthRoutes(app)
 routes(app)
 
 app.use(timeout('300s'))
+app.use(errorMiddleware)
 
 app.listen(port, () => {
   console.log(`
@@ -38,6 +39,5 @@ app.listen(port, () => {
     REST: http://localhost:${port}
   `)
 })
-app.use(errorMiddleware)
 
 export default app
