@@ -9,7 +9,7 @@ on:
     tags:
       - v*
 env:
-  IMAGE_NAME: api
+  IMAGE_NAME: slussen
 jobs:
   build:
     runs-on: ubuntu-latest
