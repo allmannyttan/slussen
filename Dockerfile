@@ -1,5 +1,5 @@
 
-FROM node:14.15.1-alpine
+FROM node
 
 # Fixes for Python missing for node-gyp
 # --no-cache: download package index on-the-fly, no need to cleanup afterwards
