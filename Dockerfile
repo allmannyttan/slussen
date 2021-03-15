@@ -1,5 +1,5 @@
 
-FROM maven:3.6.3-openjdk-11-slim
+FROM maven:3.6.3-openjdk-11-slim AS build
 
 # Fixes for Python missing for node-gyp
 # --no-cache: download package index on-the-fly, no need to cleanup afterwards
