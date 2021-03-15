@@ -1,10 +1,12 @@
 application: 
  applicationName: "sulussen"
+ # tenant operator space
  space:
    enabled: true
    tenant: "allmannyttan"
    annotations:
       argocd.argoproj.io/sync-wave: "-1"
+ # kubernetes deployment
  deployment:
    annotations:
    volumes: {}
@@ -22,7 +24,6 @@ application:
      requests:
        memory: 128Mi
        cpu: 0.1
-
    probes:
      readinessProbe:
        failureThreshold: 3
@@ -42,11 +43,13 @@ application:
        httpGet:
          path: /health
          port: 8080
+ # kubernetes service         
  service:
    ports:
    - port: 8080
      name: https
      targetPort: 8080
+ # kubernetes rbac
  rbac:
    create: true
    serviceAccount:
