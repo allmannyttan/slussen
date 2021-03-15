@@ -98,7 +98,16 @@ application:
    - name: POSTGRES__HOST
      value: slussen-postgresql
    - name: DATABASE_URL
-     value: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@slussen-postgresql:5432/api-db
+     value: postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@slussen-postgresql:5432/api-db
+   - name: POSTGRES_USER
+     value: admin
+   - name: POSTGRES_PASSWORD
+     valueFrom:
+       secretKeyRef:
+         name: slussen-postgresql
+         value: postgresql-password
+      
+          
    image:
      repository: IMAGE
      tag: TAG
