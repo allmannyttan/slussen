@@ -36,7 +36,7 @@ postgresql:
     user: repl_user
   postgresqlUsername: "admin"
   usePasswordFile: false
-  postgresqlDatabase: "inventory"
+  postgresqlDatabase: "api-db"
   postgresqlDataDir: /bitnami/postgresql/data
   service:
     annotations: {}
@@ -97,6 +97,8 @@ application:
    env:
    - name: POSTGRES__HOST
      value: sulussen-postgres
+   - name: DATABASE_URL
+     value: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@sulussen-postgres:5432/api-db
    image:
      repository: IMAGE
      tag: TAG
