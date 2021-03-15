@@ -6,6 +6,10 @@ application:
    tenant: "allmannyttan"
    annotations:
       argocd.argoproj.io/sync-wave: "-1"
+   additionalLabels:
+      kind: pr
+      team: allmanytta
+
  # kubernetes deployment
  deployment:
    annotations:
