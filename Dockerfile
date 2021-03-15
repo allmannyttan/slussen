@@ -1,6 +1,5 @@
 
-FROM maven:3.6.3-openjdk-11-slim AS build
-
+FROM node:14.15.1-alpine
 # Fixes for Python missing for node-gyp
 # --no-cache: download package index on-the-fly, no need to cleanup afterwards
 # --virtual: bundle packages, remove whole bundle at once, when done
