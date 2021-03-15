@@ -96,9 +96,9 @@ application:
    imagePullSecrets: nexus-docker-config-forked   
    env:
    - name: POSTGRES__HOST
-     value: sulussen-postgres
+     value: slussen-postgresql
    - name: DATABASE_URL
-     value: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@sulussen-postgres:5432/api-db
+     value: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@slussen-postgresql:5432/api-db
    image:
      repository: IMAGE
      tag: TAG
