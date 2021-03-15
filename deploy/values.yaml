@@ -2,6 +2,9 @@ application:
  applicationName: "sulussen"
  space:
    enabled: true
+   tenant: "allmannyttan"
+   annotations:
+      argocd.argoproj.io/sync-wave: "-1"
  deployment:
    annotations:
    volumes: {}
