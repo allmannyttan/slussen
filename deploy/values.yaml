@@ -14,10 +14,7 @@ application:
  deployment:
    annotations:
    volumes: {}
-   imagePullSecrets: nexus-docker-config-forked
-   envFrom:
-    - type: configmap
-      name: ""    
+   imagePullSecrets: nexus-docker-config-forked   
    image:
      repository: IMAGE
      tag: TAG
