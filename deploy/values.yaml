@@ -35,7 +35,7 @@ postgresql:
     slaveReplicas: 1
     synchronousCommit: "off"
     user: repl_user
-  postgresqlUsername: "admin"
+  # postgresqlUsername: "admin"
   usePasswordFile: false
   postgresqlDatabase: "api-db"
   postgresqlDataDir: /bitnami/postgresql/data
@@ -99,7 +99,7 @@ application:
    - name: POSTGRES__HOST
      value: slussen-postgresql
    - name: POSTGRES_USER
-     value: admin
+     value: postgres
    - name: POSTGRES_PASSWORD
      valueFrom:
        secretKeyRef:
