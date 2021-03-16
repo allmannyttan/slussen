@@ -35,6 +35,7 @@ postgresql:
     slaveReplicas: 1
     synchronousCommit: "off"
     user: repl_user
+  postgresqlUsername: "admin"
   usePasswordFile: false
   postgresqlDatabase: "api-db"
   postgresqlDataDir: /bitnami/postgresql/data
@@ -98,7 +99,7 @@ application:
    - name: POSTGRES__HOST
      value: slussen-postgresql
    - name: POSTGRES_USER
-     value: postgres
+     value: admin
    - name: POSTGRES_PASSWORD
      valueFrom:
        secretKeyRef:
@@ -140,7 +141,7 @@ application:
  service:
    ports:
    - port: 4000
-     name: https
+     name: http
      targetPort: 4000
  # kubernetes rbac
  rbac:
