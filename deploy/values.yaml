@@ -1,8 +1,9 @@
-DTE: false
+dte: false
 postgresql:
   global:
     postgresql: {}
   fullnameOverride: 
+  existingSecret: slussen-postgres
   image:
     debug: false
     pullPolicy: Always

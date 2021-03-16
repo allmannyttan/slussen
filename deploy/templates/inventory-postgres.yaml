@@ -1,0 +1,20 @@
+{{- if .Values.dte -}}
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  annotations:
+    sealedsecrets.bitnami.com/cluster-wide: "true"
+  creationTimestamp: null
+  name: slussen-postgres
+  namespace: {{ .Release.Namespace }}
+spec:
+  encryptedData:
+    postgresql-password: AgARL8+J+HrpkxDcI5+aa8wJPQiCyJfTuPABRxkBbuyCbxi84pbgSnYko9PSXRg/UFRkRmjqWAW5xD5fREFkKgIp/xnOgw6ReHqT+EA/IDz95a6GoLlwjUIC0KOqATRnJUQeWR3g7LVSrf9f78+3Q3u4xFvdTr7TGFDfIlp/FMdvLSR+3U+qoihLqwDp1Hd3qgbbg+xvFlTjeXlSee7lmBYSvOkGOWJkaqdex6wC981jDTBbRNR1r/c0aZMGP+nuZ3Ac/uC4cqyvitRP0rnfU556l++rXeDaEzjHpZVzgArb/0hVwDH5x74wKYoaw+uLTMzpO2vXpsp0b/GVBXQ1VWMo2DBmktMF0hn7qQ/MGgjgAlBHr2Zoj8AiS6wc9wSph27yJQj/yI/JZiDB3SqcwKmIru7Kr+gcX8jUmVjanlcSZRVhVJEg1076AStI+GC8/oSjSfrqXT9Ry5DBQdLLTauyiIgqj8fEh/kNacj1g3u9yhzj/0ihA/8lUutCDcG4aewb4g+N1goKMVU6ZPfiw8RxXfcLJxGhmmtak6/PmzbEUFT9VAQvomyLpqZdWXqcPnS6Pa2RPvv6r8HOQnb8vAl0zNZcr2Bsfbk76vVDNr+zR8S74i3CLOuifSezucUJBATnD5BOu/BUGWZ87o6b7lni56fRp3oQiwX60eAdoDDr8im3dO878o4ZXujbfwdhLD5lb80nqUoTUHI=
+  template:
+    metadata:
+      annotations:
+        sealedsecrets.bitnami.com/cluster-wide: "true"
+      creationTimestamp: null
+      name: slussen-postgres
+      namespace: {{ .Release.Namespace }}
+{{- end -}}
