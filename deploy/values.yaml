@@ -89,9 +89,9 @@ application:
    additionalLabels:
       kind: pr
       team: allmanytta
-  sealedSecret:
+ sealedSecret:
     enabled: true
-    annotations:
+    annotations: 
        sealedsecrets.bitnami.com/cluster-wide: "true"
     files:
      - name: slussen-postgresql
