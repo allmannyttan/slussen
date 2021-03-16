@@ -3,7 +3,7 @@ postgresql:
   global:
     postgresql: {}
   fullnameOverride: 
-  existingSecret: slussen-postgres
+  existingSecret: slussen-postgresql
   image:
     debug: false
     pullPolicy: Always
