@@ -108,7 +108,7 @@ application:
    - name: POSTGRES__DATABASE
      value: api-db
    - name: POSTGRES__PORT
-     value: 5432
+     value: '5432'
    - name: DATABASE_URL
      value: postgres://$(POSTGRES__USER):$(POSTGRES__PASSWORD)@slussen-postgresql:5432/api-db
    - name: POSTGRES__HOST
