@@ -126,7 +126,7 @@ application:
        initialDelaySeconds: 10
        httpGet:
          path: /health
-         port: 8080
+         port: 4000
      livenessProbe:
        failureThreshold: 3
        periodSeconds: 60
@@ -135,13 +135,13 @@ application:
        initialDelaySeconds: 10
        httpGet:
          path: /health
-         port: 8080
+         port: 4000
  # kubernetes service         
  service:
    ports:
-   - port: 8080
+   - port: 4000
      name: https
-     targetPort: 8080
+     targetPort: 4000
  # kubernetes rbac
  rbac:
    create: true
