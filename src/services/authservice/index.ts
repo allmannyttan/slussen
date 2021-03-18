@@ -3,6 +3,7 @@ import asyncHandler from 'express-async-handler'
 import hash from '@app/helpers/hash'
 import { createToken, refreshToken } from '@app/helpers/jwt'
 import { authMiddleware } from '@app/middleware/auth'
+import logger from '@app/helpers/logger'
 
 export const routes = (app: Application) => {
   /**
@@ -146,7 +147,7 @@ export const routes = (app: Application) => {
    *        description: 'Unauthorized'
    */
   app.get('/auth/test', authMiddleware, (_req, res) => {
-    console.log('test')
+    logger.info('test')
     res.send('Authorization OK')
   })
 }

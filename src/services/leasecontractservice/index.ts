@@ -3,6 +3,7 @@ import { authMiddleware } from '@app/middleware/auth'
 import { client } from '@app/adapters/fastapiadapter'
 import asyncHandler from 'express-async-handler'
 import helper from '@app/helpers/fastAPIXmlListHelper'
+import logger from '@app/helpers/logger'
 import moment from 'moment'
 import tenantService from '@app/services/tenantservice'
 import rentalService from '@app/services/rentalservice'
@@ -175,11 +176,11 @@ const transformContracts = ({ fi2simplemessage }: Fi2LeaseContractsResponse): Co
       contract.rentalObject.rental = rentalsById[contract.rentalObject.id]
     }
 
-    console.log('Contracts before filter', contracts.length)
+    logger.debug('Contracts before filter ' + contracts.length)
 
     contracts = contracts.filter((contract) => contract.rentalObject.rental && contract.rentalObject.rental.type === 'Lägenhet')
 
-    console.log('Contracts after filter', contracts.length)
+    logger.debug('Contracts after filter ' + contracts.length)
   }
 
   return contracts
@@ -247,7 +248,7 @@ const createQueryString = (
   }
 
   if (querystring.length > 0) {
-    console.debug('/leasecontracts querystring', querystring.join('&'))
+    logger.debug('/leasecontracts querystring' + querystring.join('&'))
     return '?' + querystring.join('&')
   } else {
     return ''
@@ -281,7 +282,7 @@ const getLeaseContracts = async (
     })
 
     const result = transformContracts(contracts)
-    console.debug('/leasecontracts retrieved', result.length, 'contracts')
+    logger.debug('/leasecontracts retrieved ' + result.length + ' contracts')
     return result
   } catch (err) {
     throw new Error(err)

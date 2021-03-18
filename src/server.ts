@@ -11,6 +11,7 @@ import timeout from 'connect-timeout'
 import express from 'express'
 import cors from 'cors'
 import errorMiddleware from '@app/middleware/errorhandler'
+import logger from '@app/helpers/logger'
 
 const app = express()
 app.set('etag', 'strong')
@@ -33,11 +34,7 @@ app.use(timeout('300s'))
 app.use(errorMiddleware)
 
 app.listen(port, () => {
-  console.log(`
-    🏠 API is running 
-    ------------------------
-    REST: http://localhost:${port}
-  `)
+  logger.info(`🏠 API is running (http://localhost:${port})`)
 })
 
 export default app

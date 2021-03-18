@@ -1,7 +1,7 @@
 import { Client } from 'pg'
-
 import { postgres as config } from '@app/config'
 import { SQLStatement } from 'sql-template-strings'
+import logger from '@app/helpers/logger'
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(() => resolve(), ms))
 
@@ -11,7 +11,7 @@ async function connect(attemptNo = 0): Promise<Client> {
     await client.connect()
     return client
   } catch (err) {
-    console.warn(err)
+    logger.error(err)
 
     if (attemptNo >= 3) {
       throw err

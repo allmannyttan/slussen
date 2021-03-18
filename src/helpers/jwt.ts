@@ -8,6 +8,7 @@ import {
 import createHttpError from 'http-errors'
 import hash from './hash'
 import jwt from 'jsonwebtoken'
+import logger from './logger'
 
 const { secret } = auth
 
@@ -57,7 +58,7 @@ export const createToken = async (username: string, password: string): Promise<J
     return { token }
   } catch (error) {
     // How do we log this?
-    console.error(error)
+    //console.error(error)
     const err = createHttpError('Invalid credentials')
     err.status = 401
     throw err
@@ -96,7 +97,7 @@ export const refreshToken = async (token: UserTokenInfo): Promise<JWT> => {
     return { token: freshToken }
   } catch (error) {
     // How do we log this?
-    console.error(error)
+    logger.error(error)
     const err = createHttpError('Invalid credentials')
     err.status = 401
     throw err

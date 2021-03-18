@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
+import logger from '@app/helpers/logger'
 
 /**
  * Redacts possibly sensitive information from errors before they are logged.
@@ -39,7 +40,7 @@ const redact = (error: any) => {
 
 const errorMiddleware = (error: any, request: Request, response: Response, next: NextFunction) => {
   //TODO: Send error to logging service of choice.
-  console.error(redact(error))
+  logger.error(redact(error))
 
   const status = error.status || (error.response ? error.response.status : 500)
   let message = error.message || (error.response?.data?.message)
