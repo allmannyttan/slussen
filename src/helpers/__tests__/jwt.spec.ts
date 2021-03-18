@@ -9,6 +9,7 @@ import {
 import { User, UserTokenInfo } from '../types'
 import createHttpError from 'http-errors'
 import config from '../../config'
+import logger from '../../helpers/logger'
 
 jest.mock('@app/config', () => ({
   auth: {
@@ -24,7 +25,7 @@ jest.mock('@app/middleware/auth/databaseHelper')
 let validUser: User
 
 beforeEach(() => {
-  console.error = jest.fn()
+  logger.error = jest.fn()
   validUser = {
     id: 1,
     disabled: false,
@@ -78,7 +79,7 @@ describe('#jwt', () => {
       try {
         await createToken('username', 'password')
       } catch (e) {
-        expect(console.error).toHaveBeenCalledWith(new Error(`Invalid password: ${validUser.id}.`))
+        expect(logger.error).toHaveBeenCalledWith(new Error(`Invalid password: ${validUser.id}.`))
         expect(e).toBeInstanceOf(createHttpError.HttpError)
         expect(e.status).toEqual(401)
       }
@@ -90,7 +91,7 @@ describe('#jwt', () => {
       try {
         await createToken('username', 'password')
       } catch (e) {
-        expect(console.error).toHaveBeenCalledWith(new Error(`No such user: username.`))
+        expect(logger.error).toHaveBeenCalledWith(new Error(`No such user: username.`))
         expect(e).toBeInstanceOf(createHttpError.HttpError)
         expect(e.status).toEqual(401)
       }
@@ -102,7 +103,7 @@ describe('#jwt', () => {
       try {
         await createToken('username', 'password')
       } catch (e) {
-        expect(console.error).toHaveBeenCalledWith(new Error(`User locked: ${validUser.id}.`))
+        expect(logger.error).toHaveBeenCalledWith(new Error(`User locked: ${validUser.id}.`))
         expect(e).toBeInstanceOf(createHttpError.HttpError)
         expect(e.status).toEqual(401)
       }
@@ -114,7 +115,7 @@ describe('#jwt', () => {
       try {
         await createToken('username', 'password')
       } catch (e) {
-        expect(console.error).toHaveBeenCalledWith(new Error(`User disabled: ${validUser.id}.`))
+        expect(logger.error).toHaveBeenCalledWith(new Error(`User disabled: ${validUser.id}.`))
         expect(e).toBeInstanceOf(createHttpError.HttpError)
         expect(e.status).toEqual(401)
       }
@@ -188,7 +189,7 @@ describe('#jwt', () => {
       try {
         await refreshToken({ username: 'username', sub: '1337', exp: 1111, iat: 2222 })
       } catch (e) {
-        expect(console.error).toHaveBeenCalledWith(new Error(`No such user: username.`))
+        expect(logger.error).toHaveBeenCalledWith(new Error(`No such user: username.`))
         expect(e).toBeInstanceOf(createHttpError.HttpError)
         expect(e.status).toEqual(401)
       }
@@ -200,7 +201,7 @@ describe('#jwt', () => {
       try {
         await refreshToken({ username: 'username', sub: '1337', exp: 1111, iat: 2222 })
       } catch (e) {
-        expect(console.error).toHaveBeenCalledWith(new Error(`User locked: ${validUser.id}.`))
+        expect(logger.error).toHaveBeenCalledWith(new Error(`User locked: ${validUser.id}.`))
         expect(e).toBeInstanceOf(createHttpError.HttpError)
         expect(e.status).toEqual(401)
       }
@@ -212,7 +213,7 @@ describe('#jwt', () => {
       try {
         await refreshToken({ username: 'username', sub: '1337', exp: 1111, iat: 2222 })
       } catch (e) {
-        expect(console.error).toHaveBeenCalledWith(new Error(`User disabled: ${validUser.id}.`))
+        expect(logger.error).toHaveBeenCalledWith(new Error(`User disabled: ${validUser.id}.`))
         expect(e).toBeInstanceOf(createHttpError.HttpError)
         expect(e.status).toEqual(401)
       }

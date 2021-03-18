@@ -58,7 +58,7 @@ export const createToken = async (username: string, password: string): Promise<J
     return { token }
   } catch (error) {
     // How do we log this?
-    //console.error(error)
+    logger.error(error)
     const err = createHttpError('Invalid credentials')
     err.status = 401
     throw err
