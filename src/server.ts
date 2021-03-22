@@ -6,7 +6,6 @@ import routes, {
   healthRoutes,
   authRoutes,
 } from './routes'
-import bodyParser from 'body-parser'
 import timeout from 'connect-timeout'
 import express from 'express'
 import cors from 'cors'
@@ -16,9 +15,9 @@ import logger from '@app/helpers/logger'
 const app = express()
 app.set('etag', 'strong')
 app.use(cors())
-app.use(bodyParser.json())
+app.use(express.json())
 app.use(
-  bodyParser.urlencoded({
+  express.urlencoded({
     extended: true,
   })
 )
