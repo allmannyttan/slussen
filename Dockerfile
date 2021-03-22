@@ -22,7 +22,6 @@ WORKDIR /app
 VOLUME /app/data
 
 RUN npm install
-RUN npm run test:ci
 RUN apk del build-dependencies
 
 CMD /bin/sh -c "npm run dev"
