@@ -89,6 +89,10 @@ application:
    additionalLabels:
       kind: pr
       team: allmanytta
+ forecastle:
+   enabled: true
+   icon: https://raw.githubusercontent.com/stakater/ForecastleIcons/master/allmanyttan-logo.png
+   displayName: slussen
  sealedSecret:
     enabled: true
     annotations: 
