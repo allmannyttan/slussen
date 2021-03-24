@@ -79,7 +79,7 @@ postgresql:
     timeoutSeconds: 5
 
 application: 
- applicationName: "sulussen"
+ applicationName: "slussen"
  # tenant operator space
  space:
    enabled: true
