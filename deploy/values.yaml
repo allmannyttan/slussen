@@ -81,6 +81,10 @@ postgresql:
 application: 
  applicationName: "slussen"
  # tenant operator space
+ route:
+   enabled: true
+   additionalLabels:
+     router: default
  space:
    enabled: true
    tenant: "allmannyttan"
