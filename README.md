@@ -3,6 +3,11 @@
 Code in this repo uses Version 1 of fastAPI, without "tillgäggspaket".
 Documentation of fastAPI is available here http://www.fastapi.se/apidocprop/v1/
 
+## What is slussen?
+Slussen is a middleware for FastAPI. fastAPI is a REST-API that returns XML. Slussen handles this data and presents it in an easier way (JSON).
+
+A lot of Allmännyttas services uses this, and when you develop Allämnnyttans services, this is often used and should be running locally on your computer.
+
 ## Config
 
 ### Local machine
