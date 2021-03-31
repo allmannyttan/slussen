@@ -91,6 +91,22 @@ npm run dev
 
 # Usage
 
+### User creation
+
+You currently have to create the API users in the database by hand.
+
+`GET /auth/generate-password-hash?password=<cleartext password>` to genererate a salt and hash to write to database when creating a user
+
+```sql
+INSERT INTO users (username, password_hash, salt)
+VALUES
+  (
+    '<USERNAME>', '<PASSWORD HASH>',
+    '<SALT>'
+  );
+
+```
+
 ## Authorization
 
 ### Token-based login
@@ -106,12 +122,6 @@ These routes are useful:
 ```
 
 `GET /auth/refresh-token` to refresh token
-
-### User creation
-
-You currently have to create the API users in the database by hand.
-
-`GET /auth/generate-password-hash?password=<cleartext password>` to genererate a salt and hash to write to database when creating a user
 
 ### Development tools
 
