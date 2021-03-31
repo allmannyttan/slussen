@@ -4,75 +4,92 @@ Code in this repo uses Version 1 of fastAPI, without "tillgäggspaket".
 Documentation of fastAPI is available here http://www.fastapi.se/apidocprop/v1/
 
 ## What is slussen?
+
 Slussen is a middleware for FastAPI. fastAPI is a REST-API that returns XML. Slussen handles this data and presents it in an easier way (JSON).
 
 A lot of Allmännyttas services uses this, and when you develop Allämnnyttans services, this is often used and should be running locally on your computer.
 
-## Config
+---
 
-### Local machine
-
-Put a file called config.json in the project directory:
-
-```
-{
-  "port": 4000, // API port
-  "postgres": {
-    "host": "localhost",
-    "port": 5432,
-    "user": "postgres",
-    "password": "password",
-    "database": "api-db"
-  },
-  "fastAPI": {
-    "baseURL": "https://...",
-    "accessToken": "12345", // only used for sandbox
-    "user": "user", // user for fastAPI, used to obtain access token
-    "password": "password" // password for fastAPI, used to obtain access token
-  }
-}
-```
-
-Also put an .env in project directory. This is for the migrations.
-
-```
-#URL for postgres migrations
-DATABASE_URL=postgres://postgres:postgrespassword@127.0.0.1:5432/api-db
-```
-
-### Environment variables
-
-Translate fields in config.json by converting to uppercase and replacing . with \_\_, and camelCase with snake_case. Examples:
-
-PORT=4000
-POSTGRES__HOST=localhost
-FAST_API__BASE_URL=https://...
+# Development
 
 ## Dependencies
 
-A PostgreSQL database, started using `docker-compose -f docker-compose-db-only.yml up`.
-Database migrations will set up the database on `npm start` and `npm run dev`.
-
-## Starting
-
-```
-$ nvm use
-$ npm i
-$ docker-compose up -d
-$ npm start
-```
+- Node.js installed preferably using [nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- [Docker installed](https://docs.docker.com/get-docker/)
+- [Docker Compose installed](https://docs.docker.com/compose/install/)
 
 ## Developing
 
-```
-$ nvm use
-$ npm i
-$ docker-compose up -d
-$ npm run dev
+- Slussen uses PostgreSQL that we run in Docker
+- database migrations run automatically when the project is run
+- you need some configuration files as described in the [Config section](#-Config)
+
+### Config
+
+- we use [@iteam/config](https://iteam1337.github.io/#/config/examples) package
+
+- create a file called `config.json` in the project directory with the following defaults:
+
+  ```json
+  {
+    "port": 4000,
+    "postgres": {
+      "host": "localhost",
+      "port": 5432,
+      "user": "postgres",
+      "password": "postgrespassword",
+      "database": "api-db"
+    },
+    "fastAPI": {
+      "baseURL": "http://www.fastapi.se/backendprop/v1/api/",
+      "accessToken": "12345",
+      "user": "demouser",
+      "password": "demopassword"
+    }
+  }
+  ```
+
+- `config.json` is ignored by git so you can use different values that suit your needs, above is an example
+
+- also create a `.env` in the project directory. This is for the package running the DB migrations
+
+  ```
+  DATABASE_URL=postgres://postgres:postgrespassword@127.0.0.1:5432/api-db
+  ```
+
+### Run Docker Compose
+
+```bash
+docker-compose up -d
 ```
 
-This starts the api here http://localhost:4000
-Swagger generated docs are available on http://localhost:4000/api-docs
+### Install packages
+
+```bash
+nvm use
+npm i
+```
+
+### Run the app
+
+```
+npm start
+```
+
+### Run the app using a file watcher
+
+```
+npm run dev
+```
+
+- This starts Slussen here http://localhost:4000
+
+- Swagger generated docs are available on http://localhost:4000/api-docs
+
+---
+
+# Usage
 
 ## Authorization
 
@@ -82,7 +99,8 @@ This API uses JWT for auth. The token should be passed in `Authorization` header
 
 These routes are useful:
 
-`POST /auth/generate-token` to generate a token. Post this object 
+`POST /auth/generate-token` to generate a token. Post this object
+
 ```
 {username: 'your username', password: 'your cleartext password'}
 ```
