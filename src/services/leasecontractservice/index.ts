@@ -159,7 +159,7 @@ const transformContracts = ({ fi2simplemessage }: Fi2LeaseContractsResponse): Co
       ? [rentalService.transformRental(fi2spatisystem)]
       : fi2spatisystem.map(rentalService.transformRental)
     )
-    
+
     //rentals = rentals.filter((rental) => rental.type === 'Lägenhet')
 
     if (!rentals.length) {
@@ -228,7 +228,7 @@ const createQueryString = (
 
   if (!includeExpired) {
     const today = moment().format('YYYY-MM-DD')
-    filter.push(`fi2lease_currenddate>'${today}'`)
+    filter.push(`fi2lease_endingdate>'${today}'`)
   }
 
   if (includeTenants) {
