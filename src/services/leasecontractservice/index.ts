@@ -121,7 +121,7 @@ const transformContract = (fi2: Fi2LeaseContract): Contract => {
   return contract
 }
 
-const transformContracts = ({ fi2simplemessage }: Fi2LeaseContractsResponse): Contract[] => {
+const transformContracts = ({ fi2simplemessage }: Fi2LeaseContractsResponse, includeExpired?: boolean): Contract[] => {
   if (!fi2simplemessage?.fi2leasecontract) {
     return []
   }
@@ -132,6 +132,13 @@ const transformContracts = ({ fi2simplemessage }: Fi2LeaseContractsResponse): Co
     'id' in fi2leasecontract
       ? [transformContract(fi2leasecontract)]
       : fi2leasecontract.map(transformContract)
+
+  if (!includeExpired) {
+    // Filter out contracts that have endingdate set if that date has passed
+    contracts = contracts.filter((contract: Contract) => {
+      return !contract.endingDate || moment(contract.endingDate).isAfter(moment())
+    })
+  }
 
   // If there are partners in the result, implant them as tenants in the right contracts
   if (fi2partner) {
@@ -228,7 +235,7 @@ const createQueryString = (
 
   if (!includeExpired) {
     const today = moment().format('YYYY-MM-DD')
-    filter.push(`fi2lease_endingdate>'${today}'`)
+    filter.push(`fi2lease_currenddate>'${today}'`)
   }
 
   if (includeTenants) {
@@ -281,7 +288,7 @@ const getLeaseContracts = async (
       url: `fi2leasecontract/${querystring}`,
     })
 
-    const result = transformContracts(contracts)
+    const result = transformContracts(contracts, includeExpired)
     logger.debug('/leasecontracts retrieved ' + result.length + ' contracts')
     return result
   } catch (err) {
