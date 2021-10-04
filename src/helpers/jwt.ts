@@ -7,7 +7,7 @@ import {
 } from '@app/middleware/auth/databaseHelper'
 import createHttpError from 'http-errors'
 import hash from './hash'
-import jwt from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken'
 import logger from './logger'
 
 const { secret } = auth
@@ -58,7 +58,7 @@ export const createToken = async (username: string, password: string): Promise<J
     return { token }
   } catch (error) {
     // How do we log this?
-    logger.error(error)
+    logger.error(error as string)
     const err = createHttpError('Invalid credentials')
     err.status = 401
     throw err
@@ -97,7 +97,7 @@ export const refreshToken = async (token: UserTokenInfo): Promise<JWT> => {
     return { token: freshToken }
   } catch (error) {
     // How do we log this?
-    logger.error(error)
+    logger.error(error as string)
     const err = createHttpError('Invalid credentials')
     err.status = 401
     throw err
@@ -109,19 +109,14 @@ export const authorize = ({ authorization }: any = {}) => {
 
   try {
     if (authHeader) {
-      const user:
-        | string
-        | {
-            sub?: number
-            username?: string
-          } = jwt.verify(authHeader.replace('Bearer ', ''), secret)
+      const user: string | JwtPayload = jwt.verify(authHeader.replace('Bearer ', ''), secret)
 
       if (user && typeof user !== 'string' && user.sub) {
         return { auth: user }
       }
     }
   } catch (error) {
-    error.status = 401
+    ;(error as createHttpError.HttpError).status = 401
     throw error
   }
 
