@@ -6,9 +6,11 @@ import { Fi2Value } from '@app/commonTypes/types'
 
 import {
  Case,
+ CaseRequest,
  Fi2Case,
  Fi2CasesResponse
 } from './types'
+import { createCaseBlock } from 'typescript'
 
 // TODO: This is duplicated, maybe throughout the code base
 const getPart = (parts: Fi2Value[], partName: string): string => {
@@ -52,6 +54,21 @@ const getCases = async (): Promise<Case[]> => {
     const result = raw.fi2simplemessage.fi2case.slice(0, 1).map(transformCase)
     return result
   } catch (err) {
+    throw new Error(err)
+  }
+}
+
+const createCase = async (data: CaseRequest): Promise<Case> => {
+  try {
+    const _raw: Fi2CasesResponse = await client.post({
+      url: 'fi2case',
+      body: data
+    })
+    return new Promise(() => <Case>{})
+    //const result = transformCase(raw.fi2simplemessage.fi2case)
+    //return result    
+  } catch (err) {
+    console.log("felaktig data")
     throw new Error(err)
   }
 }
@@ -104,7 +121,16 @@ export const routes = (app: Application) => {
       )
     )
   )
-
+  .post(
+    '/cases',
+    authMiddleware,
+    asyncHandler(async (req: Request, res: Response) => {
+      const caseItem: CaseRequest = req.body;
+      res.json(
+        await createCase(caseItem)
+      )
+    })
+  )
 }
 
 export default {

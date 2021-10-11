@@ -3,20 +3,22 @@ import axios from 'axios'
 import { fastAPI } from '@app/config'
 import { tokenRefresher } from './tokenHelper'
 import { FastAPIRequest } from './types'
+import { CaseRequest } from '@app/services/caseservice/types'
 
-const innerGet = async <T = any>(request: FastAPIRequest) => {
+const initXmlClient = (request: FastAPIRequest) =>  {
   const headers = {
     'Access-Token': request.token || '',
     Accept: '*/*',
   }
-  const xmlClient = axios.create({
+  return axios.create({
     headers,
     baseURL: fastAPI.baseUrl,
     responseType: 'text',
   })
+}
 
-  const { data } = await xmlClient.get(request.url)
-  const result = JSON.parse(
+const serializeXmlResponse = (data: string) =>
+  JSON.parse(
     xml2json.toJson(data, {
       arrayNotation: [
         'fi2lease_actor',
@@ -38,11 +40,31 @@ const innerGet = async <T = any>(request: FastAPIRequest) => {
     })
   )
 
+const innerGet = async <T = any>(request: FastAPIRequest) => {
+
+  const xmlClient = initXmlClient(request)
+
+  const { data } = await xmlClient.get(request.url)
+
+  const result = serializeXmlResponse(data)
   return result
 }
 
+const innerPost = async <T = any>(request: FastAPIRequest) => {
+
+  const xmlClient = initXmlClient(request)
+
+  const { data } = await xmlClient.post(request.url, <CaseRequest>request.body)
+
+  const result = serializeXmlResponse(data)
+  return result
+}
+
+
+
 export const client = {
   get: tokenRefresher(innerGet),
+  post: tokenRefresher(innerPost)
 }
 
 export default {
