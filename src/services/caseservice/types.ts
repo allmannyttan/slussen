@@ -9,7 +9,6 @@ export interface Case {
   registrationDate: string
   registrar: string
 
-
   status: string
   description: string
   comment: string
@@ -20,6 +19,10 @@ export interface Case {
   // TODO: This can be 'Script' and what else?
   createdBy: string
   changedBy: string 
+}
+
+export interface CaseRequest {
+  summary: string
 }
 
 /********** Fi2XML types **********/
