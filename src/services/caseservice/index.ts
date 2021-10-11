@@ -58,17 +58,17 @@ const getCases = async (): Promise<Case[]> => {
   }
 }
 
-const createCase = async (data: CaseRequest): Promise<Case> => {
+const createCase = async (data: CaseRequest): Promise<number> => {
   try {
-    const _raw: Fi2CasesResponse = await client.post({
+    const response = await client.post({
       url: 'fi2case',
       body: data
     })
-    return new Promise(() => <Case>{})
-    //const result = transformCase(raw.fi2simplemessage.fi2case)
-    //return result    
+    if (response.errormessage) {
+      return 400
+    }
+    return 201
   } catch (err) {
-    console.log("felaktig data")
     throw new Error(err)
   }
 }
@@ -126,12 +126,15 @@ export const routes = (app: Application) => {
     authMiddleware,
     asyncHandler(async (req: Request, res: Response) => {
       const caseItem: CaseRequest = req.body;
-      res.json(
-        await createCase(caseItem)
-      )
+      const statusCode = await createCase(caseItem)
+      res
+        .status(statusCode)
+        .send()
     })
   )
 }
+
+
 
 export default {
 }

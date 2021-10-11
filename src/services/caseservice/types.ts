@@ -21,8 +21,16 @@ export interface Case {
   changedBy: string 
 }
 
+enum CategoryType {
+  // TODO: find actual values
+  e = "Electronic",
+  
+}
+
 export interface CaseRequest {
-  summary: string
+  title: string
+  description: string
+  category: CategoryType
 }
 
 /********** Fi2XML types **********/
