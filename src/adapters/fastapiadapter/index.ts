@@ -1,11 +1,10 @@
-import xml2json, { toXml } from 'xml2json'
-import axios, { AxiosError } from 'axios'
+import xml2json from 'xml2json'
+import axios, { AxiosError, AxiosInstance } from 'axios'
 import { fastAPI } from '@app/config'
 import { tokenRefresher } from './tokenHelper'
 import { FastAPIRequest } from './types'
-import { CaseRequest } from '@app/services/caseservice/types'
 
-const initXmlClient = (request: FastAPIRequest) =>  {
+const initXmlClient = (request: FastAPIRequest): AxiosInstance =>  {
   const headers = {
     'Access-Token': request.token || '',
     Accept: '*/*',
@@ -18,7 +17,7 @@ const initXmlClient = (request: FastAPIRequest) =>  {
   })
 }
 
-const serializeXmlResponse = (data: string) =>
+const serializeXmlResponse = (data: string): object =>
   JSON.parse(
     xml2json.toJson(data, {
       arrayNotation: [
@@ -38,38 +37,10 @@ const serializeXmlResponse = (data: string) =>
         'fi2spsys_address',
         'fi2spsys_value'
       ],
-    })
-    )
-    
-  const getXmlPostBody = (title: string, description: string, category: string): string => xml2json.toXml(JSON.parse(`
-  {
-    "fi2case": {
-      "xmlns": "http://www.fi2.se/schemas/1.31",
-      "fi2case_descr": [
-          {
-            "lang": "sv",
-            "usage": "Description",
-            "$t": "${title}"
-          },
-          {
-            "lang": "sv",
-            "usage": "Comment",
-            "$t": "${description}"
-          }
-      ],
-      "fi2case_category": {
-        "fi2class_code": "Case",
-        "fi2class_scheme": {
-          "fi2scheme_id": "Class_Fi2CaseCategoryType_01",
-          "fi2scheme_name": "${category}",
-          "fi2scheme_url": "http://www.fastapi.se/lists/classlist/Class_Fi2CaseCategoryType_01.xml"
-        }
-      }
-    }
-  }`));
+    }))
 
-const innerGet = async <T = any>(request: FastAPIRequest) => {
 
+const innerGet = async (request: FastAPIRequest) => {
   const xmlClient = initXmlClient(request)
 
   const { data } = await xmlClient.get(request.url)
@@ -78,60 +49,37 @@ const innerGet = async <T = any>(request: FastAPIRequest) => {
   return result
 }
 
-const innerPost = async <T = any>(request: FastAPIRequest) => {
-
+const innerPost = async (request: FastAPIRequest, xml?: string) => {
   const xmlClient = initXmlClient(request)
-  const {title, description, category} = <CaseRequest>request.body;  
-
-  const xml = getXmlPostBody(title, description, category)
-
-  // const data = await xmlClient
-  //  .post(request.url, xml)
 
   try {
     const { data } = await xmlClient.post(request.url, xml)
     return serializeXmlResponse(data)
   } catch (error) {
     const { response } = <AxiosError>error
+    console.log(response)
     return serializeXmlResponse(response?.data)
   }
-
-  /*
-  axios.post(url, data).then(res => {
-        // do good things
-  })
-  .catch(err => {
-      if (err.response) {
-        // client received an error response (5xx, 4xx)
-      } else if (err.request) {
-        // client never received a response, or request never left
-      } else {
-        // anything else
-      }
-  })
-  */
-
-
-  // const data = xmlClient
-  //   .post(request.url, xml)
-  //   .then(response => response)
-  //   .then(({data}) => serializeXmlResponse(data))
-  //   .catch((error) => {
-  //     console.log(error)
-  //   })
-
-    // .then(({data})=> serializeXmlResponse(data) )
-
-    // const result = serializeXmlResponse(data)
-
-  // return data
 }
 
 
+const innerPut = async (request: FastAPIRequest, xml?: string) => {
+  const xmlClient = initXmlClient(request)
+
+  try {
+    const { data } = await xmlClient.put(request.url, xml)
+    return serializeXmlResponse(data)
+  } catch (error) {
+    const { response } = <AxiosError>error
+    console.log(response)
+    return serializeXmlResponse(response?.data)
+  }
+}
 
 export const client = {
   get: tokenRefresher(innerGet),
-  post: tokenRefresher(innerPost)
+  post: tokenRefresher(innerPost),
+  put: tokenRefresher(innerPut)
 }
 
 export default {

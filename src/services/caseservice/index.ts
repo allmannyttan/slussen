@@ -1,3 +1,4 @@
+import xml2json from 'xml2json'
 import { Application, Request, Response } from 'express'
 import { authMiddleware } from '@app/middleware/auth'
 import { client } from '@app/adapters/fastapiadapter'
@@ -17,6 +18,37 @@ const getPart = (parts: Fi2Value[], partName: string): string => {
   const partNode = parts.filter((part: Fi2Value) => part.fi2value_code === partName)
 
   return partNode.length > 0 ? partNode[0].fi2value_value : ''
+}
+
+
+const getXmlPostBody = (caseItem: CaseRequest): string => {
+  const {title, description, category} = caseItem
+  
+  return xml2json.toXml(JSON.parse(`{
+    "fi2case": {
+      "xmlns": "http://www.fi2.se/schemas/1.31",
+      "fi2case_descr": [
+          {
+            "lang": "sv",
+            "usage": "Description",
+            "$t": "${title}"
+          },
+          {
+            "lang": "sv",
+            "usage": "Comment",
+            "$t": "${description}"
+          }
+      ],
+      "fi2case_category": {
+        "fi2class_code": "Case",
+        "fi2class_scheme": {
+          "fi2scheme_id": "Class_Fi2CaseCategoryType_01",
+          "fi2scheme_name": "${category}",
+          "fi2scheme_url": "http://www.fastapi.se/lists/classlist/Class_Fi2CaseCategoryType_01.xml"
+        }
+      }
+    }
+  }`))
 }
 
 const transformCase = (fi2case: Fi2Case): Case => {
@@ -59,11 +91,11 @@ const getCases = async (): Promise<Case[]> => {
 }
 
 const createCase = async (data: CaseRequest): Promise<number> => {
+  const xml = getXmlPostBody(data)
   try {
     const response = await client.post({
       url: 'fi2case',
-      body: data
-    })
+    }, xml)
     if (response.errormessage) {
       return 400
     }
@@ -71,6 +103,23 @@ const createCase = async (data: CaseRequest): Promise<number> => {
   } catch (err) {
     throw new Error(err)
   }
+}
+
+const updateCase = async (data: CaseRequest): Promise<number> => {
+  const xml = getXmlPostBody(data)
+  try {
+    const response = await client.put({
+      url: `fi2case/${data.id}`,
+    }, xml)
+    if (response.errormessage) {
+      return 400
+    }
+    return 201
+  } catch (err) {
+    throw new Error(err)
+  }
+  
+  
 }
 
 export const routes = (app: Application) => {
@@ -125,8 +174,19 @@ export const routes = (app: Application) => {
     '/cases',
     authMiddleware,
     asyncHandler(async (req: Request, res: Response) => {
-      const caseItem: CaseRequest = req.body;
+      const caseItem: CaseRequest = req.body
       const statusCode = await createCase(caseItem)
+      res
+        .status(statusCode)
+        .send()
+    })
+  )
+  .put(
+    '/cases',
+    authMiddleware,
+    asyncHandler(async (req: Request, res: Response) => {
+      const caseItem: CaseRequest = req.body
+      const statusCode = await updateCase(caseItem)
       res
         .status(statusCode)
         .send()

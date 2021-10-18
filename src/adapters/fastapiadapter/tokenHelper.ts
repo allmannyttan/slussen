@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from 'axios'
 import { fastAPI } from '@app/config'
 import { getAccessTokenFromDb, setAccessTokenInDb } from './databaseHelper'
 import { FastAPIRequest } from './types'
+import { CaseRequest } from '@app/services/caseservice/types'
 
 const NO_TOKENS_IN_DB_ERROR = 'Access token missing in DB.'
 
@@ -37,10 +38,14 @@ const isInvalidAccessTokenError = (error: Error): boolean => {
  *
  * @param {wrapped function} func
  */
-export const tokenRefresher = <T extends (arg: FastAPIRequest) => any>(
-  func: T
-): ((funcArg: FastAPIRequest) => Promise<ReturnType<T>>) => {
-  return async (arg: FastAPIRequest): Promise<ReturnType<T>> => {
+
+export const tokenRefresher = (
+  func: (arg: FastAPIRequest, data?: string) => any
+) => {
+// export const tokenRefresher = <T extends (arg: FastAPIRequest, data?: CaseRequest) => any>(
+//   func: T
+// ) => {
+  return async (arg: FastAPIRequest, data?: string): Promise<ReturnType<typeof func>> => {
     try {
       const token = await getAccessTokenFromDb()
 
@@ -49,7 +54,7 @@ export const tokenRefresher = <T extends (arg: FastAPIRequest) => any>(
       }
 
       arg.token = token
-      const results = await func(arg)
+      const results = await func(arg, data)
       return results
     } catch (error) {
       //If error is invalid access-token, get a new one and retry.
@@ -59,7 +64,7 @@ export const tokenRefresher = <T extends (arg: FastAPIRequest) => any>(
         await setAccessTokenInDb(token)
 
         arg.token = token
-        const results = await func(arg)
+        const results = await func(arg, data)
         return results
       } else {
         throw error

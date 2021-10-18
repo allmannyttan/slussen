@@ -24,13 +24,29 @@ export interface Case {
 enum CategoryType {
   // TODO: find actual values
   e = "Electronic",
-  
+  CASE = 'Case'
 }
 
+
+// http://www.fastapi.se/lists/classlist/Class_Fi2CaseStatus_01.xml
+enum StatusType {
+  CREATED = 'Created',
+  PENDING = 'Pending',
+  ANNULLED = 'Annulled',
+  COMPLETED = 'Completed'
+}
+
+// Created	Skapad	
+// Pending	Pågående	
+// Annulled	Annullerad	
+// Completed	Avslutad
+
 export interface CaseRequest {
+  id?: string
   title: string
   description: string
   category: CategoryType
+  status: StatusType
 }
 
 /********** Fi2XML types **********/
