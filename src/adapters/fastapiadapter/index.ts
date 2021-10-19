@@ -7,8 +7,8 @@ import { FastAPIRequest } from './types'
 const initXmlClient = (request: FastAPIRequest): AxiosInstance =>  {
   const headers = {
     'Access-Token': request.token || '',
-    Accept: '*/*',
-    'Content-Type': 'application/xml, charset=utf-8',
+    Accept: 'application/xml; charset=utf-8',
+    'Content-Type': 'application/xml; charset=utf-8',
   }
   return axios.create({
     headers,
@@ -57,7 +57,7 @@ const innerPost = async (request: FastAPIRequest, xml?: string) => {
     return serializeXmlResponse(data)
   } catch (error) {
     const { response } = <AxiosError>error
-    console.log(response)
+    console.log(response?.data)
     return serializeXmlResponse(response?.data)
   }
 }
@@ -71,7 +71,7 @@ const innerPut = async (request: FastAPIRequest, xml?: string) => {
     return serializeXmlResponse(data)
   } catch (error) {
     const { response } = <AxiosError>error
-    console.log(response)
+    console.log(response?.data)
     return serializeXmlResponse(response?.data)
   }
 }

@@ -182,10 +182,11 @@ export const routes = (app: Application) => {
     })
   )
   .put(
-    '/cases',
+    '/cases/:id',
     authMiddleware,
     asyncHandler(async (req: Request, res: Response) => {
       const caseItem: CaseRequest = req.body
+      caseItem.id = req.params.id
       const statusCode = await updateCase(caseItem)
       res
         .status(statusCode)
@@ -193,8 +194,6 @@ export const routes = (app: Application) => {
     })
   )
 }
-
-
 
 export default {
 }
