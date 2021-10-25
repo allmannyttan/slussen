@@ -8,10 +8,10 @@ import { Fi2Value } from '@app/commonTypes/types'
 import {
  Case,
  CaseRequest,
- CaseRequestInput,
  Fi2Case,
  Fi2CasesResponse
 } from './types'
+import { createCaseBlock } from 'typescript'
 
 // TODO: This is duplicated, maybe throughout the code base
 const getPart = (parts: Fi2Value[], partName: string): string => {
@@ -104,7 +104,7 @@ const getCases = async (): Promise<Case[]> => {
   }
 }
 
-const createCase = async (data: CaseRequestInput): Promise<number> => {
+const createCase = async (data: CaseRequest): Promise<number> => {
   const xml = getXmlPostBody(data)
   try {
     const response = await client.post({
