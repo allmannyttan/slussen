@@ -40,7 +40,7 @@ const getXmlPostBody = (caseItem: CaseRequest): string => {
           }
       ],
       "fi2case_category": {
-        "fi2class_code": {"$t": "Case"},
+        "fi2class_code": {"$t": "${category}},
         "fi2class_scheme": {
           "fi2scheme_id": {"$t": "Class_Fi2CaseCategoryType_01"},
           "fi2scheme_name": {"$t": "Ärendetyp Felanmälningar"},
