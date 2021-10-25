@@ -121,17 +121,21 @@ const createCase = async (data: CaseRequest): Promise<number> => {
 }
 
 const updateCase = async (data: CaseRequest): Promise<number> => {
-  const xml = getXmlPostBody(data)
   try {
     const caseData = await client.get({
       url: `fi2case/${data.id}`,
+      skipXmlSerialization: true
     })
-    if (data.status) {
-      caseData.fi2case.fi2case_status.fi2class_code = data.status
-    }
+
+    console.log(caseData)
+
+
+    // const payload = xml2json.toXml(caseData)
+    const payload = caseData
+    // console.log(payload)
     const response = await client.put({
       url: `fi2case/${data.id}`,
-    }, xml2json.toXml(caseData))
+    }, payload)
     console.log(JSON.stringify(response, null, 2))
     if (response.errormessage) {
       return 400

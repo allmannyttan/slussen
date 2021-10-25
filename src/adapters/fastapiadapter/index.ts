@@ -46,6 +46,8 @@ const innerGet = async (request: FastAPIRequest) => {
 
   const { data } = await xmlClient.get(request.url)
 
+  if (request.skipXmlSerialization) return data
+
   const result = serializeXmlResponse(data)
   return result
 }
