@@ -35,7 +35,8 @@ const serializeXmlResponse = (data: string): object =>
         'fi2cont_email',
         'fi2spsys_area',
         'fi2spsys_address',
-        'fi2spsys_value'
+        'fi2spsys_value',
+        'fi2case_value'
       ],
     }))
 

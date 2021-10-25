@@ -22,22 +22,11 @@ const getPart = (parts: Fi2Value[], partName: string): string => {
 
 
 const getXmlPostBody = (caseItem: CaseRequest): string => {
-  const {title, description, category} = caseItem
-  
-  /*
-  <fi2case_status>
-        <fi2class_code>Pending</fi2class_code>
-        <fi2class_scheme>
-            <fi2scheme_id>Class_Fi2CaseStatus_01</fi2scheme_id>
-            <fi2scheme_name>Status Felanmälningar</fi2scheme_name>
-            <fi2scheme_url>http://www.fastapi.se/lists/classlist/Class_Fi2CaseStatus_01.xml</fi2scheme_url>
-        </fi2class_scheme>
-    </fi2case_status>
-  */
-
+  const {title, description, category, id} = caseItem
   return xml2json.toXml(JSON.parse(`{
     "fi2case": {
       "xmlns": "http://www.fi2.se/schemas/1.31",
+      "id": "${id? id: ""}",
       "fi2case_descr": [
           {
             "lang": "sv",
@@ -59,7 +48,7 @@ const getXmlPostBody = (caseItem: CaseRequest): string => {
         }
       },
       "fi2case_status": {
-        "fi2class_code": {"$t": "Pending"},
+        "fi2class_code": {"$t": "Completed"},
         "fi2class_scheme": {
           "fi2scheme_id": {"$t": "Class_Fi2CaseStatus_01"},
           "fi2scheme_name": {"$t": "Status Felanmälningar"},
@@ -134,9 +123,16 @@ const createCase = async (data: CaseRequest): Promise<number> => {
 const updateCase = async (data: CaseRequest): Promise<number> => {
   const xml = getXmlPostBody(data)
   try {
+    const caseData = await client.get({
+      url: `fi2case/${data.id}`,
+    })
+    if (data.status) {
+      caseData.fi2case.fi2case_status.fi2class_code = data.status
+    }
     const response = await client.put({
       url: `fi2case/${data.id}`,
-    }, xml)
+    }, xml2json.toXml(caseData))
+    console.log(JSON.stringify(response, null, 2))
     if (response.errormessage) {
       return 400
     }
