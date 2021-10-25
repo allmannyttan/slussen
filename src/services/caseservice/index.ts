@@ -21,8 +21,8 @@ const getPart = (parts: Fi2Value[], partName: string): string => {
 }
 
 
-const getXmlPostBody = (caseItem: CaseRequest): string => {
-  const {title, description, category, id} = caseItem
+const getXmlPostBody = (caseItem: CaseRequestInput): string => {
+  const {title, description, category, status, id} = caseItem
   return xml2json.toXml(JSON.parse(`{
     "fi2case": {
       "xmlns": "http://www.fi2.se/schemas/1.31",
@@ -48,7 +48,7 @@ const getXmlPostBody = (caseItem: CaseRequest): string => {
         }
       },
       "fi2case_status": {
-        "fi2class_code": {"$t": "Completed"},
+        "fi2class_code": {"$t": "${status}"},
         "fi2class_scheme": {
           "fi2scheme_id": {"$t": "Class_Fi2CaseStatus_01"},
           "fi2scheme_name": {"$t": "Status Felanmälningar"},
@@ -120,7 +120,7 @@ const createCase = async (data: CaseRequestInput): Promise<number> => {
   }
 }
 
-const updateCase = async (data: CaseRequest): Promise<number> => {
+const updateCase = async (data: CaseRequestInput): Promise<number> => {
   const xml = getXmlPostBody(data)
   try {
     const caseData = await client.get({
