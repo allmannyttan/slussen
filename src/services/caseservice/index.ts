@@ -24,6 +24,17 @@ const getPart = (parts: Fi2Value[], partName: string): string => {
 const getXmlPostBody = (caseItem: CaseRequest): string => {
   const {title, description, category} = caseItem
   
+  /*
+  <fi2case_status>
+        <fi2class_code>Pending</fi2class_code>
+        <fi2class_scheme>
+            <fi2scheme_id>Class_Fi2CaseStatus_01</fi2scheme_id>
+            <fi2scheme_name>Status Felanmälningar</fi2scheme_name>
+            <fi2scheme_url>http://www.fastapi.se/lists/classlist/Class_Fi2CaseStatus_01.xml</fi2scheme_url>
+        </fi2class_scheme>
+    </fi2case_status>
+  */
+
   return xml2json.toXml(JSON.parse(`{
     "fi2case": {
       "xmlns": "http://www.fi2.se/schemas/1.31",
@@ -40,13 +51,27 @@ const getXmlPostBody = (caseItem: CaseRequest): string => {
           }
       ],
       "fi2case_category": {
-        "fi2class_code": "Case",
+        "fi2class_code": {"$t": "Case"},
         "fi2class_scheme": {
-          "fi2scheme_id": "Class_Fi2CaseCategoryType_01",
-          "fi2scheme_name": "${category}",
-          "fi2scheme_url": "http://www.fastapi.se/lists/classlist/Class_Fi2CaseCategoryType_01.xml"
+          "fi2scheme_id": {"$t": "Class_Fi2CaseCategoryType_01"},
+          "fi2scheme_name": {"$t": "Ärendetyp Felanmälningar"},
+          "fi2scheme_url": {"$t": "http://www.fastapi.se/lists/classlist/Class_Fi2CaseCategoryType_01.xml"}
         }
-      }
+      },
+      "fi2case_status": {
+        "fi2class_code": {"$t": "Pending"},
+        "fi2class_scheme": {
+          "fi2scheme_id": {"$t": "Class_Fi2CaseStatus_01"},
+          "fi2scheme_name": {"$t": "Status Felanmälningar"},
+          "fi2scheme_url": {"$t": "http://www.fastapi.se/lists/classlist/Class_Fi2CaseStatus_01.xml"}
+        }
+      },
+      "fi2case_parentobject": {
+        "fi2item": "fi2property",
+        "fi2parent_ids": [
+          {"fi2_id": {"$t": "12345"}}
+        ]
+      } 
     }
   }`))
 }
@@ -58,7 +83,7 @@ const transformCase = (fi2case: Fi2Case): Case => {
   // console.log(JSON.stringify(fi2case, null, 2))
   console.log(...Object.keys(fi2case))
   const the: any = fi2case
-  console.log(the.fi2case_notifier)
+  console.log("eh", JSON.stringify(the, null, 2))
 
   return {
     id: fi2case.id,
@@ -78,12 +103,12 @@ const transformCase = (fi2case: Fi2Case): Case => {
 const getCases = async (): Promise<Case[]> => {
   try {
     const raw: Fi2CasesResponse = await client.get({
-      url: 'fi2case',
+      url: 'fi2case?limit=999',
     })
 
     // console.log(JSON.stringify(raw.fi2simplemessage.fi2case[0], null, 2))
 
-    const result = raw.fi2simplemessage.fi2case.slice(0, 1).map(transformCase)
+    const result = raw.fi2simplemessage.fi2case.map(transformCase)
     return result
   } catch (err) {
     throw new Error(err)
@@ -96,6 +121,7 @@ const createCase = async (data: CaseRequest): Promise<number> => {
     const response = await client.post({
       url: 'fi2case',
     }, xml)
+    console.log(JSON.stringify(response, null, 2))
     if (response.errormessage) {
       return 400
     }

@@ -57,7 +57,6 @@ const innerPost = async (request: FastAPIRequest, xml?: string) => {
     return serializeXmlResponse(data)
   } catch (error) {
     const { response } = <AxiosError>error
-    console.log(response?.data)
     return serializeXmlResponse(response?.data)
   }
 }
@@ -65,13 +64,11 @@ const innerPost = async (request: FastAPIRequest, xml?: string) => {
 
 const innerPut = async (request: FastAPIRequest, xml?: string) => {
   const xmlClient = initXmlClient(request)
-
   try {
     const { data } = await xmlClient.put(request.url, xml)
     return serializeXmlResponse(data)
   } catch (error) {
     const { response } = <AxiosError>error
-    console.log(response?.data)
     return serializeXmlResponse(response?.data)
   }
 }
