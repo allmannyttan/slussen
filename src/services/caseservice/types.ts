@@ -42,11 +42,15 @@ enum StatusType {
 // Completed	Avslutad
 
 export interface CaseRequest {
-  id?: string
+  id: string
   title: string
   description: string
   category: CategoryType
   status: StatusType
+}
+
+export type CaseRequestInput = CaseRequest & {
+  id?: string
 }
 
 /********** Fi2XML types **********/
