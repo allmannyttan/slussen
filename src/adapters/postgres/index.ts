@@ -3,7 +3,7 @@ import { postgres as config } from '@app/config'
 import { SQLStatement } from 'sql-template-strings'
 import logger from '@app/helpers/logger'
 
-const wait = (ms: number) => new Promise((resolve) => setTimeout(() => resolve(), ms))
+const wait = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(() => resolve(), ms))
 
 async function connect(attemptNo = 0): Promise<Client> {
   try {
@@ -11,7 +11,7 @@ async function connect(attemptNo = 0): Promise<Client> {
     await client.connect()
     return client
   } catch (err) {
-    logger.error(err)
+    logger.error(err as string)
 
     if (attemptNo >= 3) {
       throw err
