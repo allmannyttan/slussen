@@ -1,5 +1,6 @@
 import xml2json from 'xml2json'
 import { Application, Request, Response } from 'express'
+const { DOMParser } = require('xmldom')
 import { authMiddleware } from '@app/middleware/auth'
 import { client } from '@app/adapters/fastapiadapter'
 import asyncHandler from 'express-async-handler'
@@ -127,12 +128,17 @@ const updateCase = async (data: CaseRequest): Promise<number> => {
       skipXmlSerialization: true
     })
 
-    console.log(caseData)
+    // console.log(caseData)
 
-
-    // const payload = xml2json.toXml(caseData)
-    const payload = caseData
-    // console.log(payload)
+    const doc = new DOMParser().parseFromString(caseData, "application/xml")
+    const status = doc.documentElement.getElementsByTagName("fi2case_status")[0]
+    const foo = status.getElementsByTagName("fi2class_code")[0]
+    const newFoo = foo.cloneNode(true)
+    newFoo.data = "Completed"
+    newFoo.nodeValue = "Completed"
+    status.replaceChild(foo.firstChild, newFoo)
+    const payload = doc.toString()
+    console.log(payload)
     const response = await client.put({
       url: `fi2case/${data.id}`,
     }, payload)

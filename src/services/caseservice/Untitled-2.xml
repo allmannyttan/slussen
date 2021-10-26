@@ -1,0 +1,74 @@
+<fi2case id="Case-83" xmlns="http://www.fi2.se/schemas/1.31">
+  <fi2case_ids>
+    <fi2_id usage="CaseNumber" />
+  </fi2case_ids>
+  <fi2case_value>
+    <fi2value_code>ChangedBy</fi2value_code>
+    <fi2value_scheme>
+      <fi2scheme_id>VB001_005_001</fi2scheme_id>
+      <fi2scheme_name>Tillåtna värden för alla typer av fi2objekt</fi2scheme_name>
+      <fi2scheme_url>http://www.fi2.se/valuelist/VB001_005_001.xml</fi2scheme_url>
+    </fi2value_scheme>
+    <fi2value_value>demouser</fi2value_value>
+  </fi2case_value>
+  <fi2case_value>
+    <fi2value_code>ChangedDate</fi2value_code>
+    <fi2value_scheme>
+      <fi2scheme_id>VB001_005_001</fi2scheme_id>
+      <fi2scheme_name>Tillåtna värden för alla typer av fi2objekt</fi2scheme_name>
+      <fi2scheme_url>http://www.fi2.se/valuelist/VB001_005_001.xml</fi2scheme_url>
+    </fi2value_scheme>
+    <fi2value_value>2021-10-25T14:13:52</fi2value_value>
+  </fi2case_value>
+  <fi2case_value>
+    <fi2value_code>CreatedBy</fi2value_code>
+    <fi2value_scheme>
+      <fi2scheme_id>VB001_005_001</fi2scheme_id>
+      <fi2scheme_name>Tillåtna värden för alla typer av fi2objekt</fi2scheme_name>
+      <fi2scheme_url>http://www.fi2.se/valuelist/VB001_005_001.xml</fi2scheme_url>
+    </fi2value_scheme>
+    <fi2value_value>demouser</fi2value_value>
+  </fi2case_value>
+  <fi2case_value>
+    <fi2value_code>CreatedDate</fi2value_code>
+    <fi2value_scheme>
+      <fi2scheme_id>VB001_005_001</fi2scheme_id>
+      <fi2scheme_name>Tillåtna värden för alla typer av fi2objekt</fi2scheme_name>
+      <fi2scheme_url>http://www.fi2.se/valuelist/VB001_005_001.xml</fi2scheme_url>
+    </fi2value_scheme>
+    <fi2value_value>2021-10-25T09:26:13</fi2value_value>
+  </fi2case_value>
+  <fi2case_value>
+    <fi2value_code>ETag</fi2value_code>
+    <fi2value_scheme>
+      <fi2scheme_id>VB001_005_001</fi2scheme_id>
+      <fi2scheme_name>Tillåtna värden för alla typer av fi2objekt</fi2scheme_name>
+      <fi2scheme_url>http://www.fi2.se/valuelist/VB001_005_001.xml</fi2scheme_url>
+    </fi2value_scheme>
+    <fi2value_value>2021-10-25T14:13:52.973</fi2value_value>
+  </fi2case_value>
+  <fi2case_descr lang="sv" usage="Description">Kranen läcker jättemycket</fi2case_descr>
+  <fi2case_descr lang="sv" usage="Comment">Kranen läcker jättemycket</fi2case_descr>
+  <fi2case_category>
+    <fi2class_code>Case</fi2class_code>
+    <fi2class_scheme>
+      <fi2scheme_id>Class_Fi2CaseCategoryType_01</fi2scheme_id>
+      <fi2scheme_name>Ärendetyp Felanmälningar</fi2scheme_name>
+      <fi2scheme_url>http://www.fastapi.se/lists/classlist/Class_Fi2CaseCategoryType_01.xml</fi2scheme_url>
+    </fi2class_scheme>
+  </fi2case_category>
+  <fi2case_status>
+    <fi2class_code>Pending</fi2class_code>
+    <fi2class_scheme>
+      <fi2scheme_id>Class_Fi2CaseStatus_01</fi2scheme_id>
+      <fi2scheme_name>Status Felanmälningar</fi2scheme_name>
+      <fi2scheme_url>http://www.fastapi.se/lists/classlist/Class_Fi2CaseStatus_01.xml</fi2scheme_url>
+    </fi2class_scheme>
+  </fi2case_status>
+  <fi2case_parentobject fi2item="fi2property">
+    <fi2parent_ids>
+      <fi2_id>12345</fi2_id>
+    </fi2parent_ids>
+    <fi2parent_item />
+  </fi2case_parentobject>
+</fi2case>

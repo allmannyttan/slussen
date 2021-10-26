@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "node-pg-migrate up && ts-node-dev --no-notify --ignore-watch node_modules -r tsconfig-paths/register src/server.ts",
+    "devi": "node-pg-migrate up && ts-node-dev --no-notify --ignore-watch node_modules -r tsconfig-paths/register src/test.ts",
     "docs": "node generateSwagger",
     "lint": "eslint ./src/**/*.ts",
     "migrate:up": "node-pg-migrate up",
@@ -28,6 +29,7 @@
     "@iteam/config": "^12.1.2",
     "axios": "0.21.2",
     "body-parser": "1.19.0",
+    "computed-types": "^1.11.1",
     "connect-timeout": "^1.9.0",
     "cors": "2.8.5",
     "express": "4.17.1",
@@ -40,7 +42,8 @@
     "sql-template-strings": "^2.2.2",
     "typescript": "^4.4.4",
     "xml2js": "0.4.23",
-    "xml2json": "0.12.0"
+    "xml2json": "0.12.0",
+    "@xmldom/xmldom": "^0.7.0"
   },
   "devDependencies": {
     "@iteam/eslint-config-node": "github:iteam1337/eslint-config-node#dfde1d0",
