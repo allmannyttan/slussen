@@ -171,3 +171,4 @@ application:
    serviceAccount:
      create: true
      enabled: true
+
