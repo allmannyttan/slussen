@@ -85,14 +85,14 @@ application:
    enabled: true
    additionalLabels:
      router: default
- space:
+ namespace:
    enabled: true
-   tenant: "allmannyttan"
    annotations:
       argocd.argoproj.io/sync-wave: "-1"
    additionalLabels:
       kind: pr
       team: allmanytta
+      stakater.com/tenant: allmannyttan
  forecastle:
    enabled: true
    icon: https://raw.githubusercontent.com/stakater/ForecastleIcons/master/allmanyttan-logo.png
@@ -171,3 +171,4 @@ application:
    serviceAccount:
      create: true
      enabled: true
+
