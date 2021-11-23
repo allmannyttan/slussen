@@ -57,11 +57,13 @@ export const createToken = async (username: string, password: string): Promise<J
 
     return { token }
   } catch (error) {
-    // How do we log this?
-    logger.error(error)
-    const err = createHttpError('Invalid credentials')
-    err.status = 401
-    throw err
+    if (error) {
+      logger.error(error as string)
+      const err = createHttpError('Invalid credentials')
+      err.status = 401
+      throw err
+    }
+    throw error
   }
 }
 
@@ -96,11 +98,13 @@ export const refreshToken = async (token: UserTokenInfo): Promise<JWT> => {
 
     return { token: freshToken }
   } catch (error) {
-    // How do we log this?
-    logger.error(error)
-    const err = createHttpError('Invalid credentials')
-    err.status = 401
-    throw err
+    if (error) {
+      logger.error(error as string)
+      const err = createHttpError('Invalid credentials')
+      err.status = 401
+      throw err
+    }
+    throw error
   }
 }
 
@@ -110,18 +114,16 @@ export const authorize = ({ authorization }: any = {}) => {
   try {
     if (authHeader) {
       const user:
+        | { sub?: string, username?: string }
         | string
-        | {
-            sub?: number
-            username?: string
-          } = jwt.verify(authHeader.replace('Bearer ', ''), secret)
+        = jwt.verify(authHeader.replace('Bearer ', ''), secret)
 
       if (user && typeof user !== 'string' && user.sub) {
         return { auth: user }
       }
     }
   } catch (error) {
-    error.status = 401
+    if (error && typeof error === "object") (error as Record<string, any>).status = 401
     throw error
   }
 
