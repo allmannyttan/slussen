@@ -1,0 +1,168 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type='text/xsl' href='Fi2list_transform.xslt'?>
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:noNamespaceSchemaLocation="http://www.fi2.se/schemas/1.22/fi2validationlist_002.xsd">
+  <metadata>
+    <identity>VA000_003_005</identity>
+    <description>Mättekniska areabegrepp</description>
+    <version>005</version>
+    <date>2015-11-11</date>
+    <author>
+      <name>Fredrik Gren</name>
+      <company>Informationsbyggarna AB</company>
+    </author>
+  </metadata>
+  <fi2referencelist />
+  <validationlist>
+    <list-value>VA000_003_005</list-value>
+    <list-description>Mättekniska areabegrepp</list-description>
+    <list-item>
+      <item-value />
+      <item-description>Energideklaration</item-description>
+      <item-definition />
+      <item-referencelist />
+      <list-item>
+        <item-value>AGAR</item-value>
+        <item-description>Avarmgarage</item-description>
+        <item-datatype>m²</item-datatype>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>ATEMP</item-value>
+        <item-description>Atemp</item-description>
+        <item-datatype>m²</item-datatype>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+    </list-item>
+    <list-item>
+      <item-value />
+      <item-description>SS 21054 Area</item-description>
+      <item-definition />
+      <item-referencelist />
+      <list-item>
+        <item-value>BRA</item-value>
+        <item-description>Bruksarea</item-description>
+        <item-datatype>m²</item-datatype>
+        <item-definition />
+        <item-referencelist />
+        <list-item>
+          <item-value>BIA</item-value>
+          <item-description>Biarea</item-description>
+          <item-datatype>m²</item-datatype>
+          <item-definition />
+          <item-referencelist />
+        </list-item>
+        <list-item>
+          <item-value>BOA</item-value>
+          <item-description>Boarea</item-description>
+          <item-datatype>m²</item-datatype>
+          <item-definition />
+          <item-referencelist />
+        </list-item>
+        <list-item>
+          <item-value>LOA</item-value>
+          <item-description>Lokalarea</item-description>
+          <item-datatype>m²</item-datatype>
+          <item-definition />
+          <item-referencelist />
+        </list-item>
+        <list-item>
+          <item-value>ÖVA</item-value>
+          <item-description>Övrig area</item-description>
+          <item-datatype>m²</item-datatype>
+          <item-definition />
+          <item-referencelist />
+        </list-item>
+      </list-item>
+      <list-item>
+        <item-value>BTA</item-value>
+        <item-description>Bruttoarea</item-description>
+        <item-datatype>m²</item-datatype>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>BTV</item-value>
+        <item-description>Bruttovolym</item-description>
+        <item-datatype>m³</item-datatype>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>BYA</item-value>
+        <item-description>Byggnadsarea</item-description>
+        <item-datatype>m²</item-datatype>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>KA</item-value>
+        <item-description>Konstruktionsarea</item-description>
+        <item-datatype>m²</item-datatype>
+        <item-definition />
+        <item-referencelist />
+        <list-item>
+          <item-value>IKA</item-value>
+          <item-description>Invändig konstruktionsarea</item-description>
+          <item-datatype>m²</item-datatype>
+          <item-referencelist />
+        </list-item>
+        <list-item>
+          <item-value>OKA</item-value>
+          <item-description>Omslutande konstruktionsarea</item-description>
+          <item-datatype>m²</item-datatype>
+          <item-definition />
+          <item-referencelist />
+        </list-item>
+      </list-item>
+      <list-item>
+        <item-value>NTA</item-value>
+        <item-description>Nettoarea</item-description>
+        <item-datatype>m²</item-datatype>
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>NTV</item-value>
+        <item-description>Nettovolym</item-description>
+        <item-datatype>m³</item-datatype>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>OPA</item-value>
+        <item-description>Öppenarea</item-description>
+        <item-datatype>m²</item-datatype>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+    </list-item>
+    <list-item>
+      <item-value />
+      <item-description>Fastighetsareal enligt Lantmäteriet</item-description>
+      <item-definition />
+      <item-referencelist />
+      <list-item>
+        <item-value>LA</item-value>
+        <item-description>Landareal</item-description>
+        <item-datatype>m²</item-datatype>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>TA</item-value>
+        <item-description>Totalareal</item-description>
+        <item-datatype>m²</item-datatype>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>VA</item-value>
+        <item-description>Vattenareal</item-description>
+        <item-datatype>m²</item-datatype>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+    </list-item>
+  </validationlist>
+</document>

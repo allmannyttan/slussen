@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../fastpi_list.xsl"?>
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.fi2.se/schemas/1.22/fi2validationlist_002.xsd">
+  <metadata>
+    <identity>Class_Fi2Spatisystem_Class_01</identity>
+    <description>Klassifikation utrymmessystem</description>
+    <version>1</version>
+    <date></date>
+    <author>
+      <name></name>
+      <company></company>
+    </author>
+  </metadata>
+  <validationlist>
+    <list-value>Class_Fi2Spatisystem_Class_01</list-value>
+    <list-description>Klassifikation utrymmessystem</list-description>
+    <list-item>
+      <item-value>Apartment</item-value>
+      <item-description>Lägenhet</item-description>
+      <item-datatype></item-datatype>
+      <item-definition></item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Garage</item-value>
+      <item-description>Garage</item-description>
+      <item-datatype></item-datatype>
+      <item-definition></item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Parking</item-value>
+      <item-description>Parkering</item-description>
+      <item-datatype></item-datatype>
+      <item-definition></item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Carport</item-value>
+      <item-description>Carport</item-description>
+      <item-datatype></item-datatype>
+      <item-definition></item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Storage</item-value>
+      <item-description>Förråd</item-description>
+      <item-datatype></item-datatype>
+      <item-definition></item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Premises</item-value>
+      <item-description>Lokal</item-description>
+      <item-datatype></item-datatype>
+      <item-definition></item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Floor</item-value>
+      <item-description>Våning</item-description>
+      <item-datatype></item-datatype>
+      <item-definition></item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Stairwell</item-value>
+      <item-description>Uppgång</item-description>
+      <item-datatype></item-datatype>
+      <item-definition></item-definition>
+      <item-referencelist />
+    </list-item>
+  </validationlist>
+</document>

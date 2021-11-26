@@ -1,0 +1,327 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../fastpi_list.xsl"?>
+<document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.fi2.se/schemas/1.22/fi2validationlist_002.xsd">
+  <metadata>
+    <identity>Class_Equipment_Class_01</identity>
+    <description>Klassificering av utrustning</description>
+    <version>1</version>
+    <date></date>
+    <author>
+      <name></name>
+      <company></company>
+    </author>
+  </metadata>
+  <validationlist>
+    <list-value>CB001_004_001</list-value>
+    <list-description>Typer av utrustning</list-description>
+    <list-item>
+      <item-value>1</item-value>
+      <item-description>Anslags-/namn-tavla </item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>2</item-value>
+      <item-description>Avloppssystem</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>3</item-value>
+      <item-description>Badkar</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>4</item-value>
+      <item-description>Badrumsskåp</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>5</item-value>
+      <item-description>Balkong </item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>6</item-value>
+      <item-description>Belysning</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>7</item-value>
+      <item-description>Brandlarm</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>8</item-value>
+      <item-description>Braskamin</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>9</item-value>
+      <item-description>Diskmaskin</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>10</item-value>
+      <item-description>Dusch</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>11</item-value>
+      <item-description>EL</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>12</item-value>
+      <item-description>Fläkt</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>13</item-value>
+      <item-description>Frys</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>14</item-value>
+      <item-description>Golvvärme</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>15</item-value>
+      <item-description>Handdukstork</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>16</item-value>
+      <item-description>Hiss</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>17</item-value>
+      <item-description>Kyl/Frys</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>18</item-value>
+      <item-description>Kylskåp</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>19</item-value>
+      <item-description>Låssystem (mekaniskt)</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>20</item-value>
+      <item-description>Mangel</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>21</item-value>
+      <item-description>Mediaskåp tele/Internet</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>22</item-value>
+      <item-description>Microvågsugn</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>23</item-value>
+      <item-description>Porttelefon  </item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>24</item-value>
+      <item-description>Radiator</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>25</item-value>
+      <item-description>Spis</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>26</item-value>
+      <item-description>Strömbrytare  </item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>27</item-value>
+      <item-description>Strömuttag  </item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>28</item-value>
+      <item-description>Torkrum</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>29</item-value>
+      <item-description>Torktumlare</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>30</item-value>
+      <item-description>TV-box </item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>31</item-value>
+      <item-description>Tvättmaskin</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>32</item-value>
+      <item-description>Tvättställ</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>33</item-value>
+      <item-description>Ugn</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>34</item-value>
+      <item-description>VA-anläggning  del av hus</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>35</item-value>
+      <item-description>VA-anläggning helt hus</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>36</item-value>
+      <item-description>Varmvattenberedare</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>37</item-value>
+      <item-description>WC-stol</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>38</item-value>
+      <item-description>Ventilation</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>39</item-value>
+      <item-description>VVS</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>40</item-value>
+      <item-description>Värmeanläggning  </item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>41</item-value>
+      <item-description>Värmeskåp</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>42</item-value>
+      <item-description>Värmeväxlare</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>43</item-value>
+      <item-description>Ytskikt</item-description>
+      <item-definition />
+      <item-referencelist />
+      <list-item>
+        <item-value>43.A</item-value>
+        <item-description>Ytskikt golv</item-description>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>43.B</item-value>
+        <item-description>Ytskikt golv målat</item-description>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>43.C</item-value>
+        <item-description>Ytskikt golv matta</item-description>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>43.D</item-value>
+        <item-description>Ytskikt golv klinker</item-description>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>43.E</item-value>
+        <item-description>Ytskikt golv trä/laminat</item-description>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>43.F</item-value>
+        <item-description>Ytskikt tak</item-description>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>43.G</item-value>
+        <item-description>Ytskikt tak målat</item-description>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>43.H</item-value>
+        <item-description>Ytskikt tak panel</item-description>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>43.I</item-value>
+        <item-description>Ytskikt vägg</item-description>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>43.J</item-value>
+        <item-description>Ytskikt vägg målat</item-description>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>43.K</item-value>
+        <item-description>Ytskikt vägg kaklat</item-description>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>43.L</item-value>
+        <item-description>Ytskikt vägg tapetserat</item-description>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+      <list-item>
+        <item-value>43.M</item-value>
+        <item-description>Ytskikt vägg panel</item-description>
+        <item-definition />
+        <item-referencelist />
+      </list-item>
+    </list-item>
+    <list-item>
+      <item-value>44</item-value>
+      <item-description>Eluttag</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>45</item-value>
+      <item-description>Laddstation</item-description>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>100</item-value>
+      <item-description>Övrigt</item-description>
+      <item-referencelist />
+    </list-item>
+  </validationlist>
+</document>

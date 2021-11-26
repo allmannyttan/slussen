@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type='text/xsl' href='Fi2list_transform.xslt'?>
+<document xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.fi2.se/schemas/1.22/fi2validationlist_002.xsd">
+  <metadata>
+    <identity>CB001_002_002</identity>
+    <description>Uppsägningsorsak</description>
+    <version>002</version>
+    <date>2015-07-01</date>
+    <author>
+      <name>Fredrik Gren</name>
+      <company>Informationsbyggarna AB</company>
+    </author>
+  </metadata>
+  <fi2referencelist />
+  <validationlist>
+    <list-value>CB001_002_002</list-value>
+    <list-description>Uppsägningsorsak</list-description>
+    <list-item>
+      <item-value>Move</item-value>
+      <item-description>Flytt</item-description>
+      <item-definition>Flytta</item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Deceased</item-value>
+      <item-description>Avliden</item-description>
+      <item-definition>Avliden</item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Eviction</item-value>
+      <item-description>Avhysning</item-description>
+      <item-definition>Avhysning</item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Exchange</item-value>
+      <item-description>Byte</item-description>
+      <item-definition>Byte</item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Resettlement</item-value>
+      <item-description>Omflyttning</item-description>
+      <item-definition>Omflyttning</item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Removal</item-value>
+      <item-description>Avflyttning</item-description>
+      <item-definition>Avflyttning</item-definition>
+      <item-referencelist />
+    </list-item>
+    <list-item>
+      <item-value>Other</item-value>
+      <item-description>Annan orsak</item-description>
+      <item-definition>Annan orsak</item-definition>
+      <item-referencelist />
+    </list-item>
+  </validationlist>
+</document>
