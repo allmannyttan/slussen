@@ -5,10 +5,19 @@ import { routes as tenantRoutes } from './services/tenantservice'
 import { routes as leaseContactRoutes } from './services/leasecontractservice'
 import { routes as rentalRoutes } from './services/rentalservice'
 import { routes as roomRoutes } from './services/roomservice'
+import { routes as inventoryRoutes } from './services/inventoryservice'
 import { routes as healthRoutes } from './health'
 import documentation from './documentation'
 
-export { authRoutes, tenantRoutes, leaseContactRoutes, rentalRoutes, roomRoutes, healthRoutes }
+export {
+  authRoutes,
+  tenantRoutes,
+  leaseContactRoutes,
+  rentalRoutes,
+  roomRoutes,
+  inventoryRoutes,
+  healthRoutes,
+}
 
 export default (app: Application) => {
   app.use(ExpressStatic('public'))
