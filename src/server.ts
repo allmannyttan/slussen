@@ -5,6 +5,7 @@ import routes, {
   rentalRoutes,
   healthRoutes,
   authRoutes,
+  inventoryRoutes,
 } from './routes'
 import timeout from 'connect-timeout'
 import express from 'express'
@@ -27,6 +28,7 @@ tenantRoutes(app)
 leaseContactRoutes(app)
 rentalRoutes(app)
 healthRoutes(app)
+inventoryRoutes(app)
 routes(app)
 
 app.use(timeout('300s'))
