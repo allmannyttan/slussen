@@ -115,7 +115,7 @@ const getRentals = async (limit?: number, offset?: number): Promise<Rental[]> =>
 
     return result
   } catch (err) {
-    throw new Error(err as string)
+    throw new Error(err)
   }
 }
 
@@ -126,7 +126,7 @@ const getRental = async (id: string): Promise<Rental> => {
 
     return result
   } catch (err) {
-    throw new Error(err as string)
+    throw new Error(err)
   }
 }
 

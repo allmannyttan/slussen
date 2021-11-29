@@ -17,7 +17,7 @@ export const getNewAccessToken = async (): Promise<string> => {
     const token: string = loginResult.headers['access-token']
     return token
   } catch (error) {
-    throw new Error(error as string)
+    throw new Error(error)
   }
 }
 
@@ -53,7 +53,7 @@ export const tokenRefresher = <T extends (arg: FastAPIRequest) => any>(
       return results
     } catch (error) {
       //If error is invalid access-token, get a new one and retry.
-      if (error instanceof Error && isInvalidAccessTokenError(error)) {
+      if (isInvalidAccessTokenError(error)) {
         const token = await getNewAccessToken()
 
         await setAccessTokenInDb(token)

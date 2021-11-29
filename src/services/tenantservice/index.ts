@@ -128,7 +128,7 @@ const getTenants = async (limit?: number, offset?: number): Promise<Tenant[]> =>
 
     return transformTenants(result.fi2simplemessage.fi2partner)
   } catch (err) {
-    throw new Error(err as string)
+    throw new Error(err)
   }
 }
 
@@ -138,7 +138,7 @@ const getTenant = async (id: string): Promise<Tenant> => {
     const result = transformTenant(tenant.fi2partner)
     return result
   } catch (err) {
-    throw new Error(err as string)
+    throw new Error(err)
   }
 }
 

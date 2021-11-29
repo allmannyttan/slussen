@@ -292,7 +292,7 @@ const getLeaseContracts = async (
     logger.debug('/leasecontracts retrieved ' + result.length + ' contracts')
     return result
   } catch (err) {
-    throw new Error(err as string)
+    throw new Error(err)
   }
 }
 
@@ -305,7 +305,7 @@ const getLeaseContract = async (id: string): Promise<Contract> => {
     const result = transformContract(fi2Contract.fi2leasecontract)
     return result
   } catch (err) {
-    throw new Error(err as string)
+    throw new Error(err)
   }
 }
 

@@ -33,7 +33,7 @@ const checkFastAPIAccess = async (): Promise<SystemHealthInfo> => {
       name: 'fastAPI',
       access: false,
       responseTime: 0,
-      errorMessage: error as string,
+      errorMessage: error,
     }
   }
 }
@@ -56,7 +56,7 @@ const checkDbAccess = async (): Promise<SystemHealthInfo> => {
       name: 'db',
       access: false,
       responseTime: 0,
-      errorMessage: error as string,
+      errorMessage: error,
     }
   }
 }
