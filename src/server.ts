@@ -5,6 +5,8 @@ import routes, {
   rentalRoutes,
   healthRoutes,
   authRoutes,
+  roomRoutes,
+  inventoryRoutes,
 } from './routes'
 import timeout from 'connect-timeout'
 import express from 'express'
@@ -26,6 +28,8 @@ authRoutes(app)
 tenantRoutes(app)
 leaseContactRoutes(app)
 rentalRoutes(app)
+roomRoutes(app)
+inventoryRoutes(app)
 healthRoutes(app)
 routes(app)
 
