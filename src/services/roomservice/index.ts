@@ -41,3 +41,7 @@ export const routes = (app: Application) => {
     )
   )
 }
+
+export default {
+  getRooms,
+}

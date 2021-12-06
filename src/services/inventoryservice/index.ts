@@ -47,3 +47,7 @@ export const routes = (app: Application) => {
     )
   )
 }
+
+export default {
+  getInventory,
+}
