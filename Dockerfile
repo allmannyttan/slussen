@@ -1,11 +1,11 @@
 
-FROM node:14.15.1-alpine
+FROM node:16.13.1-alpine
 
 # Fixes for Python missing for node-gyp
 # --no-cache: download package index on-the-fly, no need to cleanup afterwards
 # --virtual: bundle packages, remove whole bundle at once, when done
 RUN apk --no-cache --virtual build-dependencies add \
-    python \
+    python3 \
     make \
     g++
 
