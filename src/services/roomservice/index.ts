@@ -14,18 +14,25 @@ const transformSpace = (spaceData: Fi2Space): Room => {
   return room
 }
 
-const getRooms = async (rentalId?: string): Promise<Room[]> => {
+const getRooms = async (rentalId?: string, isShared?: boolean): Promise<Room[]> => {
   try {
+    const filterIfShared = isShared ? `;fi2space_common:'${isShared}'` : ''
     const filter = rentalId
       ? `?filter=fi2space_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'${rentalId}'`
       : ''
     const response: Fi2SpaceResponse = await client.get({
-      url: `fi2space/${filter}`,
+      url: `fi2space/${filter.concat('', filterIfShared)}`,
     })
     if (!response.fi2simplemessage) {
       return []
     }
-    const result = response.fi2simplemessage.fi2space.map(transformSpace)
+    const arrResponse = Array.isArray(response.fi2simplemessage.fi2space)
+      ? response.fi2simplemessage.fi2space
+      : response.fi2simplemessage.fi2space
+      ? [response.fi2simplemessage.fi2space]
+      : []
+
+    const result = arrResponse.map(transformSpace)
     return result
   } catch (err) {
     throw new Error(err as string)
@@ -37,7 +44,9 @@ export const routes = (app: Application) => {
     '/rooms',
     authMiddleware,
     asyncHandler(async (req: Request, res: Response) =>
-      res.json(await getRooms(req.query.rentalId as string))
+      res.json(
+        await getRooms(req.query.rentalId as string, (req.query.isShared as unknown) as boolean)
+      )
     )
   )
 }
