@@ -21,11 +21,7 @@ const getRooms = async (rentalId?: string, isShared?: string): Promise<Room[]> =
     const filters = []
     if (rentalId)
       filters.push(`fi2space_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'${rentalId}'`)
-    if (isShared && VALID_SHARED_VALUES.includes(isShared))
-      filters.push(`fi2space_common:'${isShared}'`)
-    else if (isShared && !VALID_SHARED_VALUES.includes(isShared)) {
-      return Promise.reject({ status: 400, message: 'Bad request' })
-    }
+    if (isShared) filters.push(`fi2space_common:'${isShared}'`)
     const filterString = filters.length === 0 ? '' : `?filter=${filters.join(';')}`
 
     const response: Fi2SpaceResponse = await client.get({
@@ -44,7 +40,7 @@ const getRooms = async (rentalId?: string, isShared?: string): Promise<Room[]> =
     const result = arrResponse.map(transformSpace)
     return result
   } catch (err) {
-    throw new Error(err)
+    throw new Error(err as string)
   }
 }
 
@@ -53,7 +49,10 @@ export const routes = (app: Application) => {
     '/rooms',
     authMiddleware,
     asyncHandler(async (req: Request, res: Response) => {
-      res.json(await getRooms(req.query.rentalId as string, req.query.isShared as string))
+      if (req.query.isShared && !VALID_SHARED_VALUES.includes(req.query.isShared as string)) {
+        return res.status(400).json({ message: 'Bad request' })
+      }
+      return res.json(await getRooms(req.query.rentalId as string, req.query.isShared as string))
     })
   )
 }
