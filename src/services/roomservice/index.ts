@@ -14,18 +14,27 @@ const transformSpace = (spaceData: Fi2Space): Room => {
   return room
 }
 
-const getRooms = async (rentalId?: string, isShared?: boolean): Promise<Room[]> => {
+const VALID_SHARED_VALUES = ['true', 'false', undefined]
+
+const getRooms = async (rentalId?: string, isShared?: string): Promise<Room[]> => {
   try {
-    const filterIfShared = isShared ? `;fi2space_common:'${isShared}'` : ''
-    const filter = rentalId
-      ? `?filter=fi2space_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'${rentalId}'`
-      : ''
+    const filters = []
+    if (rentalId)
+      filters.push(`fi2space_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'${rentalId}'`)
+    if (isShared && VALID_SHARED_VALUES.includes(isShared))
+      filters.push(`fi2space_common:'${isShared}'`)
+    else if (isShared && !VALID_SHARED_VALUES.includes(isShared)) {
+      return Promise.reject({ status: 400, message: 'Bad request' })
+    }
+    const filterString = filters.length === 0 ? '' : `?filter=${filters.join(';')}`
+
     const response: Fi2SpaceResponse = await client.get({
-      url: `fi2space/${filter.concat('', filterIfShared)}`,
+      url: `fi2space/${filterString}`,
     })
     if (!response.fi2simplemessage) {
       return []
     }
+
     const arrResponse = Array.isArray(response.fi2simplemessage.fi2space)
       ? response.fi2simplemessage.fi2space
       : response.fi2simplemessage.fi2space
@@ -35,7 +44,7 @@ const getRooms = async (rentalId?: string, isShared?: boolean): Promise<Room[]> 
     const result = arrResponse.map(transformSpace)
     return result
   } catch (err) {
-    throw new Error(err as string)
+    throw new Error(err)
   }
 }
 
@@ -43,11 +52,9 @@ export const routes = (app: Application) => {
   app.get(
     '/rooms',
     authMiddleware,
-    asyncHandler(async (req: Request, res: Response) =>
-      res.json(
-        await getRooms(req.query.rentalId as string, (req.query.isShared as unknown) as boolean)
-      )
-    )
+    asyncHandler(async (req: Request, res: Response) => {
+      res.json(await getRooms(req.query.rentalId as string, req.query.isShared as string))
+    })
   )
 }
 
