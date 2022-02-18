@@ -31,7 +31,14 @@ const getInventory = async (spaceId?: string): Promise<Inventory[]> => {
     if (!response.fi2simplemessage) {
       return []
     }
-    const result = response.fi2simplemessage.fi2equipment.map(transformEquipment)
+
+    const arrResponse = Array.isArray(response.fi2simplemessage.fi2equipment)
+      ? response.fi2simplemessage.fi2equipment
+      : response.fi2simplemessage.fi2equipment
+      ? [response.fi2simplemessage.fi2equipment]
+      : []
+
+    const result = arrResponse.map(transformEquipment)
     return result
   } catch (err) {
     throw new Error(err as string)
