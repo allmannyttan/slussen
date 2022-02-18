@@ -41,7 +41,7 @@ describe('#roomservice', () => {
     ;(helper.getNameFromClasslist as jest.Mock).mockReturnValue('mocked')
   })
 
-  describe('#getRooms', async () => {
+  describe('#getRooms', () => {
     test('uses fast api adapter to get rooms', async () => {
       ;(client.get as jest.Mock).mockResolvedValueOnce(fi2SpacesJson)
 
@@ -60,6 +60,29 @@ describe('#roomservice', () => {
       expect(client.get).toHaveBeenCalledTimes(1)
       expect(client.get).toHaveBeenCalledWith({
         url: `fi2space/?filter=fi2space_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'${rentalId}'`,
+      })
+    })
+
+    test('adds isShared as filter query parameter', async () => {
+      ;(client.get as jest.Mock).mockResolvedValueOnce(fi2SpacesJson)
+      const isShared = 'true'
+      await service.getRooms('', isShared)
+
+      expect(client.get).toHaveBeenCalledTimes(1)
+      expect(client.get).toHaveBeenCalledWith({
+        url: `fi2space/?filter=fi2space_common:'${isShared}'`,
+      })
+    })
+
+    test('adds room id and isShared as filter query parameter', async () => {
+      ;(client.get as jest.Mock).mockResolvedValueOnce(fi2SpacesJson)
+      const isShared = 'true'
+      const rentalId = 'OBJ-1337'
+      await service.getRooms(rentalId, isShared)
+
+      expect(client.get).toHaveBeenCalledTimes(1)
+      expect(client.get).toHaveBeenCalledWith({
+        url: `fi2space/?filter=fi2space_parentobject@fi2spatisystem.fi2parent_ids.fi2_id:'${rentalId}';fi2space_common:'${isShared}'`,
       })
     })
 
