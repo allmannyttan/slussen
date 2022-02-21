@@ -17,7 +17,7 @@ export const getNewAccessToken = async (): Promise<string> => {
     const token: string = loginResult.headers['access-token']
     return token
   } catch (error) {
-    throw new Error(error)
+    throw new Error(error as string)
   }
 }
 
@@ -37,10 +37,12 @@ const isInvalidAccessTokenError = (error: Error): boolean => {
  *
  * @param {wrapped function} func
  */
-export const tokenRefresher = <T extends (arg: FastAPIRequest) => any>(
-  func: T
-): ((funcArg: FastAPIRequest) => Promise<ReturnType<T>>) => {
-  return async (arg: FastAPIRequest): Promise<ReturnType<T>> => {
+
+export const tokenRefresher = (func: (arg: FastAPIRequest, data?: string) => any) => {
+  // export const tokenRefresher = <T extends (arg: FastAPIRequest, data?: CaseRequest) => any>(
+  //   func: T
+  // ) => {
+  return async (arg: FastAPIRequest, data?: string): Promise<ReturnType<typeof func>> => {
     try {
       const token = await getAccessTokenFromDb()
 
@@ -49,17 +51,17 @@ export const tokenRefresher = <T extends (arg: FastAPIRequest) => any>(
       }
 
       arg.token = token
-      const results = await func(arg)
+      const results = await func(arg, data)
       return results
     } catch (error) {
       //If error is invalid access-token, get a new one and retry.
-      if (isInvalidAccessTokenError(error)) {
+      if (isInvalidAccessTokenError(error as Error)) {
         const token = await getNewAccessToken()
 
         await setAccessTokenInDb(token)
 
         arg.token = token
-        const results = await func(arg)
+        const results = await func(arg, data)
         return results
       } else {
         throw error

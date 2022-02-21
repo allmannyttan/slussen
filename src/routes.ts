@@ -6,6 +6,7 @@ import { routes as leaseContactRoutes } from './services/leasecontractservice'
 import { routes as rentalRoutes } from './services/rentalservice'
 import { routes as roomRoutes } from './services/roomservice'
 import { routes as inventoryRoutes } from './services/inventoryservice'
+import { routes as caseRoutes } from './services/caseservice'
 import { routes as healthRoutes } from './health'
 import documentation from './documentation'
 
@@ -16,6 +17,7 @@ export {
   rentalRoutes,
   roomRoutes,
   inventoryRoutes,
+  caseRoutes,
   healthRoutes,
 }
 

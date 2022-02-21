@@ -63,16 +63,16 @@ describe('#getNewAccessToken', () => {
 
   describe('#tokenRefresher', () => {
     test('calls innerFunction with correct args', async () => {
-      const resultFunc = await tokenRefresher(mockFunc)
+      const resultFunc = tokenRefresher(mockFunc)
       await resultFunc(mockArgs)
 
-      expect(mockFunc).toHaveBeenCalledWith(mockArgs)
+      expect(mockFunc).toHaveBeenCalledWith(mockArgs, undefined)
     })
 
     test('calls setAccessTokenIndb if token doesnt exist', async () => {
       databaseHelper.getAccessTokenFromDb.mockImplementationOnce(() => Promise.resolve(null))
 
-      const resultFunc = await tokenRefresher(mockFunc)
+      const resultFunc = tokenRefresher(mockFunc)
       await resultFunc(mockArgs)
 
       expect(databaseHelper.setAccessTokenInDb).toHaveBeenCalledWith(accessToken)
@@ -83,7 +83,7 @@ describe('#getNewAccessToken', () => {
       databaseHelper.setAccessTokenInDb.mockImplementationOnce(() => Promise.reject(errorMessage))
 
       try {
-        const resultFunc = await tokenRefresher(mockFunc)
+        const resultFunc = tokenRefresher(mockFunc)
         await resultFunc(mockArgs)
       } catch (error) {
         expect(error).toEqual(errorMessage)
