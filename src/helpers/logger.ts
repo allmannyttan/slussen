@@ -19,12 +19,12 @@ const warn = (message: string, stacktrace?: string) => {
 }
 
 const error = (message: string, stacktrace?: string) => {
-  console.warn(createOutputJson('error', message, stacktrace))
+  console.error(createOutputJson('error', message, stacktrace))
 }
 
 export default {
   debug,
   info,
   warn,
-  error
+  error,
 }
