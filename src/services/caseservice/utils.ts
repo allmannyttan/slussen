@@ -32,7 +32,7 @@ function makeDescription({ description, comment }: { description: string; commen
 
 function makeParentObject(input: CaseCreateRequest) {
   return {
-    fi2item: 'fi2property',
+    fi2item: 'fi2spatisystem',
     fi2parent_ids: [{ fi2_id: { $t: input.rentalId } }],
   }
 }
