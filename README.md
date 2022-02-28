@@ -42,7 +42,7 @@ A lot of Allmännyttas services uses this, and when you develop Allämnnyttans s
       "database": "api-db"
     },
     "fastAPI": {
-      "baseURL": "http://www.fastapi.se/backendprop/v1/api/",
+      "baseURL": "http://www.fastapi.se/backendprop/v1_WP/api/",
       "accessToken": "12345",
       "user": "demouser",
       "password": "demopassword"
