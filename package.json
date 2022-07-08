@@ -34,7 +34,7 @@
     "express": "4.17.1",
     "express-async-handler": "1.1.4",
     "jsonwebtoken": "^8.5.1",
-    "moment": "^2.29.1",
+    "moment": "^2.29.4",
     "node-pg-migrate": "4.6.2",
     "openapi-types": "^7.2.3",
     "pg": "8.0.3",
